@@ -28,6 +28,19 @@ public class CharacterString {
         我们可以肯定的就是后面的 equals 肯定为 true，因为二者都属于字符串且内容相同。
         值得琢磨的就是 == ，我们知道这是两个不同的对象，所以返回 false，但是仔细想想有一点很有趣，就是他们 aa bb 这两个对象指向的都是在字符串常量池中的同一个位置！
         也就是他们的内容是一样的，都存的是"aabb"这个字符串对象在字符串常量池的地址，但是他们两个本身的地址不一样，所以 == 不一样。
+<<<<<<< HEAD
+=======
+
+        如果单纯使用+拼接字符串，既浪费空间效率也非常低，因为拼接字符串会创建新的字符串对象。
+        StringBuilder的前身是StringBuffer，它的效率没有StringBuilder那么高但是它可以多线程添加或删除字符串。
+        而StringBuilder是单线程方式运作的并且效率比StringBuffer高。使用 StringBuilder.append() 可以拼接字符串。
+        使用 StringBuilder.toString() 可以将 StringBuilder 对象转换为 String 字符串对象。
+
+        github 回退到某个版本：
+        1. git log
+        2. git reset --hard commitEdition
+        3. git push origin --force
+>>>>>>> origin/main
     */
     public static void main(String[] args) {
         String str = "HelloWorld";
