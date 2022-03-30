@@ -162,3 +162,175 @@ class Book {
 ```
 
 ## 4. `List`接口
+
+`List`接口是`Collection`接口的子接口，`List`的实现类是有序可重复的，相比于`Collection`接口，`List`有索引，所以可以删除某个索引的元素或者某个集合也可以在某个索引后边增加元素或者某个集合。
+
+常用方法：
+
+```tex
+1.add(int index, Object object)指定索引添加元素
+2.addAll(int index, Collection collection)指定索引添加集合
+3.get(int index)获取某个索引的对象
+4.indexOf(Object object)某个object在集合中首先出现的位置
+5.lastIndexOf(Object object)末次出现的位置
+6.remove(int index)移除指定位置的元素并返回此元素
+7.set(int index, Object object)将指定位置的元素设置为object
+8.subList(int fromIndex, int toIndex)返回从fromIndex开始的几个元素的集合 ---> 简单理解：左闭右开
+```
+
+```java
+package Chapter03;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ListMethod {
+    public static void main(String[] args) {
+        List list = new ArrayList<>();
+        //1.1直接添加元素
+        list.add("AAA");
+        System.out.println("List add object = " + list);
+        //1.2指定位置添加元素
+        list.add(0, "BBB");
+        System.out.println("List add index = " + list);
+        //2.1获取某位置的元素
+        Object object = list.get(0);
+        System.out.println("List get = " + object);
+        //2.2获取首次出现的元素位置
+        list.add("AAA");
+        int indexOf = list.indexOf("AAA");
+        System.out.println("List indexOf = " + indexOf);
+        //2.3末尾首次出现的元素位置
+        int lastIndexOf = list.lastIndexOf("AAA");
+        System.out.println("List last index of = " + lastIndexOf);
+        //3.1直接移除元素
+        boolean isRemoveOrNot = list.remove("AAA");
+        System.out.println("List remove object = " + isRemoveOrNot);
+        //3.2按照位置移除元素
+        object = list.remove(0);
+        System.out.println("List remove index = " + object);
+        System.out.println("List = " + list);
+        list.set(0, "super玛丽");
+        System.out.println("List set index and object = " + list);
+        list.add("愤怒小鸟");
+        list.add("僵尸大战");
+        List list1 = list.subList(0, 2);
+        System.out.println("List subList = " + list1);
+    }
+}
+```
+
+`List`遍历方式有三：一是`Iterator`因为`List`继承了`Collection`接口也就继承了`Iterator`接口，二是增强`for`循环，三是普通`for`循环
+
+```java
+package Chapter03;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+public class ListCirculate {
+    public static void main(String[] args) {
+        List list = new ArrayList<>();
+        list.add("青椒炒肉");
+        list.add("宫保鸡丁");
+        list.add("鱼香肉丝");
+        list.add("北京烤鸭");
+        list.add("麻婆豆腐");
+        //1.Iterator 遍历
+        Iterator iterator = list.iterator();
+        while (iterator.hasNext()) {
+            Object object = iterator.next();
+            System.out.println("菜单 iterator：" + object);
+        }
+        //2.增强 for 遍历方式
+        for (Object object : list) {
+            System.out.println("菜单增强 for：" + object);
+        }
+        //3.普通 for 遍历方式
+        for (int i = 0; i < list.size(); i++) {
+            Object object = list.get(i);
+            System.out.println("菜单普通 for：" + object);
+        }
+    }
+}
+```
+
+`List`冒泡排序：
+
+```java
+package Chapter03;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+public class CollectionFor {
+    public static void main(String[] args) {
+        Collection<Book> collection = new ArrayList();
+        collection.add(new Book("三国演义", "罗贯中", 10.1));
+        collection.add(new Book("小李飞刀", "古龙", 5.1));
+        collection.add(new Book("红楼梦", "曹雪芹", 34.6));
+        for (Book book : collection) {
+            System.out.println("book = " + book.toString());
+        }
+    }
+}
+
+class Book {
+    private String name;
+    private String author;
+    private double price;
+
+    public Book(String name, String author, double price) {
+        this.name = name;
+        this.author = author;
+        this.price = price;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "name='" + name + '\'' +
+                ", author='" + author + '\'' +
+                ", price=" + price +
+                '}';
+    }
+}
+```
+
+`ArrayList`可以存放`null`元素其底层就是一个数组，不过增添了如自动扩容等级制，线程不安全但是效率高。在多线程情况下，要想保证线程安全可以使用`Vector`
+
+`ArrayList`源码剖析【重点】：
+
+`ArrayList`维护了一个`Object`类型的数组也就是什么类型都可以存放到`ArrayList`中。
+
+- 对象在序列化的时候，`transient`修饰的属性不会被序列化
+- 当创建对象的时候，如果使用的是无参构造器那么初始化容量`elementData`为`0`，在`JDK7`中为`10`
+- 当添加元素的时候，会判断是否要自动扩容，如果需要扩容则调用`grow`方法，如果不需要则直接将元素添加到相应位置即可
+- 当创建`ArrayList`对象时，如果使用的是无参构造器，则初始`elementData`容量为0，第1次添加，则扩容`elementData`为10，如需要再次扩容，则扩容`elementData`为1.5倍
+- 如果使用的是有参构造器则初始化容量就是设置的那个容量，并且如果需要扩容的时候，会将其扩容到`1.5`倍`elementData`的容量，这点与无参构造器构造的`ArrayList`不同，它的第一次扩容是先扩容到`10`
+
