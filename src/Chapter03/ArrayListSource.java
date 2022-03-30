@@ -1,11 +1,10 @@
 package Chapter03;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class ArrayListSource {
     public static void main(String[] args) {
-        ArrayList arrayList = new ArrayList();
+        ArrayList arrayList = new ArrayList(1);
         for (int i = 1; i <= 10; i++) {
             arrayList.add(i);
         }
