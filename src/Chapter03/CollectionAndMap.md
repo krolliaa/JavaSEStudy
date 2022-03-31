@@ -322,6 +322,8 @@ class Book {
 }
 ```
 
+### 4.1 `ArrayList`
+
 `ArrayList`可以存放`null`元素其底层就是一个数组，不过增添了如自动扩容等级制，线程不安全但是效率高。在多线程情况下，要想保证线程安全可以使用`Vector`
 
 **<font color="red">`ArrayList`源码剖析【重点】</font>**：
@@ -435,6 +437,8 @@ public class ArrayListSource {
 
     ![](https://img-blog.csdnimg.cn/8a064f00911f4b03aabc0350b1da8f47.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
 
+### 4.2 `Vector`
+
 **<font color="red">`Vector`源码剖析</font>**：
 
 ```java
@@ -479,3 +483,133 @@ public class VectorSource {
 5. 上述所有的情况如果整合起来就形成了下面这张图：因为有了`capacityIncrement`所以每次扩容将扩大`capacityIncrement`容量，所以可以看到这里在`i = 2`的时候将进行扩容[初始化容量为`1`]，每次增加`2`个，所以扩容后`Vector`容量为`3`，这里通过下面箭头所指的数值也可以看到
 
    ![](https://img-blog.csdnimg.cn/c8121fd8a6f54229bf17e120ddd6a44f.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+### 4.3 `LinkedList`
+
+1. `LinkedList`底层维护了一个双向链表
+2. `LinkedList`中维护了两个属性`first`和`last`分别指向首节点和尾节点
+3. 每个节点`Node`对象，里面又维护了`prev`、`next`还有`item`三个属性，其中通过`prev`指向当前节点的前一个节点，通过`next`指向当前节点的后一个接待你，最终实现双向链表
+4. 链表的删除和添加的效率比数组高，但是查找没有数组的效率高
+
+```java
+package Chapter03;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+
+public class LinkedListCRUD {
+    public static void main(String[] args) {
+        LinkedList linkedList = new LinkedList();
+        //添加节点
+        linkedList.add(1);
+        linkedList.add(2);
+        linkedList.add(3);
+        System.out.println("linkedList = " + linkedList);
+        //删除节点
+        linkedList.remove();
+        System.out.println("linkedList = " + linkedList);
+        //修改节点
+        linkedList.set(1, 8);
+        System.out.println("linkedList = " + linkedList);
+        //获取某个位置的节点
+        Object object = linkedList.get(1);
+        System.out.println("linkedList get 1 = " + object);
+        //LinkedList 实现了 List 接口，List 接口继承了 Collection 接口
+        Iterator iterator = linkedList.iterator();
+        while (iterator.hasNext()) {
+            Object obj = iterator.next();
+            System.out.println("next = " + obj);
+        }
+        for (Object o : linkedList) System.out.println("for++ = " + o);
+        for (int i = 0; i < linkedList.size(); i++) {
+            System.out.println("for = " + linkedList.get(i));
+        }
+    }
+}
+```
+
+`LinkedList`底层就是双向链表，链表是基本必须掌握的数据结构之一，比较简单，这里就不多赘述。
+
+### 4.4  `ArrayList`和`LinkedList`比较
+
+`ArrayList`：底层数据结构为数组，查找的效率较高，添加和删除的效率就相对较低，前者每次添加都要进行是否扩容，后者则需要将数组整体往前移动，效率低
+
+`LinkedList`：底层数据结构为双向链表，查找的效率较低，从头查到尾或者反过来，添加和删除的效率非常高，通过拆解`prev`和`next`指向就可以添加或者删除某元素，在这里没有扩容这一说法，效率高
+
+选择`ArrayList`还是`LinkedList`关键还是看以下两点并且需要根据业务的不同进行选择：
+
+1. 如果查找的操作多[大部分，达到`80% - 90%`的操作其实都是查找]，选择`ArrayList`
+2. 如果增加和删除的操作多，选择`LinkedList`
+
+## 5. `Set`接口
+
+特点：无序不可重复并且没有索引，不支持随机访问，因为继承了`Collection`接口所以可以使用迭代器和增强`for`循环进行遍历
+
+```java
+package Chapter03;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
+public class SetStudy {
+    public static void main(String[] args) {
+        Set set = new HashSet();
+        set.add("john");
+        set.add("lucy");
+        set.add("kate");
+        set.add("john");
+        set.add(null);
+        set.add(null);
+        System.out.println("set = " + set);
+        Iterator iterator = set.iterator();
+        while (iterator.hasNext()) {
+            Object object = iterator.next();
+            System.out.println("iterator = " + object);
+        }
+        for (Object object : set) {
+            System.out.println("for++ = " + object);
+        }
+        //无法使用普通for循环便利 Set
+    }
+}
+```
+
+### 5.1 `HashSet`
+
+- `HashSet`实现了`Set`接口
+
+- `HashSet`的底层其实就是`HashMap``
+
+- ``HashSet`可以存放`null`值并且只能存放一个
+
+- 除此之外`HashSet`不能保证元素是有序的这取决于`Hash`值然后再确定索引取出元素。为什么会有这样的操作？因为：`HashSet`底层是`HashMap`，而`HashMap`底层数据结构是：数组 + 单向链表 + 红黑树，通过`Hash`值可以确定是数组的哪个节点，然后通过索引确定是数组里面链表中的的哪个元素，当链表中的元素个数到达某一个数量的时候就会变成红黑树。
+
+- 所谓的不重复其实是针对内存地址而言的，如果添加的是新创建的对象其实这不叫重复了，这种情况还是属于新增元素
+
+  但是如果加入了两个`new String("A");`其实只加入了一个。这是为什么呢？这个`HashSet`的`add()`加入机制有关，前面说过是先计算出`hash`值然后再看存到哪里，`String`对象重写了`hashCode`方法，比较的是常量值中的对象。
+
+`HashSet`底层结构详细说明：
+
+1. 先获取元素的哈希值即`HashCode`
+2. 对哈希值进行运算得到一个索引值即为要存放在哈希值中的位置号
+3. 如果该位置上没有其它的元素，则直接存放，如果有其它元素需要调用`equals`进行判断，如果相等则证明该元素存在过了，不再添加，如果不相等则按照链表的方式进行存放即存放到最后面
+4. 在`Java8`中如果一条链表中的元素个数超过`TREEIFY_THRESHOLD`[默认是`8`]并且存储数组的大小是`>= MIN_TREEIFY_CAPACITY`[默认`64`]就会转换成红黑树，那如果数组没到`64`呢？就会先把数组进行扩容，按两倍扩容，但是不是直接一步到位的那种扩容，一直到扩容到`64`之前呢，都还是链表的形式，只有到了`64`容量的时候才会树化，转换成红黑树
+5. 这里涉及到一个扩容因子，达到`容量 X 扩容因子`的时候就会自动扩容，这里判断是否达到是用`size`判断的，这里的`size`指的不是在数组链表的条数，而是总的元素的个数。
+
+<font color="red">**【注：`HashSet`的底层就是`HashMap`，所以研究`HashSet`其实也就是在研究`HashMap`，除此之外，`HashSet`底层中当一个链表节点个数达到一定的数量之后就会变成红黑树，因为红黑树的存取效率更高】**</font>
+
+这也就是为什么虽然是`new String()`但是存放的数据却只有一个，因为`String`重写了`equals`和`hashCode`的计算方式，可以看看`String`类的`hashCode()`方法：由此也可以看出，`String`对象的哈希值计算出来是什么取决于的是`value`，而`value`就是字符串字符数组，所以只要两个字符串的内容是一样的，则它们的哈希值也是一样的。【简单说就是：`hash() + equals()`】
+
+![](https://img-blog.csdnimg.cn/812240cc06b24ef6824e5868fec7d67e.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+再接着来看看`equals`方法：可以清楚的看到`String`对象比较的是每个字符也就是比较字符串的内容
+
+![](https://img-blog.csdnimg.cn/101879e4cebf4a1cb6d48586ca4d45b1.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+再回过头来看`HashSet`的存储方法，为什么会有如下这个问题？为什么明明存储了两个对象，在`HashSet`中只存储了一个呢？这就需要我们结合`HashSet`的存储机制和`String`类计算`hashCode`的方式了，我们知道`String`类对象，只要内容一样哈希值肯定也是一样的，而`HashSet`首先就是计算出哈希值，然后通过哈希值计算得到索引，也就是说这两个哈希值相同的`String`对象的索引是一样的，所以会调用`equals`方法比较，内容是相同的，证明这是同一个东西，所以`HashSet`只存放了一个`String`对象。
+
+![](https://img-blog.csdnimg.cn/8e331411283e4a5c9da6e3d7a323b14c.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+`HashSet`源码剖析【重点】：
+
