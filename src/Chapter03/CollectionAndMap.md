@@ -324,7 +324,7 @@ class Book {
 
 `ArrayList`可以存放`null`元素其底层就是一个数组，不过增添了如自动扩容等级制，线程不安全但是效率高。在多线程情况下，要想保证线程安全可以使用`Vector`
 
-`ArrayList`源码剖析【重点】：
+**<font color="red">`ArrayList`源码剖析【重点】</font>**：
 
 `ArrayList`维护了一个`Object`类型的数组也就是什么类型都可以存放到`ArrayList`中。
 
@@ -434,3 +434,48 @@ public class ArrayListSource {
     我们可以看到在比较`elementData`和`DEFAULTCAPACITY_EMPTY_ELEMENTDATA`时使用的是`==`，那么就表明需要比较内存地址，很明显，因为有参构造其中创建了新的数组对象，所以内存地址肯定不一样，所以就不会将最小容量改为默认容量`10`，也就是说扩容将按照给定的容量进行扩容，比如给的是`1`，那么新容量就是`2`，下图是`ArrayList`有参构造器，可以看到新建了一个数组对象：
 
     ![](https://img-blog.csdnimg.cn/8a064f00911f4b03aabc0350b1da8f47.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+**<font color="red">`Vector`源码剖析</font>**：
+
+```java
+package Chapter03;
+
+import java.util.Vector;
+
+public class VectorSource {
+    public static void main(String[] args) {
+        Vector vector = new Vector();
+        for (int i = 1; i <= 10; i++) {
+            vector.add(i);
+        }
+        vector.add(100);
+        System.out.println("Vector = " + vector);
+    }
+}
+```
+
+1. 首先看看`Vector`的构造器，可以发现`Vector`如果在创建的时候没有传递任何的值，默认会调用有参构造器然后传递`10`，这个`10`就作为`Vector`对象的初始化容量，`capacityIncrement`表示每次增加多少容量，这里`capacityIncrement`传递的是`0`，如果不手动传入`capacityIncrement`，后续默认增加的容量即为`initialCapacity`即一倍扩容
+
+   ![](https://img-blog.csdnimg.cn/292ef2e472754f549abe9ce6b956ad3e.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+2. 添加元素进入到`add(E e)`可以看到这里方法使用`synchronized`修饰，也证明了`Vector`是线程安全的。`modCount++`记录当前`vector`被修改的次数。进入到`ensureCapacityHelper(int minCapacity)`中，判断是否需要扩容，若需要则进行扩容机制。
+
+   ![](https://img-blog.csdnimg.cn/c21ecba9158a4fc4a2a889c4af75edd0.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_16,color_FFFFFF,t_70,g_se,x_16)
+
+3. 进入到`ensureCapacityHelper(int minCapacity)`中，我们知道在构造`vector`对象的时候，`elementData`的容量就已经赋值为`10`或者是自定义的容量，`minCapacity`这里只需要`1`个容量即可存储，所以够用，无序扩容，一直到`i = 10`的时候都无需扩容，扩容是在`add(100)`的时候生效
+
+   ![](https://img-blog.csdnimg.cn/2ff0b3327b5f4aeabb4d0470b278c830.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+4. 让我们看看添加第`11`个元素，`Vector`进行的扩容机制，可以发现这里的
+
+   ```java
+   int newCapacity = oldCapacity + ((capacityIncrement > 0) ? capacityIncrement : oldCapacity);
+   ```
+
+   跟前面学习的`ArrayList`扩容是不一样的，扩容扩容最核心的就是扩多少，怎么扩，怎么扩这个问题很简单，使用`copyOf()`保障原有数据的同时扩容即可，那扩多少呢？`Vector`采用的机制是：如果用户有自定义`capacityIncrement`即增加多少容量的话，那就在原有基础上即`oldCapacity`也就是`elementData.length`自增一倍，虽然这里用的是加法但是加上自身就是扩容一倍的意思。所以默认情况下也就是程序没有给出`capacityIncrement`的情况下扩容过程就是：`10 ---> 20 ---> 40`这样扩
+
+   ![](https://img-blog.csdnimg.cn/bde52511040a4ca98418af9d8fe7a4d8.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_19,color_FFFFFF,t_70,g_se,x_16)
+
+5. 上述所有的情况如果整合起来就形成了下面这张图：因为有了`capacityIncrement`所以每次扩容将扩大`capacityIncrement`容量，所以可以看到这里在`i = 2`的时候将进行扩容[初始化容量为`1`]，每次增加`2`个，所以扩容后`Vector`容量为`3`，这里通过下面箭头所指的数值也可以看到
+
+   ![](https://img-blog.csdnimg.cn/c8121fd8a6f54229bf17e120ddd6a44f.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
