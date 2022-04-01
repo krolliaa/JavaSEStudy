@@ -5,9 +5,8 @@ import java.util.HashSet;
 public class HashSetAdd {
     public static void main(String[] args) {
         HashSet hashSet = new HashSet();
-        for (int i = 1; i <= 16; i++) {
-            hashSet.add(i);
-        }
+        hashSet.add(new String("ABC"));
+        System.out.println(hashSet.add(new String("ABC")));
         System.out.println("HashSet = " + hashSet);
     }
 }
