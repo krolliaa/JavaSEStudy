@@ -613,3 +613,324 @@ public class SetStudy {
 
 `HashSet`源码剖析【重点】：
 
+1. `HashSet`的底层其实就是`HashMap`，这一点可以通过构造器函数看出来
+
+   ![](https://img-blog.csdnimg.cn/82904035c5de4b759a75813faec82524.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+2. 再进入到`HashMap()`的无参构造器一探究竟：可以看到初始化构造加载因子，加载因子是后面用来给数组扩容用的，后面会讲，这里暂时先不做解释
+
+   ![](https://img-blog.csdnimg.cn/5f0c462cf17b4e458b8b0badbda64bb7.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+我们通过以下这段代码来研究一下`HashSet`的添加方法 ---> `add()`：
+
+```java
+package Chapter03;
+
+import java.util.HashSet;
+
+public class HashSetAdd {
+    public static void main(String[] args) {
+        HashSet hashSet = new HashSet();
+        for (int i = 1; i <= 16; i++) {
+            hashSet.add(i);
+        }
+        System.out.println("HashSet = " + hashSet);
+    }
+}
+```
+
+1. `Debug`模式走起，进入到`hashSet.add(i)` ---> `map.put(e, PRESENT)==null`这里的`PRESENT`是个什么东东？它其实就是一个占位符而已，因为`HashSet`的底层就是`HashMap`所以要符合它的格式，这是一种键值对形式 ---> `private static final Object PRESENT = new Object();`
+
+   ![](https://img-blog.csdnimg.cn/d1122e1bb8a442028df0438f3470e04b.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+2. 继续进入`map.put(e, PRESENT)`方法一探究竟，可以发现调用了`putVal()`方法，该方法的第一个参数传入的是所添加元素的哈希值，调用的是`hash(key)`方法，我们看看这个`hash(key)`里面是什么东东
+
+   ![](https://img-blog.csdnimg.cn/0adb1603b74645289fc2216de6e32adf.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+3. 进入到`hash(key)`方法，这里的`key`就是传入的元素，如果传入的元素是个`null`值，哈希值为`0`，如果不是`null`就调用传入元素类的`hashCode()`的方法，注意到这里是调用传入元素自身类的`hashCode()`，也就是说，程序员是可以重写这个方法决定某个类的哈希值是否一样，`hash()`方法再对元素的哈希值跟右移`16`位的哈希值做一个异或操作，为得是尽可能地避免哈希碰撞，最后就是返回一个哈希值
+
+   ![](https://img-blog.csdnimg.cn/37a0c0a4c46249ecbfa8461eb9abfeae.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+4. 返回到`put()`方法，传入哈希值，进入到`putVal()`方法中，这段代码是一个重头戏而且篇幅不小，我们一步一步慢慢看。
+
+   > 1. `Node<K, V>[] tab`：首先定义了一个节点数组，这里的`K V`都是泛型，代表的是`key value`的类型，这里的`value`只是一个占位符，重点看`key`
+   >
+   > 2. `Node<K, V> p`：然后定义节点`p`，通过第`6`可以看出`p`是用来存储当前索引的元素的，也就是数组某个位置存放的元素，用来判断这个位置是`null`还是有元素然后再进行下一步的打算
+   >
+   > 3. `int n, i`通过第`4`可以看出这里的`n`是用来存储数组长度即`tab.length`的，`i`通过第`6`步可以看出是索引
+   >
+   > 4. `if((tab = table) == null || (n = tab.length) == 0)`：如果数组是`null`或者数组的长度为`0`也就是没有元素的话，`n = (tab = resize()).length`，调用`reszie()`方法对`tab`进行扩容，这里也可以看出`resize()`返回的是`Node<K, V>[]`类型，让我们进入到`resize()`方法看看是怎么对节点数组进行扩容的，这个`resize()`也是够长的，所以分三批来看，注意哦，因为此时数组是空也就是说这是咋们的数组小朋友第一次扩容
+   >
+   >    > 1. `Node<K, V>[] oldTab = table;`这里`HashMap`的节点数组表传入给了`oldTab`元素，很明显这是老表的意思
+   >    >
+   >    > 2. `int oldCap = (oldTab == null) ? 0 : oldTab.length;`判断老表是否是`null`的，如果是老表数组容量我们当做`0`，如果不是返回老表数组的容量
+   >    >
+   >    > 3. `int oldThr = threshold;`这里的`threshold`是阈值的意思，暂且不明白这个是干嘛的
+   >    >
+   >    > 4. `int newCap, newThr = 0;`定义新的容量和阈值都为`0`
+   >    >
+   >    > 5. ```java
+   >    >    if (oldCap > 0) {
+   >    >        if (oldCap >= MAXIMUM_CAPACITY) {
+   >    >            threshold = Integer.MAX_VALUE;
+   >    >            return oldTab;
+   >    >        }
+   >    >        else if ((newCap = oldCap << 1) < MAXIMUM_CAPACITY &&
+   >    >                 oldCap >= DEFAULT_INITIAL_CAPACITY)
+   >    >            newThr = oldThr << 1; // double threshold
+   >    >    }
+   >    >    else if (oldThr > 0) // initial capacity was placed in threshold
+   >    >        newCap = oldThr;
+   >    >    ```
+   >    >
+   >    >    很明显，这里`Node<K, V>[] tab`本身就是`null`，很明显这里`oldCap = 0`所以直接跳过这个判断一直到执行`else`语句
+   >    >
+   >    > 6. ```java
+   >    >    else {               // zero initial threshold signifies using defaults
+   >    >        newCap = DEFAULT_INITIAL_CAPACITY;
+   >    >        newThr = (int)(DEFAULT_LOAD_FACTOR * DEFAULT_INITIAL_CAPACITY);
+   >    >    }
+   >    >    ```
+   >    >
+   >    >    这里将赋予`newCap`也就是新的容量一个默认容量值，这里`DEFAULT_INITIAL_CAPACITY`的值为`16`，也就是说`HashSet`或者`HashMap`的数组容量初始化都是`16`，这里的`DEFAULT_INITIAL_CAPACITY`也很有意思，不是直接写`16`而写的是`1 << 4`相当于`1 * 2^4 = 16`
+   >    >
+   >    >    ```java
+   >    >    static final int DEFAULT_INITIAL_CAPACITY = 1 << 4; // aka 16
+   >    >    ```
+   >    >
+   >    >    `newThr = (int)(DEFAULT_LOAD_FACTOR * DEFAULT_INITIAL_CAPACITY);`
+   >    >
+   >    >    通过这句代码，真相大白，我们终于明白这个`New Threshold`阈值是个什么东东了，原来阈值表示的就是要做扩容的一个临界值，比如这里是`0.75 * 16 = 12`也就是说如果`HashSet/HashMap`里面的元素个数超过了`12`个也就是`13`个的时候就需要做扩容，这是为了防止突然有一大段数据要插入的时候不够用的情况
+   >    >
+   >    > 7. 继续进入到下一段代码：新的扩容阈值是`0`吗显然不是，所以这段代码跳过，后续如果遇到了再继续更深一步的探索
+   >    >
+   >    >    ```java
+   >    >    if (newThr == 0) {
+   >    >        float ft = (float)newCap * loadFactor;
+   >    >        newThr = (newCap < MAXIMUM_CAPACITY && ft < (float)MAXIMUM_CAPACITY ?
+   >    >                  (int)ft : Integer.MAX_VALUE);
+   >    >    }
+   >    >    ```
+   >    >
+   >    > 8. `threshold = newThr;`阈值初始化
+   >    >
+   >    > 9. `Node<K,V>[] newTab = (Node<K,V>[])new Node[newCap];`创建一个新的节点数组，目的就是为了扩容
+   >    >
+   >    > 10. `table = newTab;` ---> 直接将`table`指向跟`newTab`一样的数组，直接扩容
+   >    >
+   >    > 11. 判断老数组中是否为`null`，不为`null`表示里面有元素，需要将元素给到新数组，这里还没遇到这种情况，先跳过，到时候再继续深入
+   >    >
+   >    >     ```java
+   >    >     if (oldTab != null) {
+   >    >         for (int j = 0; j < oldCap; ++j) {
+   >    >             Node<K,V> e;
+   >    >             if ((e = oldTab[j]) != null) {
+   >    >                 oldTab[j] = null;
+   >    >                 if (e.next == null)
+   >    >                     newTab[e.hash & (newCap - 1)] = e;
+   >    >                 else if (e instanceof TreeNode)
+   >    >                     ((TreeNode<K,V>)e).split(this, newTab, j, oldCa
+   >    >                 else { // preserve order
+   >    >                     Node<K,V> loHead = null, loTail = null;
+   >    >                     Node<K,V> hiHead = null, hiTail = null;
+   >    >                     Node<K,V> next;
+   >    >                     do {
+   >    >                         next = e.next;
+   >    >                         if ((e.hash & oldCap) == 0) {
+   >    >                             if (loTail == null)
+   >    >                                 loHead = e;
+   >    >                             else
+   >    >                                 loTail.next = e;
+   >    >                             loTail = e;
+   >    >                         }
+   >    >                         else {
+   >    >                             if (hiTail == null)
+   >    >                                 hiHead = e;
+   >    >                             else
+   >    >                                 hiTail.next = e;
+   >    >                             hiTail = e;
+   >    >                         }
+   >    >                     } while ((e = next) != null);
+   >    >                     if (loTail != null) {
+   >    >                         loTail.next = null;
+   >    >                         newTab[j] = loHead;
+   >    >                     }
+   >    >                     if (hiTail != null) {
+   >    >                         hiTail.next = null;
+   >    >                         newTab[j + oldCap] = hiHead;
+   >    >                     }
+   >    >                 }
+   >    >             }
+   >    >         }
+   >    >     }
+   >    >     ```
+   >    >
+   >    > 12. `return newTab;`返回新的数组，**<font color="red">到此第一次扩容结束，与其说是扩容，倒不如说是直接创建返回了一个长度为`16`的节点数组</font>**，除此之外还走了初始化扩容阈值操作，不像`ArrayList`和`Vector`，它两的扩容使用的是`copyOf`拷贝出一个新的数组
+   >
+   >    ![](https://img-blog.csdnimg.cn/c0d8eae33ef345a3bd8064ea29d90047.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+   >
+   >    ![](https://img-blog.csdnimg.cn/10c834bbfab4492ab6b2af955ecd4eec.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+   >
+   >    ![](https://img-blog.csdnimg.cn/0348673fe445401e85b3548e9e7ef325.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_18,color_FFFFFF,t_70,g_se,x_16)
+   >
+   > 5. `n = (tab = resize()).length;`经过第一次所谓的“扩容”，现在数组就从一个`null`转换成了长度为`16`的节点数组，此时`n`代表数组长度也就成了`16`
+   >
+   > 6. `if ((p = tab[i = (n - 1) & hash]) == null)`可以很清楚的看到，索引`i`的计算方式就是`(n - 1) & hash`也就是数组的最后一个位置和哈希值进行与操作得来的，`p = tab[i]`所以`p`就是当前这个索引的元素，判断该位置有无元素，很明显，因为是第一次插入所以肯定是没有元素在这里的，进入到`tab[i] = newNode(hash, key, value, null);`，创建一个新的节点`newNode(hash, key, value, null);`传入`hash key value`这都好理解，最后一个`null`代表的是下一个元素的位置，因为用节点的目的就是后续是要形成链表的
+   >
+   >    ```java
+   >    if ((p = tab[i = (n - 1) & hash]) == null)
+   >        tab[i] = newNode(hash, key, value, null);
+   >    ```
+   >
+   > 7. `++modCount;`记录修改的次数
+   >
+   > 8. 比较`++size`和`threshold`，如果添加元素后的数组数量要大于阈值则要进行扩容 ---> `resize();`
+   >
+   >    ```java
+   >    if (++size > threshold)
+   >        resize();
+   >    ```
+   >
+   > 9. `afterNodeInsertion(evict);`这个方法是用来给`HashMap`的子类所做的一个标的，当前这里是一个空方法，也就是说，后续可能有一些其它的功能，可以在这个方法中添加，比如将做个有序的数组链表等等
+   >
+   > 10. `return null;`到这里，元素添加完毕
+
+   ![](https://img-blog.csdnimg.cn/2f406002bfee4858b3841984d58911ca.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+5. 第一个元素添加完成，`HashSet`长这样
+
+   ![](https://img-blog.csdnimg.cn/bf53331d0cd842d0b5a0ab66ad285a00.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_16,color_FFFFFF,t_70,g_se,x_16)
+
+6. 让我们接着来添加第二个元素，从添加第二个元素起一直到添加第`13`个元素【不包括第`13`个元素，第`13`个元素还发生了一些有趣的事情，是什么呢？到时候你就知道啦~而且如果某个链表的长度已经到了`8`个元素并且此时数组容量超过了`64`，那么该链表会转化为红黑树，那如果数组容量没有超过`64`但是链表长度超过了`8`，此时会发生什么呢？此时会一直先扩容到`64`然后再将链表转化为红黑树。这个后面也会提到滴】，中途发生的东西都是一样一样滴
+
+   还是原来的配方，熟悉的味道，照样还是调用`put`方法然后进入到`putVal()`调用`hash()`传入哈希值，跟前面的第`1 2 3`步没什么区别，这里我们直接跳过，直接进入到`putVal()`方法
+
+   ![](https://img-blog.csdnimg.cn/5e9d2e856df842138de4ab4b144f7da9.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+7. 继续阅读这个重点源码`putVal();`
+
+   > 1. `Node<K, V>[] tab; Node<K, V> p; int n, i;`还是定义几个辅助变量，这里再说下，这个`tab`是节点数组，`p`是某索引下数组中的元素节点，`n`是数组长度，`i`是根据哈希计算得来的索引
+   >
+   > 2. ```java
+   >    if ((tab = table) == null || (n = tab.length) == 0)
+   >        n = (tab = resize()).length;
+   >    ```
+   >
+   >    可以看到，`table`赋值给了`tab`，此时`table`已经不是`null`，并且在第一次的时候已经添加了元素`1`，所以长度不再为`0`故这里不再进行扩容，跳过
+   >
+   > 3. ```java
+   >    if ((p = tab[i = (n - 1) & hash]) == null)
+   >        tab[i] = newNode(hash, key, value, null);
+   >    ```
+   >
+   >    获取当前数组最后一个位置的索引和哈希值进行一个与操作得到索引，判断当前索引是否为`null`，很明显这里是一个`null`，所以直接在这个位置存储第二个节点
+   >
+   > 4. 重复上述第`4`大步中的第`7 8 9 10`步骤，至此添加元素完成
+
+   ![](https://img-blog.csdnimg.cn/ec448325f0334ac292bef9bac73f92f0.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+8. 随后添加的第`3 4 5 6 7 8 9 10 11 12`都是如此，我们直接调到`i = 12`的情况，前面的步骤没什么差别，重点在于最后的：因为`threshold = 12`，`++size = 13`超过了，所以要进行第二次扩容，让我们一起看看第二次扩容都发生了什么吧~
+
+   ```java
+   if (++size > threshold)
+       resize();
+   ```
+
+9. 第二次扩容又到来我们的老朋友`resize()`这里做客了
+
+   > 1. `Node<K, V>[] oldTab = table;`存储老表
+   >
+   > 2. `int oldCap = (oldTap == null) ? 0 : oldTab.length;`存储老表的长度，很明显是`16`
+   >
+   > 3. `int oldThr = threshold;`存储老表的阈值，很明显是`12`
+   >
+   > 4. `int newCap, newThr = 0;`创建新容量和新阈值
+   >
+   > 5. 很明显老表的容量`= 16 > 0`，这是`newCap`到底要赋予多少的容量而做的一个判断，`MAXIMUM_CAPACITY`的数值是`1 << 30`也就是`1 * 2^30`很明显，一般都不会到达这个数值，所以这里进入的是第二个`else if()`【点击栈顶可以快速回到执行处】，`oldCap << 1`也就是老表容量的`2`倍传递给`newCap`确保是小于`MAXIMUM_CAPACITY`的，这个`MAXIMUM_CAPACITY`有多大？前面已经提到过是`1 << 30`所以这个条件是符合的，再来看第二个条件：`oldCap >= DEFAULT_INITIAL_CAPACITY`也就是老表的容量是`>=`默认容量的，都是`16`很明显这个条件也是符合的。
+   >
+   >    执行代码，到了这里，新的容量和新的阈值都诞生了：`newCap = oldCap << 1`，`newThr = oldThr << 1`都是原先容量和原先阈值的两倍，这里新容量就是`32`，新阈值就是`24`
+   >
+   >    ```java
+   >    if (oldCap > 0) {
+   >        if (oldCap >= MAXIMUM_CAPACITY) {
+   >            threshold = Integer.MAX_VALUE;
+   >            return oldTab;
+   >        }
+   >        else if ((newCap = oldCap << 1) < MAXIMUM_CAPACITY &&
+   >                 oldCap >= DEFAULT_INITIAL_CAPACITY)
+   >            newThr = oldThr << 1; // double threshold
+   >    }
+   >    ```
+   >
+   > 6. 很明显`newThr == 0`不符合条件直接跳过
+   >
+   >    ```java
+   >     if (newThr == 0) {
+   >         float ft = (float)newCap * loadFactor;
+   >         newThr = (newCap < MAXIMUM_CAPACITY && ft < (float)MAXIMUM_CAPACITY ?
+   >                   (int)ft : Integer.MAX_VALUE);
+   >     }
+   >    ```
+   >
+   > 7. `threshold = newThr;`赋予新的阈值，阈值为：`32 * 0.75 = 24`
+   >
+   > 8. `Node<K,V>[] newTab = (Node<K,V>[])new Node[newCap];`创建新的节点数组
+   >
+   > 9. `table = newTab;`数组`table`指向新的节点数组
+   >
+   > 10. 判断老数组中有无元素，很明显之前存入的`12`个元素都还在里边，我们看看如果老数组存在元素会发生什么有趣的事情？
+   >
+   >     定义一个普通`for`循环，遍历数组中的每一个链表，创建一个`Node`节点`e`指向当前索引的头结点，这里第一个指向的是`index = 0`索引，很明显没有元素，`j++`，到下一个，`index = 1`，有节点，进入，将`oldTab`数组和链表的联系切断即`oldTab[j] = null;`如果新结点的`next`是`null`的话，说明该链表只有一个元素【这里是为了判断是否要转化为红黑树节点设置的】，如果没有的话直接存入新数组中，照样索引的取值`= e.hash & (newCap - 1)`哈希值和数组最大索引的与运算结果。
+   >
+   >     **<font color="red">到这里节点的操作就结束了，但是如果节点并不是红黑树节点，并且`next`有节点这种情况呢？这里有必要还要继续说说这种情况：在这里，你将弄明白索引的运算到底是个什么原理？高位链表和低位链表是什么？为什么需要这样做？扩容之后，之前的元素到底是怎么转换的？等等这些答案都将一一揭晓</font>**
+   >
+   >     ```java
+   >     if (oldTab != null) {
+   >         for (int j = 0; j < oldCap; ++j) {
+   >             Node<K,V> e;
+   >             if ((e = oldTab[j]) != null) {
+   >                 oldTab[j] = null;
+   >                 if (e.next == null)
+   >                     newTab[e.hash & (newCap - 1)] = e;
+   >                 else if (e instanceof TreeNode)
+   >                     ((TreeNode<K,V>)e).split(this, newTab, j, oldCap);
+   >                 else { // preserve order
+   >                     Node<K,V> loHead = null, loTail = null;
+   >                     Node<K,V> hiHead = null, hiTail = null;
+   >                     Node<K,V> next;
+   >                     do {
+   >                         next = e.next;
+   >                         if ((e.hash & oldCap) == 0) {
+   >                             if (loTail == null)
+   >                                 loHead = e;
+   >                             else
+   >                                 loTail.next = e;
+   >                             loTail = e;
+   >                         }
+   >                         else {
+   >                             if (hiTail == null)
+   >                                 hiHead = e;
+   >                             else
+   >                                 hiTail.next = e;
+   >                             hiTail = e;
+   >                         }
+   >                     } while ((e = next) != null);
+   >                     if (loTail != null) {
+   >                         loTail.next = null;
+   >                         newTab[j] = loHead;
+   >                     }
+   >                     if (hiTail != null) {
+   >                         hiTail.next = null;
+   >                         newTab[j + oldCap] = hiHead;
+   >                     }
+   >                 }
+   >             }
+   >         }
+   >     }
+   >     ```
+   >
+   >     
+
+   ![](https://img-blog.csdnimg.cn/8a95c861bc744ac6bc06a49213702030.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+   ![](https://img-blog.csdnimg.cn/9e5ef748e2464cc29f06e56ecf98ac51.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
