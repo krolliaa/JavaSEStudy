@@ -1044,4 +1044,144 @@ public class HashSetAdd {
 
 之前添加的元素的哈希值都是不一样的，如果哈希值的值是一样的呢？我们知道哈希值如果一样，那根据索引的计算方式：`hashCode & (n - 1)`那么哈希值一样索引就是一样的，这一小段代码我们还没有看，让我们一探究竟！
 
+`else`之前的两个判断为：`tab`是否是空的，如果是是空的进行第一次扩容，然后判断根据哈希值求出来的索引上有没有数据，没有数据就直接存储节点。
+
+所以`else`这里判断的就是如果得到的索引值上有数据要如何处理结果？到底如何处理呢？请看：
+
+> 1. `Node<K, V> e; K k;`首先定义一个节点以及创建一个跟需要添加的数据一样类型的对象`k`
+>
+> 2. `if(p.hash == hash && ((k = p.key) == key || (key != null && key.equals(k))))`判断当前的元素的哈希值跟头结点的哈希值是不是一样的，如果一样接着判断传进来的`key`和头结点的`key`【这里因为是`HashSet`，`HashSet`，存储元素就是存放在`key`里头】如果比较的是对象则比较的是内存地址是不是一样的，如果比较的是基本数据类型则比较的是值，如果本身就是同一个东西，那它直接返回`true`，减少了后续判断，如果不是同一个内存地址，使用`equals`看内容是不是一样的。如果内容也是一样的，将当前的头结点赋值给刚刚创建的节点`Node<K, V> e;`
+>
+>    有些人可能很好奇，为什么这里返回的是一个节点？而在`main`方法中打印的是`boolean`值，这是因为`boolean`方法是在`add()`方法发生的，判断从`put()`方法有没有返回元素`value`，如果返回的是`null`则表示没有相同元素存在，故添加成功；如果返回的是非空元素，也就是说`添加的元素已经存在了`则表示添加不成功，声明下，`add()`方法就是用来说明添加是否成功的？而添加是否成功的关键就看要添加的元素是否已经存在在`HashSet`中，如果不存在也就是`put() == null`返回`true`表示添加成功，如果`put() != null`返回`false`表示添加失败
+>
+>    这里的`equals`方法程序员是可以自定义的，由于`String`类型重写了`equals`方法，只要内容相同就认为是同一个对象，因此这里会直接返回`true`
+>
+> 3. 继续看代码：如果头结点属于树节点，则进入`putTreeVal`判断是否有重复没有就添加
+>
+>    ```java
+>    else if (p instanceof TreeNode)
+>        e = ((TreeNode<K,V>)p).putTreeVal(this, tab, hash, key, value);
+>    ```
+>
+> 4. 第一步已经判断跟头结点是否是重复元素【提高效率】，第二步判断是不是树节点，这两个情况分开讨论，如果上述都不满足，就需要进入到这条链表中，取出每一个结点跟要添加的元素进行比较，只要有一个结点跟这个元素是相同的，表明无法添加。
+>
+>    ```java
+>    else {
+>        for (int binCount = 0; ; ++binCount) {
+>            if ((e = p.next) == null) {
+>                p.next = newNode(hash, key, value, null);
+>                if (binCount >= TREEIFY_THRESHOLD - 1) // -1 for 1st
+>                    treeifyBin(tab, hash);
+>                break;
+>            }
+>            if (e.hash == hash &&
+>                ((k = e.key) == key || (key != null && key.equals(k))))
+>                break;
+>            p = e;
+>        }
+>    }
+>    ```
+>
+>    开始遍历每一个结点，如果当前链表只有头结点一个节点，因为之前已经判断过了头结点跟要添加的元素不构成重复关系，所以直接添加即可：
+>
+>    `p.next = newNode(hash, key, value, null);`添加新元素到这条链表中
+>
+>    `if (binCount >= TREEIFY_THRESHOLD - 1) treeifyBin(tab, hash); // -1 for 1st`判断当前链表的数量是否已经`= 8`如果`= 8`则需要做红黑树转换
+>
+>    `break`：添加成功，退出循环，返回`null`
+>
+>    ```java
+>    if ((e = p.next) == null) {
+>        p.next = newNode(hash, key, value, null);
+>        if (binCount >= TREEIFY_THRESHOLD - 1) // -1 for 1st
+>            treeifyBin(tab, hash);
+>        break;
+>    }
+>    ```
+>
+>    如果当前节点跟要添加的元素哈希值相同并且（内存地址相同【引用数据类型】或者值相同【基本数据类型】或者使用`equals`判断相同）则表示当前节点和要添加的元素构成重复关系，不往里面添加值，直接退出循环，为什么这里可以直接退出循环呢？因为在上一个判断中：`if((e = p.next) == null)`此时`e`已经指向当前节点，在下面这段代码中此时`break`，意味着当前节点也就是`e`指向的节点跟添加的元素重复了，所以直接`break`即可
+>
+>    ```java
+>    if (e.hash == hash &&
+>        ((k = e.key) == key || (key != null && key.equals(k))))
+>        break;
+>    ```
+>
+> 5. 返回节点的`value`值，有些同胞们可能感到奇怪，为什么明明搞的是`key`这里却返回的是`value`，嘿嘿，这就是大神们的操作，因为`HashSet`的底层就是`HashMap`，`HashMap`里头是键值对，看的是`key-value`，如果前面判断了`key`都是一样的，但是`value`不一样，`HashMap`也是要存储的，会更新原来的`value`值，但是`HashMap`直接调用的是`put()`方法，而`HashSet`是调用的是`add()`方法，同一个方法，就显示出了不同的功能，这绝实属于写代码的高级境界了。
+>
+>    **<font color="red">在`HashSet`中有返回`value`说明重复，不添加</font>**
+>
+>    **<font color="red">在`HashMap`中有返回`value`说明`key`已存在，更新`value`</font>**
+>
+>    ```java
+>    if (e != null) { // existing mapping for key
+>        V oldValue = e.value;
+>        if (!onlyIfAbsent || oldValue == null)
+>            e.value = value;
+>        afterNodeAccess(e);
+>        return oldValue;
+>    }
+>    ```
+
 ![](https://img-blog.csdnimg.cn/55804be127d645c1a68eed4a6533b90d.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+<font color="red">**到此`HashSet`源码剖析就到此结束了，想必已经讲得非常透彻。**</font>
+
+#### 5.1.5 `HashSet`的最佳实践
+
+定义一个`Employee`类，该类包含：`private`成员属性`name.age`
+
+1. 创建`3`个`Employee`对象放入`HashSet`中
+2. 当`name`和`age`的值相同时,认为是相同员工，不能添加到`HashSet`集合中
+
+```java
+package Chapter03;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Objects;
+
+public class HashSetTest {
+    public static void main(String[] args) {
+        HashSet hashSet = new HashSet();
+        hashSet.add(new Employee("张三", 25));
+        hashSet.add(new Employee("张三", 25));
+        hashSet.add(new Employee("张三", 25));
+        Iterator iterator = hashSet.iterator();
+        while (iterator.hasNext()) System.out.println(iterator.next());
+        System.out.println(hashSet);
+    }
+}
+
+class Employee {
+    private String name;
+    private int age;
+
+    public Employee(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Employee employee = (Employee) o;
+        return age == employee.age && Objects.equals(name, employee.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, age);
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                '}';
+    }
+}
+```
+
