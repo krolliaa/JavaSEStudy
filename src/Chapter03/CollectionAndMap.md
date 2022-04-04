@@ -161,7 +161,7 @@ class Book {
 }
 ```
 
-## 4. `List`接口
+## 4. `List`接口[继承`Collection`接口]
 
 `List`接口是`Collection`接口的子接口，`List`的实现类是有序可重复的，相比于`Collection`接口，`List`有索引，所以可以删除某个索引的元素或者某个集合也可以在某个索引后边增加元素或者某个集合。
 
@@ -541,7 +541,7 @@ public class LinkedListCRUD {
 1. 如果查找的操作多[大部分，达到`80% - 90%`的操作其实都是查找]，选择`ArrayList`
 2. 如果增加和删除的操作多，选择`LinkedList`
 
-## 5. `Set`接口
+## 5. `Set`接口[继承`Collection`接口]
 
 特点：无序不可重复并且没有索引，不支持随机访问，因为继承了`Collection`接口所以可以使用迭代器和增强`for`循环进行遍历
 
@@ -1184,4 +1184,97 @@ class Employee {
     }
 }
 ```
+
+### 5.2 `LinkedHashSet`
+
+1. `LinkedHashSet`是`HashSet`的子类
+
+2. `LinkedHashSet`的底层是`LinkedHashMap`，底层维护的是一个**数组**和**双向链表**
+
+3. `LinkedHashSet`根据元素的`HashCode`即哈希值决定元素的存储位置，同时使用双向链表维护元素的次序，这使得元素看起来是以插入顺序保存的【也就是取出来的顺序跟添加的元素是一样的】
+
+   ![](https://img-blog.csdnimg.cn/eb29610b5e7a478e8a4be35322b6c703.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L25pbmdtZW5nc2h1eGlhd28=,size_16,color_FFFFFF,t_70)
+
+4. `LinkedHashSet`也是`HashSet`的一种，不允许添加重复的元素
+
+![](https://img-blog.csdnimg.cn/816f1c3604cb4abaa67363ad6207fe49.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_14,color_FFFFFF,t_70,g_se,x_16)
+
+`LinkedHashSet`源码剖析：
+
+> 1. 在`LinkedHashSet`中维护了一个哈希表和双向链表，双向链表有`head`和`tail`
+>
+> 2. 每一个节点中都有`before`和`after`属性，这是形成双向链表的必要条件
+>
+>    ```java
+>    tail.next = newElement;
+>    newElement.pre = tail;
+>    tail = newElement;
+>    ```
+>
+> 3. 在添加一个元素的时候，先求出哈希值再求索引，确定该元素在哈希表中的位置，然后将添加的元素加入到双线链表中，跟他爸爸`HashSet`一样，不能重复添加
+>
+> 4. 因为每次插入一个节点，`tail`都会指向它，这就使得插入顺序是一定的，我们总是可以通过双向链表找到下一个节点【不管是不是在一个索引上，都可以找到】
+>
+> 5. `LinkedHashSet`的底层是`LinkedHashMap`，`LinkedHashMap`是`HashMap`的子类
+
+```java
+package Chapter03;
+
+import java.util.LinkedHashSet;
+
+public class LinkedHashSetSource {
+    public static void main(String[] args) {
+        LinkedHashSet linkedHashSet = new LinkedHashSet();
+        linkedHashSet.add(new String("AAA"));
+        linkedHashSet.add(456);
+        linkedHashSet.add(456);
+        linkedHashSet.add(new Customer(1001, "Z"));
+        linkedHashSet.add(123);
+        linkedHashSet.add("XML");
+        System.out.println(linkedHashSet);
+    }
+}
+
+class Customer {
+    private int no;
+    private String name;
+
+    public Customer(int no, String name) {
+        this.no = no;
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "no=" + no +
+                ", name='" + name + '\'' +
+                '}';
+    }
+}
+```
+
+打印结果：可以看到结果是有序的，但是`HashSet`是无序的
+
+```java
+[AAA, 456, Customer{no=1001, name='Z'}, 123, XML]
+
+Process finished with exit code 0
+```
+
+其实啊，`LinkedHashSet`的添加方法跟`HashSet`的添加方法是没区别的，都是`add put putVal`这三个方法，只是将节点变成了双向链表的节点，有`before`还有`after`，`LinkedHashSet`的底层是`LinkedHashMap`，添加的节点叫做`Entry`，`Enrty`是继承了`Node`类的子类。
+
+可以看到`table`也就是哈希表是`HashMap$Node`但是存放的元素是：`LinkedHashMap$Entry`这两个一个是`HashMap`的子类一个是`Node`的子类。通过下图可以看到`Entry`类的实现是在`LinkedHashMap`中完成的，这是一个静态内部类。
+
+![](https://img-blog.csdnimg.cn/67cc756918504dbfa48eaf0746c78afe.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+![](https://img-blog.csdnimg.cn/ffa800d583514e13941300b07deebf82.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+存入的节点如下：可以看到`value`的值跟当时剖析`HashSet`源码时没区别。
+
+![](https://img-blog.csdnimg.cn/43711623abaa479589ce4d64f279c74a.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+再继续存入一个节点，可以看到`after`和`before`这两个双向链表最明显特征的显示，这就使得插入时是保持顺序插入的：
+
+![](https://img-blog.csdnimg.cn/ab77c44bd1fb413b91d3a5ae66e5837b.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
 
