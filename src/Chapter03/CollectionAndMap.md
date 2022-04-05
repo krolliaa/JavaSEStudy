@@ -1278,3 +1278,277 @@ Process finished with exit code 0
 
 ![](https://img-blog.csdnimg.cn/ab77c44bd1fb413b91d3a5ae66e5837b.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
 
+### 5.3 `TreeSet`
+
+## 6. `Map`接口
+
+![](https://img-blog.csdnimg.cn/fc8dade994fe429c8af659315a13b830.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+双列集合，存储数据的形式是键值对。之前在学习`HashSet`和`LinkedHashSet`的时候其实已经间接的学习了`Map`接口的实现类`HashMap`了，之前我们往`HashSet`或者`LinkedHashSet`存储元素的时候表面上看好像只是存储了的是单列形式的数据，但深入源码之后可以发现，存储的还是键值对的形式，用户添加的数据存储在`key`上，而`value`则是默认赋予了一个定格的数据：`PRESENT ---> new Object()`，现在要学习的`Map`在这里就不一样，`value`是程序员或者说是用户自定义传递进来的数据。
+
+![](https://img-blog.csdnimg.cn/4fb293ac7c034140b86a954c9b163292.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+![](https://img-blog.csdnimg.cn/ea7afbbf68974328b7b992a79e0cd82d.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+- `Map`接口拥有着大量的应用场景，非常使用，所以搞懂`Map`非常非常非常有必要，而且必须是很透彻的那种搞懂而不是一知半解的那种。
+
+- **`Map`接口的特点：**
+
+  1. `Map`和`Collection`并列存在，用于保存具有映射关系的数据`key-value`也就是键值对形式的数据
+
+  2. `Map`中的`key`和`value`是可以引用任何类型的数据[`Object`]，会封装到`HashMap$Node`对象中
+
+  3. `Map`中的`key`不允许重复【严格意义上说是一种有条件的不可重复，如果哈希值或者`equals`方法不同说明是不一样的元素，这就可以添加，即使看着是一样的，但其实并不一样，此时不构成重复】，因为`Map`实现类中是通过`Key`得到哈希值而得到索引进而再使用`equals`方法比较，所以在该实现机制下，认为哈希值得到的索引然后调用`equals`方法内容相同就会认为是同一个东西，此时被认为是一个重复值从而**覆盖**掉原来的`key`中的`value`，所以`key`想重复也重复不了，除非是两个不一样的对象。
+
+     但是`value`是可以一样的。也就是说不同的`key`可以允许有一样的`value`。
+
+  4. `Map`中的`key`可以为`null`，`value`也可以为`null`
+
+  5. 通常使用`String`类作为`Map`的`key`
+
+  6. `key-value`之间的关系是单向一对一的关系，通过`key`总能找到相对应的`value`
+
+  7. 因为哈希值是无法确定的，导致索引无法确定，所以存放的顺序跟取出的顺序不一致【`HashMap`】
+
+  8. 通过`get()`方法获取某个`key`的`value`值
+
+  ```java
+  package Chapter03;
+  
+  import java.util.HashMap;
+  import java.util.Map;
+  
+  public class MapStudy {
+      public static void main(String[] args) {
+          Map map = new HashMap<>();
+          map.put("no1", "逻辑");
+          map.put("no2", "水滴");
+          map.put("no1", "地球");
+          map.put("no3", "三体");
+          map.put(null, null);
+          map.put(null, "碳中和");
+          map.put("no4", null);
+          map.put("no5", null);
+          map.put(new Object(), "新能源");
+          System.out.println(map.get("no1"));
+          System.out.println(map.get("no2"));
+          System.out.println(map.get("no3"));
+          System.out.println(map.get("no4"));
+          System.out.println(map.get("no5"));
+          System.out.println(map.get(null));
+          System.out.println(map);
+      }
+  }
+  ```
+
+  注：`Map`存放数据的`key-value`存放在`Node<K, V>`类中，因为实现了`Map.Entry<K, V>`也就是`Map`接口的静态内部接口`Enrty`接口，所以有的人说一个键值对就是一个`Enrty`。可以通过定位`putVal()`方法从而定位到存入一个键值对的本质是通过`newNode()`方法存入一个新的节点。
+
+  ![](https://img-blog.csdnimg.cn/81c6c7d9f7e04a6db625e5d4901c7381.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+  `newNode()`方法返回的是`Node<K, V>`类的对象
+
+  ![](https://img-blog.csdnimg.cn/abbcba431cb24ec7940c7ad0d7fd98c1.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+  继续看看`Node<K, V>`类，可以看到`Node<K, V>`是一个静态内部类并且实现了`Map.Entry<K, V>`接口。
+
+  ![](https://img-blog.csdnimg.cn/926c46c831f7423cba2e96821207302d.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+- 关于`EntrySet`初始化问题，通过调试代码发现在`putVal`的时候`EntrySet`就被初始化了，一直不清楚是怎么初始化的，在哪里初始化的，后面才知道原来`IDEA`在`Debug`模式下会隐式地调用`toString`方法，就会默认初始化了。所以得停止隐式地调用`toString`方法：
+
+  ![](https://img-blog.csdnimg.cn/e5098b5fa7d144e2afa0eae67b91f8ec.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+  此时我们再研究`EntrySet`的初始化逻辑就变得通畅了，在通过`hashMap.entrySet()`时，会调用`entrySet()`方法：
+
+  ![](https://img-blog.csdnimg.cn/b9fec983afcb4bb1841e3168a741f47a.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+  因为是第一次赋值，所以此时的`entrySet`这个变量肯定是一个`null`，所以赋予`entrySet`变量：`new EntrySet()`，这个`EnrtySet`又是`HashMap`的一个内部类：
+
+  ![](https://img-blog.csdnimg.cn/ee51ddbfd98c40a4bb1a7242d015b32b.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+  要想真正弄懂这个，首先你得明白什么是内部类？内部类有什么意义？内部类有什么特点？内部类有哪些？等等问题，如果弄不清楚这些是无法弄清楚`EntrySet`的，所以我们得先学习清楚内部类！
+
+### 6.1 内部类
+
+**为什么要用内部类？**
+
+> 1. 内部类方法可以访问该类中定义所在的作用域中的数据，包括私有数据
+> 2. 内部类可以对同一个包中的其它类隐藏起来
+> 3. 当想要定义一个回调函数且不想编写大量代码时，使用匿名内部类比较便捷
+
+**什么时候用到内部类？**
+
+>  当描述事物时，若一个事物内部还包含由其它的事物，就可以使用内部类这种结构。比如：汽车类即`Car.class`中包含着发动机类`Engine.class`。此时发动机类就可以作为汽车类的一个内部类。
+
+**使用内部类有什么好处？**
+
+> 1. 内部类可以很好地实现隐藏，一般非内部类是不允许访问私有`private`属性/方法的，甚至如果你不是在同一个包下是无法访问`protected`修饰的属性/方法的，但是内部类可以，也就是说内部类拥有外部类所有元素包括属性和方法的访问权限
+> 2. 内部类可以实现多重集成
+> 3. 可以避免修改接口而实现同一个类中两种同名方法的调用
+
+**使用内部类有什么缺点？**
+
+> 内部类的结构有些许复杂，光是种类划分就可以分为：成员内部类、匿名内部类、局部内部类、静态内部类
+
+#### 6.1.1 成员内部类
+
+成员内部类是最普通的内部类，它是外部类的一个成员，所以它是可以无限制的访问外部类的所有属性和方法的，即使该方法或者属性是被`private`修饰的，但是外部类要访问成员内部类的方法或者属性，必须通过创建成员内部类的实例才可以访问。这就像是成员变量中的实例变量，是一样的。
+
+我们知道成员变量是在一个类中的，如果没有该类也就没有了成员变量，成员内部类也一样，如果没有外部类，也就没有成员内部类，并且，成员内部类，我们类比于成员变量，需要先创建外部类的实例才可以创建成员内部类。
+
+```java
+package Chapter03;
+
+public class Car {
+    private boolean run = true;
+
+    public Engine getEngine() {
+        return new Engine();
+    }
+
+    class Engine {
+        public void runEngine() {
+            //成员内部类可以调用外部类任意权限的方法或者属性，即使是private
+            if (run) System.out.println("发动机启动");
+            else System.out.println("发动机坏了");
+        }
+    }
+
+    public static void main(String[] args) {
+        Car car = new Car();
+        Car.Engine carEngine = car.getEngine();
+        carEngine.runEngine();
+    }
+}
+```
+
+#### 6.1.2 局部内部类
+
+局部内部类类比于局部变量，我们知道局部变量是在方法体内的， 所以局部内部类也是如此，局部变量出了大括号就不认识了，局部内部类也是如此，它出了这个方法就没人认识它了。
+
+```java
+package Chapter03;
+
+public class Car {
+    private boolean run = true;
+
+    public void runMethod() {
+        class Engine {
+            public void runEngine() {
+                //成员内部类可以调用外部类任意权限的方法或者属性，即使是private
+                if (run) System.out.println("发动机启动");
+                else System.out.println("发动机坏了");
+            }
+        }
+        new Engine().runEngine();
+    }
+
+
+    public static void main(String[] args) {
+        Car car = new Car();
+        car.runMethod();
+    }
+}
+```
+
+#### 6.1.3 静态内部类
+
+用`public static`修饰的就是表示公开的静态内部类，如果再加上一个`final`则表示该类无法被继承也就是说没有子类。它可以直接以`类.静态内部类.静态方法/静态变量`的形式调用该静态内部类中的方法，也可以直接以`new 类.静态内部类()`创建静态内部类对象。
+
+静态内部类和非静态内部类最大一个区别在于内部类编译后会隐含地保存着一个引用，该引用是指向创建它地外部类内，但是静态内部类却没有。
+
+```java
+package Chapter03;
+
+public class Car {
+    private static boolean run = true;
+
+    static class Engine {
+        public void runEngine() {
+            //成员内部类可以调用外部类任意权限的方法或者属性，即使是private
+            if (run) System.out.println("发动机启动");
+            else System.out.println("发动机坏了");
+        }
+    }
+
+
+    public static void main(String[] args) {
+        Car car = new Car();
+        Car.Engine carEngine = new Car.Engine();
+        carEngine.runEngine();
+    }
+}
+```
+
+#### 6.1.4 匿名内部类
+
+匿名内部类是内部类地简化写法，它的本质是一个具体实现的父类或者父接口匿名的子类对象。在开发中，最常用的内部类就是匿名内部类了。匿名内部类的作用就是简化接口的创建以及实现的步骤。
+
+> 1. 匿名内部类是没有访问修饰符的
+> 2. 当所在的方法的形参需要被匿名的内部类使用，那么这个形参必须是`final`
+> 3. 匿名内部类没有构造方法，因为本身没有名字，无意义
+> 4. 不能定义静态成员
+
+<hr/>
+
+简单了解了什么是内部类以后，再去看回`EntrySet`就会变得相对好理解一些：我们可以看到`EntrySet`是一个成员内部类，所以它可以持有外部类的任意属性或者方法，并且它被`final`修饰着，这也就是为什么`EntrySet`在初始化的时候我们总是可以看到它持有`table`属性，而且这个`table`总跟外部类的`table`的地址一样，正是因为它是一个成员内部类。
+
+所以这个`EntrySet`也好，`keySet`也好还是`Values`也好，都只是对`HashMap`节点中的引用。
+
+![](https://img-blog.csdnimg.cn/83bcb0c5a9a44bd0b3ffc1b6f37f53df.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+顺带分析分析，`EntrySet`是如何通过迭代器来实现遍历的。可以看到创建了一个`EntryIterator`对象：
+
+![](https://img-blog.csdnimg.cn/9d9637e04ee14364947299c0a124f2ee.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+继续点进去看看`EntryIterator`这个类：然后你会发现这个类并没有显式的构造方法，也就是说有隐式的无参构造方法，会调用`super()`也就是会调用`HashIterator`类的无参构造方法，所以我们进入`HashIterator`类中一探究竟
+
+![](https://img-blog.csdnimg.cn/c9b881be5db84140a6e8ab287be76e95.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+`HashIterator`中的构造方法逻辑就是找到哈希表中索引下的第一个非空节点，后面就跟迭代器的逻辑没什么差别了，通过`hasNext()`和`next()`方法可以不断获取到下一个节点
+
+![](https://img-blog.csdnimg.cn/f3bb07f3249f4430bd4ac28600732c43.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+### 6.2 `Map`接口常用方法
+
+> 1. `put`：添加键值对
+> 2. `remove`：根据`key`删除键值对
+> 3. `get`：根据`key`获取`value`
+> 4. `size`：获取键值对个数
+> 5. `isEmpty`：判断`Map`是否为空
+> 6. `clear`：清空`Map`
+> 7. `containsKey`：查找某个`key`是否存在
+
+```java
+package Chapter03;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class MapMethod {
+    public static void main(String[] args) {
+        Map map = new HashMap<>();
+        map.put("no1", "罗辑");
+        System.out.println("put = " + map);
+        boolean isMapEmpty = map.isEmpty();
+        System.out.println("isEmpty = " + isMapEmpty);
+        System.out.println("get = " + map.get("no1"));
+        System.out.println("size = " + map.size());
+        System.out.println("remove = " + map.remove("no1"));
+        map.put("no1", "罗辑");
+        System.out.println("clear before = " + map);
+        map.clear();
+        System.out.println("clear after = " + map);
+        map.put("no1", "罗辑");
+        System.out.println("containsKey = " + map.containsKey("no1"));
+        System.out.println("containsKey = " + map.containsKey("no2"));
+    }
+}
+```
+
+### 6.3 `Map`遍历
+
+> 1. `containsKey`：查找`key`是否存在
+> 2. `keySet`：获取所有`key`
+> 3. `entrySet`：获取所有`key-value`
+> 4. `values`：获取所有`value`
+
