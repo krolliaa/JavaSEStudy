@@ -1545,7 +1545,7 @@ public class MapMethod {
 }
 ```
 
-### 6.3 `Map`遍历
+### 6.3 `Map`接口遍历方式
 
 > 1. `keySet`：获取所有`key`
 > 2. `entrySet`：获取所有`key-value`
@@ -1612,3 +1612,82 @@ public class MapFor {
 }
 ```
 
+### 6.4 `Map`接口练习
+
+使用`HashMap`添加`3`个员工对象,要求`key`：员工`id`，`value`:员工对象，并遍历显示`工资>18000`的员工(遍历方式最少`2`种)员工类:姓名、工资、员工id
+
+```java
+package Chapter03;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
+public class MapExercise {
+    public static void main(String[] args) {
+        Map map = new HashMap();
+        map.put(1, new NewEmployee("zs", 20000, 1));
+        map.put(2, new NewEmployee("ls", 17000, 2));
+        map.put(3, new NewEmployee("ww", 21000, 3));
+        Set entrySet = map.entrySet();
+        for (Object entry : entrySet) {
+            Map.Entry mapEntry = (Map.Entry) entry;
+            NewEmployee newEmployee = (NewEmployee) mapEntry.getValue();
+            if (newEmployee.salary > 18000) {
+                System.out.println(mapEntry.getKey() + "-" + mapEntry.getValue());
+            }
+        }
+        Iterator iterator = map.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry mapEntry = (Map.Entry) iterator.next();
+            NewEmployee newEmployee = (NewEmployee) mapEntry.getValue();
+            if (newEmployee.salary > 18000) {
+                System.out.println(mapEntry.getKey() + "-" + mapEntry.getValue());
+            }
+        }
+        Set keySet = map.keySet();
+        for (Object key : keySet) {
+            NewEmployee newEmployee = (NewEmployee) map.get(key);
+            if (newEmployee.salary > 18000) {
+                System.out.println(key + "-" + map.get(key));
+            }
+        }
+    }
+}
+
+class NewEmployee {
+    public String name;
+    public double salary;
+    public int id;
+
+    public NewEmployee(String name, double salary, int id) {
+        this.name = name;
+        this.salary = salary;
+        this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "NewEmployee{" +
+                "name='" + name + '\'' +
+                ", salary=" + salary +
+                ", id=" + id +
+                '}';
+    }
+}
+```
+
+### 6.5 `HashMap`特点
+
+> 1. `HashMap`是`Map`接口中使用频率最高的实现类
+> 2. `HashMap`是以键值对形式来存储数据的
+> 3. `HashMap`中`key`不能重复，但是`value`可以重复，允许使用`null`建和`null`值
+> 4. 如果添加相同的`key`就会覆盖掉原来的`value`，等同于修改
+> 5. `HashMap`没有像`Vector`那样有`synchronized`关键字也没有实现同步互斥，因此是线程不安全的
+
+### 6.6 `HashMap`底层机制
+
+因为`HashSet`的底层就是`HashMap`，所以其底层机制跟`HashSet`那时候学习的东西是一模一样的，只不过`value`不再是`new Object()`，存入的数据是自定义的`value`，然后存入返回的不再是`boolean`而是原先的`value`值。
+
+也就是说第一次返回的`null`，如果有覆盖，则返回的是被覆盖的老的`value`值。
