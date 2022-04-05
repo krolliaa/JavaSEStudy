@@ -1691,3 +1691,70 @@ class NewEmployee {
 因为`HashSet`的底层就是`HashMap`，所以其底层机制跟`HashSet`那时候学习的东西是一模一样的，只不过`value`不再是`new Object()`，存入的数据是自定义的`value`，然后存入返回的不再是`boolean`而是原先的`value`值。
 
 也就是说第一次返回的`null`，如果有覆盖，则返回的是被覆盖的老的`value`值。
+
+### 6.7 `HashTable`
+
+> 1. `HashTable`跟`HashMap`一样存放的都是键值对
+> 2. `HashTable`无论是`key`还是`value`都不能存放`null`，若存放则会抛出`NullPointerException`
+> 3. `HashTable`的方法跟`HashMap`的一样，存储取出删除是否包含为空清空都一样
+> 4. `HashTable`是线程安全的，有`synchronized`修饰，而`HashMap`则是线程不安全的
+
+深入`HashTable`源码，让我们看看`HashTable`是如何初始化的，又是如何添加元素的，扩容是怎么扩的？举例的代码如下：
+
+```java
+package Chapter03;
+
+import java.util.Hashtable;
+
+public class HashTableSource {
+    public static void main(String[] args) {
+        Hashtable hashtable = new Hashtable();
+        hashtable.put("no1", "罗辑");
+        hashtable.put("no2", "三体");
+        hashtable.put("no3", "地球");
+    }
+}
+```
+
+1. 可以看到`HashTable`的无参构造方法调用了有参构造方法，传入了初始化容量`11`和加载因子`0.75f`，也就是说`HashTable`的初始化容量不是像`HashMap`那样是`16`了，而是`11`，但是加载因子是一样的为：`0.75f`
+
+   ![](https://img-blog.csdnimg.cn/fe05bc166cc54951bc668c3a1ffab505.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+2. 我们接着进入到`HashTable`的有参构造方法一探究竟，可以看到`HashTable`的有参构造方法先是对初始化容量`initialCapacity`和加载因子`loadFactor`做了一个判断，判断这些值是否在正常范围之内。
+
+   然后初始化实例变量：加载因子`loadFactor`、表`table`、扩容阈值`threshold`，这里的加载因子直接赋值即可为`0.75f`，表赋予了一个`Entry`类型且容量为初始化容量的一维数组`Entry<?, ?>[initialCapacity]`，阈值为：`(int) 初始化容量 x 加载因子 = 11 * 0.75 = 8`
+
+   ![](https://img-blog.csdnimg.cn/f4c2267507be4d7596216a9b884feaa7.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+3. 到了这里，就创建好了容量为`11`的`Entry<?, ?>[11]`表，阈值为`8`，加载因子为`0.75f`的`HashTable`
+
+   ![](https://img-blog.csdnimg.cn/b4fc3a8846104a3aa2dc0f65b0d4a7da.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+4. 继续看`HashTable`是如何添加元素的，视线来到了`hashTable.put("no1", "罗辑");`上面，我们进到`put`方法里头，可以看到`put`方法被`synchronized`关键字修饰，也就是告诉我们`HashTable`是线程安全的。执行`put`方法：
+
+   首先是对`value`进行了一个`null`判断，如果`value`为`null`，则抛出`NullPointerException`，咦？不是说`key`也不能是`null`，怎么没有在这里看到对`key`是否为`null`的判断呢？
+
+   别急，让我们慢慢往下继续看：
+
+   - `Entry<?, ?> tab[] = table;`将之前初始化容量的`table`放入`tab`变量中
+
+   - `int hash = key.hashCode();`关于`key`也不能为`null`的判断就在这里，因为`null`是无法调用`hashCode()`的，所以会抛出`NullPointerException`异常，有的小伙伴就会问了，那为啥`HashMap`的没事，那说明在`HashMap`的时候没看仔细，`HashMap`是调用了自身的`hash()`方法，而这个方法判断`key`是否为`null`，如果为`null`，那么哈希值为`0`：
+
+     ```java
+     static final int hash(Object key) {
+         int h;
+         return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
+     }
+     ```
+
+     到这里就告诉我们：在`HashTable`中，无论是`key`还是`value`都不能是`null`，若是则会抛出`NullPointerException`空指针异常
+
+   - `int index = (hash & 0x7FFFFFFF) % tab.length;`获取索引，这里括号里面是为了获取到正整数，而后面的`%`操作是为了让索引在数组范围之内
+
+   - `Entry<K,V> entry = (Entry<K,V>)tab[index];`获取到该索引下数组的元素
+
+   - `for(; entry != null ; entry = entry.next)`想对该链表进行一个遍历，并且每次遍历一个元素都会对该节点的`hash`进行一个判断，若不同则再进行`equals`判断，目的就是防止添加重复元素，也就是说`HashTable`也是不能添加重复元素的。这里没有进入到循环体中，因为很明显因为这是第一次添加这个元素，所以直接跳过循环，到下一步
+
+   - `addEntry(hash, key, value, index);`进入到`addEntry()`方法里头添加键值对到`Entry`数组中
+
+   ![](https://img-blog.csdnimg.cn/9686136e64d4465e81d1e34457ef2d5a.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
