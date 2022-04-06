@@ -1280,6 +1280,79 @@ Process finished with exit code 0
 
 ### 5.3 `TreeSet`
 
+`TreeSet`实现了`Set`接口，与`HashSet`最大的区别就是`TreeSet`可以排序。所以在向`TreeSet`添加元素的时候，若不指定比较器，那么会将`key`强制转换为比较器比较，因此`key`必须实现`Comparable`接口，不然无法添加元素。可以看下面这个例子，很明显的报错了，因为`Person`。没有实现`Comparable`接口，所以无法添加元素。
+
+![](https://img-blog.csdnimg.cn/865db0ddc0564fdda6af2a7fd52516ce.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+`TreeSet`的底层就是`TreeMap`，要想弄清楚`TreeSet`，就顺带弄清楚了`TreeMap`。通过`TreeSet`的无参构造方法可以看见底层是`TreeMap`
+
+![](https://img-blog.csdnimg.cn/087faf4506944290b5c1e202bf7eec71.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+`TreeSet`添加元素会调用`TreeSet.add()`方法，进而会调用`TreeMap.put()`方法，这里跟`HashSet`一样，`value`值也是直接给了一个`new Object()`：
+
+![](https://img-blog.csdnimg.cn/6f05d2bb77a14e9a9c26c08149fec2d0.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+接下来进入到`TreeMap.put()`方法一探究竟，到底是如何添加元素的？
+
+> 1. `Enrty<K, V> t = root;`获取到二叉树的根结点【`TreeMap`的底层数据结构就是二叉树】
+>
+> 2. `if(t == null)`说明这是一棵没有任何数据的空二叉树，直接看看能不能插入
+>
+>    `compare(key, key);`进入`compare()`方法中判断有无比较器
+>
+>    `root = new Entry<>(key, value, null);`赋予该元素在根结点的位置上
+>
+>    `size = 1;`元素个数为`1`
+>
+>    `modCount++;`修改次数增加
+>
+>    `return null;`返回`null`表示添加成功
+>
+> 3. ```java
+>    int cmp;
+>    Entry<K,V> parent;
+>    // split comparator and comparable paths
+>    Comparator<? super K> cpr = comparator;
+>    if (cpr != null) {
+>        do {
+>            parent = t;
+>            cmp = cpr.compare(key, t.key);
+>            if (cmp < 0)
+>                t = t.left;
+>            else if (cmp > 0)
+>                t = t.right;
+>            else
+>                return t.setValue(value);
+>        } while (t != null);
+>    }
+>    else {
+>        if (key == null)
+>            throw new NullPointerException();
+>        @SuppressWarnings("unchecked")
+>            Comparable<? super K> k = (Comparable<? super K>) key;
+>        do {
+>            parent = t;
+>            cmp = k.compareTo(t.key);
+>            if (cmp < 0)
+>                t = t.left;
+>            else if (cmp > 0)
+>                t = t.right;
+>            else
+>                return t.setValue(value);
+>        } while (t != null);
+>    }
+>    ```
+>
+>    这是一段比较器，如果比较器不为`null`，则一直遍历到最后一个父元素节点，如果要添加的元素通过比较器判断要比父结点小，则放在左边，如果大则放在右边，如果一样，就覆盖掉父元素的`value`值，因为`TreeSet`插入的元素是按照`key`来的，所以我们看`TreeSet`是插不进去的，但是看`TreeMap`可以看到父元素节点的`value`值发生了变化，被覆盖了
+>
+> 4. 也就是说这里的`abc`我们插入不进去
+
+![](https://img-blog.csdnimg.cn/b53c54af31c04a93aaa3fc61977dc0b5.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+
+
+
+
 ## 6. `Map`接口
 
 ![](https://img-blog.csdnimg.cn/fc8dade994fe429c8af659315a13b830.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
@@ -1873,3 +1946,87 @@ public class HashTableSource {
 1. `Properties`类继承了`HashTable`类并且实现了`Map`接口也就是以一种键值对的形式保存数据
 2. `Properties`使用特点与`HashTable`类似
 3. `Properties`还可以用于`xxx.properties`文件中，加载数据到`Properties`类对象并进行读取和修改，`xxx.properties`文件通常作为配置文件使用
+
+### 6.9 `TreeMap`
+
+详见`5.3 TreeSet`
+
+## 7. 集合选型规则
+
+在开发中选择什么集合，主要取决于业务操作特点，然后根据不同集合的特型进行选择：
+
+1. 先判断存储的类型是什么？是一组对象还是一组键值对
+
+2. 如果是一组对象，则在`Collection`接口中选：
+
+   - 允许元素重复：`List`
+     - 增删多：`LinkedList`底层维护了一个双向链表
+     - 改查多：`ArrayList`底层维护`Object`类型的可变数组
+     - 线程安全且改查多：`Vector`
+   - 不允许元素重复：`Set`
+     - 无序：`HashSet`，底层是`HashMap`，维护了一个哈希表（数组 + 单向链表 + 红黑树）
+     - 有序：`LinkedHashSet`【插入和取出顺序一致：数组 + 双向链表】 + `TreeSet`【排序】
+
+3. 如果是一组键值对，则在`Map`接口中选：
+
+   - 键无序：`HashMap`，底层维护了一个哈希表（数组 + 单向链表 + 红黑树）
+
+     ​				`HashTable`，底层维护了一个哈希表（数组 + 单向链表），初始化容量为`11`，扩容为`2倍+1`
+
+   - 键排序：`TreeMap`
+
+   - 键插入和取出的顺序一致：`LinkedHashMap`
+
+   - 读取文件：`Properties`
+
+## 8. `Collections`工具类
+
+1. `Collections`是一个操作`Set、List、Map`等集合的工具类
+2. `Collections`中提供了一系列静态的方法对集合元素进行排序、查询和修改等操作
+3. 均为静态方法
+
+- `reverse(List)`：反转`List`中元素的顺序
+- `shuffle(List)`：对`List`集合元素进行随机排序
+- `sort(List)`：根据元素的自然顺序对指定`List`集合元素按升序排序
+- `sort(List, Comparator)`：根据指定的`Comparator`产生的顺序对指定`List`集合元素按升序排序
+- `swap(List, int, int)`：将指定`List`集合中的`i`处元素和`j`处元素进行交换
+
+```java
+package Chapter03;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+public class CollectionsStudy {
+    public static void main(String[] args) {
+        List list = new ArrayList<>();
+        list.add("D");
+        list.add("E");
+        list.add("A");
+        list.add("B");
+        //1.将 list 反转
+        Collections.reverse(list);
+        System.out.println(list);
+        //2.将 list 随机排序
+        Collections.shuffle(list);
+        System.out.println(list);
+        //3.将 list 进行正序排序
+        Collections.sort(list);
+        System.out.println(list);
+        //4.将 list 按照 Comparator 进行排序[倒叙]
+        Collections.sort(list, new Comparator<Object>() {
+            @Override
+            public int compare(Object o1, Object o2) {
+                return ((String) o2).compareTo((String) o1);
+            }
+        });
+        System.out.println(list);
+        //5.指定 list 交换 i 跟 j 位置上的元素
+        Collections.swap(list, 0, 1);
+        System.out.println(list);
+    }
+}
+```
+
