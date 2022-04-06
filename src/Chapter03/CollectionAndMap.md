@@ -2107,3 +2107,351 @@ public class CollectionsStudy {
     }
 }
 ```
+
+## 9. 集合相关练习
+
+### 9.1 练习一
+
+按照要求实现：
+
+1. 封装一个新闻类，包含标题和内容属性，提供`get、set`方法，重写`toString()`方法，打印时只打印标题
+2. 只提供一个带参数的构造器，实例化对象时，只初始化标题，并且实例化两个对象：
+   - 新闻一：新冠确诊病例超千万，数百万印度教信徒赴恒河“圣浴”引民众担忧
+   - 新闻二：男子突然想起2个月前钓的鱼还在网兜里，捞起一看赶紧放生
+3. 将新闻对象添加到`ArrayList`集合中，并且进行倒序遍历
+4. 在遍历集合过程中，对新闻标题进行处理，超过`15`字的只保留前`15`个，然后在后边加`...`
+5. 在控制台打印遍历出经过处理的新闻标题
+
+```java
+package Chapter03;
+
+import java.util.ArrayList;
+
+public class CollectionAndMapHomeWork1 {
+    public static void main(String[] args) {
+        ArrayList<News> arrayList = new ArrayList<News>();
+        News news1 = new News("新冠确诊病例超千万，数百万印度教信徒赴恒河“圣浴”引民众担忧");
+        News news2 = new News("男子突然想起2个月前钓的鱼还在网兜里，捞起一看赶紧放生");
+        arrayList.add(news1);
+        arrayList.add(news2);
+        for (int i = 0; i < arrayList.size(); i++) {
+            System.out.println(arrayList.get(i).getTitle().substring(0, 15) + "...");
+        }
+    }
+}
+
+class News {
+    String title;
+    String content;
+
+    public News(String title) {
+        this.title = title;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    @Override
+    public String toString() {
+        return "title= '" + title + '\'';
+    }
+}
+```
+
+```java
+新冠确诊病例超千万，数百万印度...
+男子突然想起2个月前钓的鱼还在...
+
+Process finished with exit code 0
+```
+
+### 9.2 练习二
+
+使用`ArrayList`完成对对象`Cae{name, price}`的各种操作：
+
+> 1. 添加单个元素：`new Car("宝马", 400000);`和`new Car("奔驰", 800000)`和`new Car("宾利", 5000000);`
+> 2. 删除指定元素
+> 3. 查找三款车是都存在
+> 4. 获取车库中有多少辆车
+> 5. 车库中是否有车？
+> 6. 清空车库里的车
+> 7. 添加多辆车
+> 8. 查找多辆车是否都存在
+> 9. 删除多辆车
+
+```java
+package Chapter03;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
+public class CollectionAndMapHomeWork2 {
+    public static void main(String[] args) {
+        ArrayList<GreatCar> greatCars = new ArrayList<GreatCar>();
+        GreatCar car1 = new GreatCar("宝马", 400000);
+        GreatCar car2 = new GreatCar("奔驰", 800000);
+        GreatCar car3 = new GreatCar("宾利", 5000000);
+        //1.add:添加元素
+        greatCars.add(car1);
+        greatCars.add(car2);
+        greatCars.add(car3);
+        System.out.println("GreatCars add = " + greatCars);
+        //2.remove:删除元素
+        greatCars.remove(car1);
+        System.out.println("GreatCars remove = " + greatCars);
+        //3.contains:元素是否存在
+        System.out.println("GreatCars contains = " + greatCars.contains(car1));
+        System.out.println("GreatCars contains = " + greatCars.contains(car2));
+        System.out.println("GreatCars contains = " + greatCars.contains(car3));
+        //4.size:集合个数
+        System.out.println("GreatCars size = " + greatCars.size());
+        //5.isEmpty:集合是否为空
+        System.out.println("GreatCars isEmpty = " + greatCars.isEmpty());
+        //6.clear:清空集合元素
+        greatCars.clear();
+        System.out.println("GreatCars clear = " + greatCars.isEmpty());
+        greatCars.add(car1);
+        greatCars.add(car2);
+        greatCars.add(car3);
+        //7.addAll:添加多个元素
+        greatCars.addAll(greatCars);
+        System.out.println("GreatCars addAll = " + greatCars.size() + " = " + greatCars);
+        //8.containsAll:包含多个元素
+        System.out.println("GreatCars containsAll = " + greatCars.containsAll(greatCars));
+        //9.removeAll:删除多个元素
+        greatCars.removeAll(greatCars);
+        System.out.println("GreatCars removeAll = " + greatCars);
+        greatCars.add(car1);
+        greatCars.add(car2);
+        greatCars.add(car3);
+        //10.三种方式遍历
+        for (int i = 0; i < greatCars.size(); i++) {
+            System.out.println("Great Car = " + greatCars.get(i).getName() + ":" + greatCars.get(i).getPrice());
+        }
+        for (GreatCar greatCar : greatCars) {
+            System.out.println("Great Car = " + greatCar.getName() + ":" + greatCar.getPrice());
+        }
+        Iterator iterator = greatCars.iterator();
+        while (iterator.hasNext()) {
+            GreatCar greatCar = (GreatCar) iterator.next();
+            System.out.println("Great Car = " + greatCar.getName() + ":" + greatCar.getPrice());
+        }
+    }
+}
+
+class GreatCar {
+    private String name;
+    private int price;
+
+    public GreatCar(String name, int price) {
+        this.name = name;
+        this.price = price;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return "GreatCar{" +
+                "name='" + name + '\'' +
+                ", price=" + price +
+                '}';
+    }
+}
+```
+
+### 9.3 练习三
+
+按照要求完成下列任务：
+
+1. 使用`HashMap`类实例化一个`Map`类型的对象`m`，键`String`值`int`对分别用于存储员工的姓名和工资，存入数据如下：`jack-650` + `tom-1200` + `smith-2900`
+
+2. 将`jack`的工资更改为`2600`
+3. 为所有员工工资加薪`100`
+4. 遍历集合中所有的员工
+5. 遍历集合中所有的工资
+
+```java
+package Chapter03;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Set;
+
+public class CollectionAndMapHomeWork3 {
+    public static void main(String[] args) {
+        HashMap<String, Integer> hashMap = new HashMap<String, Integer>();
+        //1.HashMap 添加元素
+        hashMap.put("jack", 650);
+        hashMap.put("tom", 1200);
+        hashMap.put("smith", 2900);
+        System.out.println("hashMap put = " + hashMap);
+        //2.HashMap 修改元素
+        hashMap.put("jack", 2600);
+        System.out.println("hashMap put = " + hashMap);
+        //3.HashMap Integer 添加 100
+        Set keySet = hashMap.keySet();
+        for (Object key : keySet) {
+            hashMap.put((String) key, hashMap.get(key) + 100);
+        }
+        System.out.println("hashMap put = " + hashMap);
+        //4.遍历集合中所有的员工
+        for (Object key : keySet) {
+            System.out.println("hashMap key = " + key);
+        }
+        //5.遍历集合中所以有的工资
+        Collection collection = hashMap.values();
+        for (Object salary : collection) {
+            System.out.println("hashMap value = " + salary);
+        }
+    }
+}
+```
+
+### 9.4 练习四
+
+分析题：分析`HashSet`和`TreeSet`分别是如何实现去重的。
+
+1. `HashSet`去重：根据`key`求出哈希值，如果哈希值相同就再使用`equals()`方法判断，这就是`HashSet`的去重机制。底层通过存入对象，进行运算得到一个哈希值，通过对象调用`hashCode`得到对象哈希值然后与左移`16`位的数进行异或操作获取得真正的`hash`，通过这个`hash`跟`table.length - 1`进行与操作获得索引，如果这个索引有没有数据，直接存放，如果这个索引有数据，就将该数据和存入的数据进行`equals`比较，如果相同就表示重复，不相同表示不重复可直接添加
+
+2. `TreeSet`去重机制：`TreeSet`是调用`Comparator`对象的`compare`方法判断是否重复的，如果自定义一个`Comparator`匿名对象传入，则调用该对象的`compare`方法，如果父节点和传入的对象通过比较器判断出来是相等就表明这是重复的，如果小于，则往左子节点插入，如果大于，则往右子节点插入
+
+   如果没有传入`Comparator`匿名对象，那么就调用传入的对象实现的`Comparable`接口的`compareTo()`方法去去重
+
+### 9.5 练习五
+
+下列代码运行是否会抛出异常？
+
+```java
+TreeSet treeSet = new TreeSet();
+treeSet.add(new Person());
+```
+
+如果这个方法没有实现`Comparable`接口重写`compareTo()`方法，那么就会抛出异常。因为`TreeSet`在这里并没有传入自定义的匿名对象`Comparator`所以不会调用`compare`方法，就会去调用传入对象实现`Comparable`的`compareTo()`方法，但是如果`Person`类没有实现`Comparable`就会报错
+
+### 9.6 练习六
+
+已知：`Person`类按照`id`和`name`重写了`hashCode`和`equals`方法，问下面代码输出什么？
+
+```java
+package Chapter03;
+
+import java.util.HashSet;
+import java.util.Objects;
+
+public class CollectionAndMapHomeWork6 {
+    public static void main(String[] args) {
+        HashSet set = new HashSet();
+        MyPerson p1 = new MyPerson(1001, "AA");
+        MyPerson p2 = new MyPerson(1002, "BB");
+        set.add(p1);
+        set.add(p2);
+        System.out.println("set = " + set);
+        p1.name = "CC";
+        System.out.println("set = " + set);
+        set.remove(p1);
+        System.out.println("set = " + set);
+        set.add(new MyPerson(1001, "CC"));
+        System.out.println("set = " + set);
+        set.add(new MyPerson(1001, "AA"));
+        System.out.println("set = " + set);
+    }
+}
+
+class MyPerson {
+    Integer id;
+    String name;
+
+    public MyPerson(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MyPerson myPerson = (MyPerson) o;
+        return Objects.equals(id, myPerson.id) && Objects.equals(name, myPerson.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
+    }
+
+    @Override
+    public String toString() {
+        return "MyPerson{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
+}
+```
+
+这道题很有意思，让我们初步分析分析，首先很重要的一点就是`Person`已经重写了`hashCode equals`两个方法，前面的语句没什么太大问题：
+
+```java
+HashSet set = new HashSet();
+Person p1 = new Person(1001, "AA");
+Person p2 = new Person(1002, "BB");
+set.add(p1);
+set.add(p2);
+p1.name = "CC";
+```
+
+- 然后开始执行第一个操作：`set.remove(p1);``
+
+  `remove`也好`add`也好，这里因为重写了`hashCode`方法，而重写的`hashCode`是根据`id`和`name`得到哈希值的，这里`remove(p1)`的过程得到的哈希值是根据`1001 CC`这两个得到的，但是添加的时候是根据`1001 AA`得到的。所以`remove(p1)`找不到原来的哈希值，所以不会执行删除，于是打印出来的语句是：【注：`HashSet`是无序的，所以打印出来的顺序跟插入的顺序不同】
+
+  `set = [MyPerson{id=1002, name='BB'}, MyPerson{id=1001, name='CC'}]`
+
+- 再接下来是添加语句：`set.add(new Person(1001, "CC"));`
+
+  你以为添加不进去吗？那就错了，因为`hashCode`是根据`id name`求出来的，这个刚刚也讲过，但是之前添加的元素是`1001 AA`和`1002 BB`，所以这三个的哈希值是不一样的，都可以添加进去，所以打印出来的语句是：哈哈哈，结果看到是不是很有意思~
+
+  `set = [MyPerson{id=1002, name='BB'}, MyPerson{id=1001, name='CC'}, MyPerson{id=1001, name='CC'}]`
+
+  ![](https://img-blog.csdnimg.cn/095e3626398243219730706b6cf47154.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_19,color_FFFFFF,t_70,g_se,x_16)
+
+- `set.add(new MyPerson(1001, "AA"));`是不是想着这下肯定插不进去了？那你就大错特错啦~因为虽然这里的`1001 AA`跟第一次添加的元素`1001 AA`，是一莫一样的，但你可别忘了，判断是否重复先是`hash`后边还有个`equals`方法咧，因为第一次添加的`1001 AA`已经改成了`1001 CC`所以使用`equals`方法判断二者是不同的，所以不重复，还是可以正常添加
+
+  `set = [MyPerson{id=1002, name='BB'}, MyPerson{id=1001, name='CC'}, MyPerson{id=1001, name='CC'}, MyPerson{id=1001, name='AA'}]`
+
+  ![](https://img-blog.csdnimg.cn/3d0eaddfb5ec41668c9a1576b88ec5fa.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+### 9.7 练习七
+
+`ArrayList`和`Vector`的比较：
+
+- `ArrayList`是线程不安全的但是效率高，无参构造器中二次扩容时默认按照`1.5`扩容，默认初始化容量为：`10`
+- `Vector`是线程安全的但是效率较低，无参构造器中二次扩容时默认按照`2`倍扩容，默认初始化容量为：`10`
