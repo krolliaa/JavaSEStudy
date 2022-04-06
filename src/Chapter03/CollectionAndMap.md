@@ -2030,3 +2030,13 @@ public class CollectionsStudy {
 }
 ```
 
+- `max(Collection)`：根据元素的自然排序返回给定集合中最大的元素
+- `max(Collection, Comparator)`：根据`Comparator`指定的顺序，返回给定集合中最大的元素
+- `min(Collection)`：根据元素的自然排序返回给定集合中最小的元素
+- `min(Collection, Comparator)`：根据`Comparator`指定的顺序，返回给定集合中最小的元素
+- `int frequency(Collection, Object)`：返回指定集合中指定元素的出现次数
+- `void copy(List dest, List src)`：将`src`集合中的内容复制到`dest`集合中
+- `boolean replaceAll(List list, Object oldVal, Object newVal)`：使用新值替换`List`对象的所有旧值
+
+```java
+```
