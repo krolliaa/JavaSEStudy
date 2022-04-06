@@ -1865,3 +1865,11 @@ public class HashTableSource {
    - 扩容方式为：`2 x 原先容量` + 1也就是二倍加上1，这就挺神奇的一套做法
    - 除此之外还有两个很细节的点，一是无论是`key`还是`value`都无法是`null`
    - 而且添加的时候，如果元素也就是节点都在同一个链表上，采用的是头插法，是一种最后进来的在最前面的一种方式
+
+### 6.8 `Properties`
+
+`Properties`是`HashTable`的子类，间接实现了`Map`接口，`Properties`特点有：
+
+1. `Properties`类继承了`HashTable`类并且实现了`Map`接口也就是以一种键值对的形式保存数据
+2. `Properties`使用特点与`HashTable`类似
+3. `Properties`还可以用于`xxx.properties`文件中，加载数据到`Properties`类对象并进行读取和修改，`xxx.properties`文件通常作为配置文件使用
