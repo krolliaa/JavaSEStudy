@@ -54,6 +54,14 @@ public class CollectionsStudy {
         System.out.println(Collections.frequency(list, "A"));
         //11.复制集合
         List list1 = new ArrayList();
-        System.out.println(Collections.copy(list1, list));
+        list1.add("C");
+        list1.add("C");
+        list1.add("C");
+        list1.add("C");
+        Collections.copy(list1, list);
+        System.out.println(list1);
+        //12.替换
+        Collections.replaceAll(list, "D", "A");
+        System.out.println(list);
     }
 }
