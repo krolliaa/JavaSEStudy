@@ -1699,6 +1699,8 @@ class NewEmployee {
 > 3. `HashTable`的方法跟`HashMap`的一样，存储取出删除是否包含为空清空都一样
 > 4. `HashTable`是线程安全的，有`synchronized`修饰，而`HashMap`则是线程不安全的
 
+**<font color="red">通过源码发现，在同一链表插入元素采用的是头插法的方式，后续有讲到</font>**
+
 深入`HashTable`源码，让我们看看`HashTable`是如何初始化的，又是如何添加元素的，扩容是怎么扩的？举例的代码如下：
 
 ```java
@@ -1757,4 +1759,109 @@ public class HashTableSource {
 
    - `addEntry(hash, key, value, index);`进入到`addEntry()`方法里头添加键值对到`Entry`数组中
 
+     > 1. `modCount++;`保存数组的修改次数
+     >
+     > 2. `Entry<?, ?> tab[] = table;`定义一个变量指向数组
+     >
+     > 3. `if(count >= threshold)`如果`count`也就是已添加的个数大于等于阈值**<font color="red">注意这里是已经添加的元素个数，将要添加的还没有算进去，比如现在数组里面有 7 个元素，现在要添加进去第 8 个，此时不扩容，因为数组里面还没有到 8 个，所以说 HashTable 扩容是看已经有的实实在在的情况，并且你可以看到 HashMap HashSet LinkedHashSet 也是如此都是跟 HashTable 一样走一步看一步，到了要添加第 9 个的时候才会扩容，而 HashMap 则是到了 13 才会扩容，除此之外顺带讲下 HashMap 的树化，树化也是如此，树化在第 8 个的时候不会树化，在添加第 9 个元素的时候链表才会转换成红黑树，这是一个细节点，非常需要注意</font>**，则需要进行扩容，重新获取哈希值和索引，扩容机制在`rehash()`方法中完成，我们进入到`rehash()`中看看是怎么一肥事：
+     >
+     >    - `int oldCapacity = table.length;`先是保存了老表的长度即老表的容量
+     >
+     >    - `Entry<?, ?>[] oldMap = table;`保存起原来的数组，这样等下需要把老数组的数据转移到新数组上
+     >
+     >    - `int newCapacity = (oldCapacity << 1) + 1;`新容量赋值为`2`倍老表的容量再`+1`，所以说`HashTable`扩容后的容量是原先老容量的`2倍 + 1`，由于这里初始化容量是`11`，所以扩容以后容量为：`2 * 11 + 1 = 23`
+     >
+     >    - ```java
+     >      if (newCapacity - MAX_ARRAY_SIZE > 0) {
+     >          if (oldCapacity == MAX_ARRAY_SIZE)
+     >              // Keep running with MAX_ARRAY_SIZE buckets
+     >              return;
+     >          newCapacity = MAX_ARRAY_SIZE;
+     >      }
+     >      ```
+     >
+     >      如果新容量比最大值`MAX_ARRAY_SIZE`还大，需要赋予最大的容量给`newCapacity`
+     >
+     >    - `Entry<?,?>[] newMap = new Entry<?,?>[newCapacity];`：创建一个新的容量数组
+     >
+     >    - `modCount++;`保存更改的数据
+     >
+     >    - `threshold`存储阈值
+     >
+     >    - `table`将新容量`entry`数组赋值给哈希表`table`
+     >
+     >    - 遍历原来的数组，获取节点，然后通过`next`不断遍历，每一个结点都重新获取哈希值然后跟`newCapacity`相余得到新的索引，最后将数据存储到新数组中去
+     >
+     >    - 到此完成扩容操作
+     >
+     >    ![](https://img-blog.csdnimg.cn/4ccf59b014eb44fdbe072b6c6f7b8b28.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+     >
+     >    4. `tab = table`完成扩容后需要将新的数组赋值给要添加的`tab`
+     >
+     >    5. `hash = key.hashCode()`重新获取哈希值
+     >
+     >    6. `index = (hash & 0x7FFFFFFF) % tab.length;`重新获取索引
+     >
+     >    7. 获取到当前索引的节点，然后把新结点也就是新元素插在这个节点的前面，也就是说`HashTable`采用的竟然是头插法！！！
+     >
+     >       ```java
+     >       Entry<K,V> e = (Entry<K,V>) tab[index];
+     >       tab[index] = new Entry<>(hash, key, value, e);
+     >       ```
+     >
+     >       通过以下这段代码也可以验证：
+     >
+     >       ```java
+     >       package Chapter03;
+     >       
+     >       import java.util.Hashtable;
+     >       import java.util.Objects;
+     >       
+     >       public class HashTableSource {
+     >           public static void main(String[] args) {
+     >               Hashtable hashtable = new Hashtable();
+     >               hashtable.put(new Dog("no1", 11), 1);
+     >               hashtable.put(new Dog("no2", 11), 2);
+     >               hashtable.put(new Dog("no3", 11), 3);
+     >           }
+     >       }
+     >       
+     >       class Dog {
+     >           private String name;
+     >           private int age;
+     >       
+     >           public Dog(String name, int age) {
+     >               this.name = name;
+     >               this.age = age;
+     >           }
+     >       
+     >           @Override
+     >           public String toString() {
+     >               return "Dog{" +
+     >                       "name='" + name + '\'' +
+     >                       ", age=" + age +
+     >                       '}';
+     >           }
+     >       
+     >           @Override
+     >           public int hashCode() {
+     >               return 1;
+     >           }
+     >       }
+     >       ```
+     >
+     >       ![](https://img-blog.csdnimg.cn/05dbc56cedd04a82ba4cf73302476a4b.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+     >
+     >    8. `count++`元素个数添加
+     >
+     > ![](https://img-blog.csdnimg.cn/d5e949a144574737b3e876b23a296d4d.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+   
    ![](https://img-blog.csdnimg.cn/9686136e64d4465e81d1e34457ef2d5a.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQ3JBY0tlUi0x,size_20,color_FFFFFF,t_70,g_se,x_16)
+   
+   到了这里就把`HashTable`的源码剖析完成了，`HashTable`很不一样：
+   
+   - 它的初始容量不仅是`11`
+   - 初始阈值为`8`
+   - 扩容方式为：`2 x 原先容量` + 1也就是二倍加上1，这就挺神奇的一套做法
+   - 除此之外还有两个很细节的点，一是无论是`key`还是`value`都无法是`null`
+   - 而且添加的时候，如果元素也就是节点都在同一个链表上，采用的是头插法，是一种最后进来的在最前面的一种方式
