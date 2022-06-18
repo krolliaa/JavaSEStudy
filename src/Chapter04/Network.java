@@ -1,3 +1,5 @@
+package Chapter04;
+
 public interface Network {
     public abstract void work();
 }

@@ -1,3 +1,5 @@
+package Chapter04;
+
 public class ProAndCon implements Runnable {
 
     private int productNum = 0;

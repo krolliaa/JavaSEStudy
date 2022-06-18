@@ -587,7 +587,7 @@ public class SetStudy {
 
 - 所谓的不重复其实是针对内存地址而言的，如果添加的是新创建的对象其实这不叫重复了，这种情况还是属于新增元素
 
-  但是如果加入了两个`new String("A");`其实只加入了一个。这是为什么呢？这个`HashSet`的`add()`加入机制有关，前面说过是先计算出`hash`值然后再看存到哪里，`String`对象重写了`hashCode`方法，比较的是常量值中的对象。
+  但是如果加入了两个`new String("Chapter04.A");`其实只加入了一个。这是为什么呢？这个`HashSet`的`add()`加入机制有关，前面说过是先计算出`hash`值然后再看存到哪里，`String`对象重写了`hashCode`方法，比较的是常量值中的对象。
 
 `HashSet`底层结构详细说明：
 
@@ -2004,8 +2004,8 @@ public class CollectionsStudy {
         List list = new ArrayList<>();
         list.add("D");
         list.add("E");
-        list.add("A");
-        list.add("B");
+        list.add("Chapter04.A");
+        list.add("Chapter04.B");
         //1.将 list 反转
         Collections.reverse(list);
         System.out.println(list);
@@ -2051,8 +2051,8 @@ public class CollectionsStudy {
         List list = new ArrayList<>();
         list.add("D");
         list.add("E");
-        list.add("A");
-        list.add("B");
+        list.add("Chapter04.A");
+        list.add("Chapter04.B");
         //1.将 list 反转
         Collections.reverse(list);
         System.out.println(list);
@@ -2092,17 +2092,17 @@ public class CollectionsStudy {
             }
         }));
         //10.找出该元素出现的频次
-        System.out.println(Collections.frequency(list, "A"));
+        System.out.println(Collections.frequency(list, "Chapter04.A"));
         //11.复制集合
         List list1 = new ArrayList();
-        list1.add("C");
-        list1.add("C");
-        list1.add("C");
-        list1.add("C");
+        list1.add("Chapter04.C");
+        list1.add("Chapter04.C");
+        list1.add("Chapter04.C");
+        list1.add("Chapter04.C");
         Collections.copy(list1, list);
         System.out.println(list1);
         //12.替换
-        Collections.replaceAll(list, "D", "A");
+        Collections.replaceAll(list, "D", "Chapter04.A");
         System.out.println(list);
     }
 }

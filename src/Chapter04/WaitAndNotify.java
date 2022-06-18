@@ -1,3 +1,5 @@
+package Chapter04;
+
 public class WaitAndNotify {
     public static void main(String[] args) {
         WN wn = new WN();

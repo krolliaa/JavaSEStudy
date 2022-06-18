@@ -1,3 +1,5 @@
+package Chapter04;
+
 import java.util.Arrays;
 
 public class StringTest {
@@ -24,8 +26,8 @@ public class StringTest {
         String s8 = "  nu  ll  ";
         System.out.println(s8.trim());
 
-        String s9 = "A";
-        String s10 = "A";
+        String s9 = "Chapter04.A";
+        String s10 = "Chapter04.A";
         System.out.println(s10.compareTo(s9));
 
         String s11 = "123456";

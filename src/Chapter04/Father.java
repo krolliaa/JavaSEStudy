@@ -1,6 +1,8 @@
+package Chapter04;
+
 public abstract class Father {
     public void method() {
-        System.out.println("This is a Father method.");
+        System.out.println("This is a Chapter04.Father method.");
     }
 
     public static void main(String[] args) {

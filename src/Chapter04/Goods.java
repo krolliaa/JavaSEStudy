@@ -1,5 +1,6 @@
-import java.util.Arrays;
-import java.util.Comparator;
+package Chapter04;
+
+import java.util.*;
 
 public class Goods implements Comparable {
     private String name;
@@ -31,7 +32,7 @@ public class Goods implements Comparable {
 
     @Override
     public String toString() {
-        return "Goods{" +
+        return "Chapter04.Goods{" +
                 "name='" + name + '\'' +
                 ", price=" + price +
                 '}';
@@ -51,12 +52,12 @@ public class Goods implements Comparable {
 
 class GoodsTest {
     public static void main(String[] args) {
-        Goods goods1 = new Goods("A", 96);
-        Goods goods2 = new Goods("B", 100);
-        Goods goods3 = new Goods("C", 98);
+        Goods goods1 = new Goods("Chapter04.A", 96);
+        Goods goods2 = new Goods("Chapter04.B", 100);
+        Goods goods3 = new Goods("Chapter04.C", 98);
         Goods goods4 = new Goods("D", 99);
         Goods goods5 = new Goods("E", 97);
-        Goods goods6 = new Goods("A", 97);
+        Goods goods6 = new Goods("Chapter04.A", 97);
         Goods[] goods = new Goods[]{goods1, goods2, goods3, goods4, goods5, goods6};
         Arrays.sort(goods);
         System.out.println(Arrays.toString(goods));

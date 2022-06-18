@@ -80,7 +80,7 @@
 
   - `double`占用`8字节`，双精度浮点型，`Java`默认浮点型数据类型
 
-  - `char`占用`2`字节，表示字符，一个汉字正好是`2`字节，所以可以直接存储汉字，`char`存储数值可以有三种表现形式：`char c1 = 'a'`，`Java`中还允许使用转义字符`\`，并且可以使用十六进制如：`\u000a`表示`\n`，`char`数据类型是可以进行运算的，因为它有对应的`Unicode`码，可以进行运算。常见的`65 - A， 97 - a`，为了跨界形成了万国码`Unicode`，其中最广泛应用的`Unicode`实现方式就是`UTF-8`，注意`char`跟`char`是做运算，`char`跟`string`是连接
+  - `char`占用`2`字节，表示字符，一个汉字正好是`2`字节，所以可以直接存储汉字，`char`存储数值可以有三种表现形式：`char c1 = 'a'`，`Java`中还允许使用转义字符`\`，并且可以使用十六进制如：`\u000a`表示`\n`，`char`数据类型是可以进行运算的，因为它有对应的`Unicode`码，可以进行运算。常见的`65 - Chapter04.A， 97 - a`，为了跨界形成了万国码`Unicode`，其中最广泛应用的`Unicode`实现方式就是`UTF-8`，注意`char`跟`char`是做运算，`char`跟`string`是连接
 
   - <font color="red">**基本数据类型转换：**</font>分为自动类型转换和强制类型转换，自动类型转换就是容量小的类型可以自动转换为容量大的类型，数据类型容量按从小到大的排序为：`byte ---> short|char ---> int ---> long ---> float ---> double `
 
@@ -124,7 +124,7 @@
 
 **关于进制：**
 
-二进制以`0b 0B`开头，八进制以`0`开头`3 位二进制表示`，十六进制以`0x 0X`开头`4 位二进制表示`，`A-F`不区分大小写。<font color="red">**计算机存储都是以补码的形式存储数据**</font>，正数的原码反码和补码都是它本身，负数的补码是原码取反码+1。
+二进制以`0b 0B`开头，八进制以`0`开头`3 位二进制表示`，十六进制以`0x 0X`开头`4 位二进制表示`，`Chapter04.A-F`不区分大小写。<font color="red">**计算机存储都是以补码的形式存储数据**</font>，正数的原码反码和补码都是它本身，负数的补码是原码取反码+1。
 
 `10111011`有可能是正数也可能是负数：
 
@@ -399,7 +399,7 @@ public static void test(int a, String book);
 2. 最后结果为：一是在方法中打印完就退出程序：`System.exit(0)`，二是可以重写`println()`方法
 
    ```java
-   public class Test {
+   public class Chapter04.Test {
        public static void main(String[] args) {
            int a = 10;
            int b = 10;
@@ -561,7 +561,7 @@ public static void getNum() {
 习题：
 
 ```java
-class Base {
+class Chapter04.Base {
     int count = 10;
 
     public void display() {
@@ -569,7 +569,7 @@ class Base {
     }
 }
 
-class Sub extends Base {
+class Chapter04.Sub extends Chapter04.Base {
     int count = 20;
 
     public void display() {
@@ -577,15 +577,15 @@ class Sub extends Base {
     }
 }
 
-public class FieldMethodTest {
+public class Chapter04.FieldMethodTest {
     public static void main(String[] args) {
-        Sub s = new Sub();
+        Chapter04.Sub s = new Chapter04.Sub();
         System.out.println(s.count);//输出 20
-        s.display();//Sub 重写了父类 Base 中的 display 方法，打印 20
-        Base b = s;//父类引用指向子类对象，这里用到了多态，所以 b 其实是一个 Sub 对象，跟 s 指向同一个地址
+        s.display();//Chapter04.Sub 重写了父类 Chapter04.Base 中的 display 方法，打印 20
+        Chapter04.Base b = s;//父类引用指向子类对象，这里用到了多态，所以 b 其实是一个 Chapter04.Sub 对象，跟 s 指向同一个地址
         System.out.println(b == s);//这里比较的是内存地址，b 跟 s 都指向同一个内存地址，所以为 true
-        System.out.println(b.count);//10 这里因为 Base b 的缘故，所以在堆内存中会有父类的属性，找的话是先找父类的属性
-        b.display();//20 因为这里是 this ，指向的是 Sub 类对象方法区中的方法，如果这里改成 super，那么指向的就是父类的，结果就变为 10，或者找不到才会去找父类的
+        System.out.println(b.count);//10 这里因为 Chapter04.Base b 的缘故，所以在堆内存中会有父类的属性，找的话是先找父类的属性
+        b.display();//20 因为这里是 this ，指向的是 Chapter04.Sub 类对象方法区中的方法，如果这里改成 super，那么指向的就是父类的，结果就变为 10，或者找不到才会去找父类的
     }
 }
 ```
@@ -598,13 +598,13 @@ public class FieldMethodTest {
 - 答：只有在调用的那一刻才知道到底调用的是哪个类的方法，所以是运行时行为。
 
 ```java
-class Base {
+class Chapter04.Base {
     public void add(int a, int...arr) {
         System.out.println("base");
     }
 }
 
-class Sub extends Base {
+class Chapter04.Sub extends Chapter04.Base {
     public void add(int a, int[] arr) {
         System.out.println("sub_1");
     }
@@ -614,11 +614,11 @@ class Sub extends Base {
     }
 }
 
-public class FieldMethodTest {
+public class Chapter04.FieldMethodTest {
     public static void main(String[] args) {
-        Base base = new Sub();
-        base.add(1, 2, 3);//输出 sub_1，编译没问题，调用的是 Sub 类的 add 方法，编译器认为int...arr 和 int[] arr 是一样的 如果把 sub_2 打开把 sub_1 合上输出的则为 base，如果不合上，输出的还是 base_1
-        Sub s = (Sub)base;//s 指向的跟 base 一样 指向在堆内存中的一个 Sub 对象
+        Chapter04.Base base = new Chapter04.Sub();
+        base.add(1, 2, 3);//输出 sub_1，编译没问题，调用的是 Chapter04.Sub 类的 add 方法，编译器认为int...arr 和 int[] arr 是一样的 如果把 sub_2 打开把 sub_1 合上输出的则为 base，如果不合上，输出的还是 base_1
+        Chapter04.Sub s = (Chapter04.Sub)base;//s 指向的跟 base 一样 指向在堆内存中的一个 Chapter04.Sub 对象
         s.add(1, 2, 3);//sub_2 确定个数的优先调用
     }
 }
@@ -658,7 +658,7 @@ public class FieldMethodTest {
   System.out.println(i == b);//编译错误
   char c = 10;
   System.out.println(i == c);//true
-  char a = 'A';
+  char a = 'Chapter04.A';
   char e = 65;
   System.out.println(a == e);//true
   ```
@@ -732,7 +732,7 @@ System.out.println(it == fl);//true 存在自动类型提升
 ```
 
 ```java
-char ch1 = 'A';
+char ch1 = 'Chapter04.A';
 char ch2 = 12;
 System.out.println(65 == ch1);//true
 System.out.println(12 == ch2);//true
@@ -1008,12 +1008,12 @@ private static class IntegerCache {
 - 饿汉式单例模式：【定义一个静态对象然后返回这个静态对象，比较饥渴上来就`new`一个对象】
 
   ```java
-  private static Test test = new Test();
+  private static Chapter04.Test test = new Chapter04.Test();
   
-  private Test() {
+  private Chapter04.Test() {
   }
   
-  public static Test getObject() {
+  public static Chapter04.Test getObject() {
       return test;
   }
   ```
@@ -1021,14 +1021,14 @@ private static class IntegerCache {
 - 懒汉式单例模式：【每次要创建都判断定义的对象是不是`null`，如果是就`new`一个不是的话就直接返回，太懒了，你要的话我才给你】
 
   ```java
-  private static Test test = null;
+  private static Chapter04.Test test = null;
   
-  private Test() {
+  private Chapter04.Test() {
   }
   
-  private static Test getObject() {
+  private static Chapter04.Test getObject() {
       if(test != null) return test;
-      else return new Test();
+      else return new Chapter04.Test();
   }
   ```
 
@@ -1060,13 +1060,13 @@ public static void main(String[] args) {}
 - 代码块只能使用`static`用来修饰，表示静态代码块，没有使用`static`修饰的叫做非静态代码块，**<font color="red">静态代码块随着类的加载而执行。</font>**而非静态代码块是随着对象的创建而执行的，**<font color="red">并且每创建一个对象都会执行一次代码块。除此之外还有很重要很重要很重要的一点！！！！！！！！！！就是代码块会先执行然后才会执行构造器！！！！代码块先执行然后才执行构造器！！！</font>**
 
   ```java
-  public class FieldMethodTest {
-      public FieldMethodTest() {
+  public class Chapter04.FieldMethodTest {
+      public Chapter04.FieldMethodTest() {
           System.out.println("这是构造器！");
       }
   
       public static void main(String[] args) {
-          FieldMethodTest fieldMethodTest = new FieldMethodTest();
+          Chapter04.FieldMethodTest fieldMethodTest = new Chapter04.FieldMethodTest();
       }
   
       static {
@@ -1102,7 +1102,7 @@ public static void main(String[] args) {}
 
 - 当`final`修饰一个方法时：则表示这个方法是一个最终方法，**表明该方法无法被重写**。
 
-  `Object`类中的`getClass()`方法就被`final`修饰了，表明无法被重写，因为这个方法只有这种搞法，无需重写，没那个必要。可以发现有一个`native`，`native`的意思就是接下来要调用的底层的`C/C++`了。
+  `Object`类中的`getClass()`方法就被`final`修饰了，表明无法被重写，因为这个方法只有这种搞法，无需重写，没那个必要。可以发现有一个`native`，`native`的意思就是接下来要调用的底层的`Chapter04.C/Chapter04.C++`了。
 
 - 当`final`修饰一个变量时：则表示这个变量是一个常量。可以考虑给一个常量赋值的地方有：
 
@@ -1168,12 +1168,12 @@ public static void main(String[] args) {}
 3. 代码实现单例模式的饿汉式【线程安全】
 
    ```java
-   private Test test = new Test();
+   private Chapter04.Test test = new Chapter04.Test();
    
-   private Test() {
+   private Chapter04.Test() {
    }
    
-   public Test getTest() {
+   public Chapter04.Test getTest() {
        return test;
    }
    ```
@@ -1181,13 +1181,13 @@ public static void main(String[] args) {}
 4. 代码实现单例模式的懒汉式【线程不安全】
 
    ```java
-   private Test test = null;
+   private Chapter04.Test test = null;
    
-   private Test() {
+   private Chapter04.Test() {
    }
    
-   public Test getTest() {
-       if(test == null) return new Test();
+   public Chapter04.Test getTest() {
+       if(test == null) return new Chapter04.Test();
        else return test;
    }
    ```
@@ -1219,32 +1219,32 @@ public static void main(String[] args) {}
 3. **`abstract`关键字不能用来修饰`static`修饰的静态方法**，因为静态方法是随着类的加载而加载的，而被`abstract`关键字修饰的方法只有被重写才有意义，但是静态方法因为随着类的加载而加载，它并不关父类的事情，但是它可以找得到父类的东西。这里涉及到`JVM`的底层知识，以现在的知识无法讲清楚，但是可以通过一个多态的例子来说明：
 
    ```java
-   public class Father {
+   public class Chapter04.Father {
        public static void method() {
-           System.out.println("This is a Father method.");
+           System.out.println("This is a Chapter04.Father method.");
        }
    }
    
-   class Son extends Father {
+   class Chapter04.Son extends Chapter04.Father {
        public static void method() {
-           System.out.println("This is a Son method");
+           System.out.println("This is a Chapter04.Son method");
        }
    
        public static void main(String[] args) {
-          Father son  = new Son();
+          Chapter04.Father son  = new Chapter04.Son();
           son.method();
        }
    }
    ```
 
-   上述代码如果`method`重写了的话，那么调用的时候肯定是打印`Son`中的，但是现在这里打印的是`Father`中的，也就是说静态方法看似被重写了，其实并没有。那暂时就先记住，静态方法看似重写实则没有重写，而被`abstract`修饰的方法是必须被重写才有意义的，所以`abstract`关键字无法修饰静态方法
+   上述代码如果`method`重写了的话，那么调用的时候肯定是打印`Chapter04.Son`中的，但是现在这里打印的是`Chapter04.Father`中的，也就是说静态方法看似被重写了，其实并没有。那暂时就先记住，静态方法看似重写实则没有重写，而被`abstract`修饰的方法是必须被重写才有意义的，所以`abstract`关键字无法修饰静态方法
 
 4. **`abstract`关键字不能用来修饰`final`修饰的最终方法以及最终类**，因为`final`修饰的方法表示最终的，无法被子类重写，那就与被`abstract`关键字修饰的方法必须被重写是相互违背的，所以`abstract`无法修饰被`final`关键字修饰的方法，相应的也无法修饰被`final`修饰的类，因为无法被继承。
 
 抽象类的匿名子类对象：
 
 ```java
-Father father = new Father() {
+Chapter04.Father father = new Chapter04.Father() {
     @Override
     public void method() {
         System.out.println("This is a FFF method.");
@@ -1263,9 +1263,9 @@ Father father = new Father() {
 - 接口时比抽象类还要抽象的类，它里面全都是抽象方法。接口的出现是为了解决`Java`类单继承的问题，因为接口是可以被多个类实现的，抽象类是可以有具体被实现的方法的，但是接口不行。
 - 说白了，接口就是一种规范，一种法律，你要想实现我，然后实例化你就必须实现我所有的抽象方法才可以。
 
-接口中的属性默认是静态常量：`public static final int A = 1;`
+接口中的属性默认是静态常量：`public static final int Chapter04.A = 1;`
 
-接口中的方法默认是公共抽象方法：`public abstract void B();**`**
+接口中的方法默认是公共抽象方法：`public abstract void Chapter04.B();**`**
 
 **<font color="red">相比于抽象类，抽象类是有构造器的，但是接口不允许有构造器，因为接口比抽象类还要抽象，抽象类可以通过多态机制实现间接实例化，但是接口无法被实例化【这里暂且忽视掉匿名内部类】，因为它压根就没有构造器！</font>**
 
@@ -1279,51 +1279,51 @@ Father father = new Father() {
 
 **习题：**
 
-1. 排错：编译错误，接口`A`和类`B`都声明了属性`x`，`pX()`方法中不知道到底要用哪个
+1. 排错：编译错误，接口`Chapter04.A`和类`Chapter04.B`都声明了属性`x`，`pX()`方法中不知道到底要用哪个
 
-   可以改成：`A.x`或者`super.x`
+   可以改成：`Chapter04.A.x`或者`super.x`
 
    ```java
-   interface A {
+   interface Chapter04.A {
        public static final int x = 0;
    }
    
-   class B {
+   class Chapter04.B {
        int x = 1;
    }
    
-   class C extends B implements A {
+   class Chapter04.C extends Chapter04.B implements Chapter04.A {
        public void pX() {
            System.out.println(x);
        }
        
        public static void main(String[] args) {
-           new C().pX();
+           new Chapter04.C().pX();
        }
    }
    ```
 
 ## 代理模式设计模式
 
-代理模式是`Java`开发中比较常用的设计模式，前面我们学习了：单例模式【懒汉式、饿汉式】还有模板方法设计模式。这些都是常用的设计模式。代理模式这种设计模式就是为其他对象提供一种代理以控制对这个对象的访问。所谓代理其实就是中介。**其实就是把本身`A`要做的事情，`B`把它给做了。**比如这里：`ProxyServer`做了检查但是`Server`并没有做检查，这就是代理。
+代理模式是`Java`开发中比较常用的设计模式，前面我们学习了：单例模式【懒汉式、饿汉式】还有模板方法设计模式。这些都是常用的设计模式。代理模式这种设计模式就是为其他对象提供一种代理以控制对这个对象的访问。所谓代理其实就是中介。**其实就是把本身`Chapter04.A`要做的事情，`Chapter04.B`把它给做了。**比如这里：`Chapter04.ProxyServer`做了检查但是`Chapter04.Server`并没有做检查，这就是代理。
 
 ```java
-public interface Network {
+public interface Chapter04.Network {
     public abstract void work();
 }
 
-class Server implements Network {
+class Chapter04.Server implements Chapter04.Network {
     @Override
     public void work() {
         System.out.println("服务器完成联网，开始工作...");
     }
 }
 
-class ProxyServer implements Network {
+class Chapter04.ProxyServer implements Chapter04.Network {
 
-    private Server server = null;
+    private Chapter04.Server server = null;
 
-    public ProxyServer(Server server) {
+    public Chapter04.ProxyServer(Chapter04.Server server) {
         this.server = server;
     }
 
@@ -1338,10 +1338,10 @@ class ProxyServer implements Network {
     }
 }
 
-class Test {
+class Chapter04.Test {
     public static void main(String[] args) {
-        Server server = new Server();
-        ProxyServer proxyServer = new ProxyServer(server);
+        Chapter04.Server server = new Chapter04.Server();
+        Chapter04.ProxyServer proxyServer = new Chapter04.ProxyServer(server);
         proxyServer.work();
     }
 }
@@ -1419,7 +1419,7 @@ class Test {
 **<font color="red">`finally`中声明的是一定会被执行的代码，通常用于资源的释放，即使`try`跟`catch`里面都有`return`语句但是依然会执行`finally`中的代码</font>**
 
 ```java
-public class SomeElse {
+public class Chapter04.SomeElse {
     public static void main(String[] args) {
         System.out.println(method());
     }
@@ -1447,13 +1447,13 @@ public class SomeElse {
 - 自定义异常：【异常的顶层是一个叫`Throwable`的类，再往上就是`Object`类了】
 
   ```java
-  public class MyException extends RuntimeException {
+  public class Chapter04.MyException extends RuntimeException {
       static final long serialVersionUID = -7034897190745766939L;
   
-      public MyException() {
+      public Chapter04.MyException() {
       }
   
-      public MyException(String msg) {
+      public Chapter04.MyException(String msg) {
           super(msg);
       }
   }
@@ -1493,15 +1493,15 @@ public class ReturnExceptionDemo {
 
 将会输出：
 
-> 进入方法`A` 
+> 进入方法`Chapter04.A` 
 >
-> 方法`A`中的`finally`
+> 方法`Chapter04.A`中的`finally`
 >
 > 制造异常
 >
-> 进入方法`A` 
+> 进入方法`Chapter04.A` 
 >
-> 方法`A`中的`finally`
+> 方法`Chapter04.A`中的`finally`
 
 **`final finally finalize`三者的区别？**
 
@@ -1560,7 +1560,7 @@ public class ReturnExceptionDemo {
 
 ```java
 //只用一次所以可以采用匿名内部类的方式直接写
-public class MoreThread extends Thread {
+public class Chapter04.MoreThread extends Thread {
     public static void main(String[] args) {
         new Thread() {
             @Override
@@ -1617,7 +1617,7 @@ public class MoreThread extends Thread {
 三个窗口同时售卖`100`张票：【这里如果把`ticket--`单独放一行会导致线程安全问题】
 
 ```java
-public class MoreThread extends Thread {
+public class Chapter04.MoreThread extends Thread {
 
     private static int ticket = 100;
 
@@ -1633,9 +1633,9 @@ public class MoreThread extends Thread {
     }
 
     public static void main(String[] args) {
-        MoreThread moreThread1 = new MoreThread();
-        MoreThread moreThread2 = new MoreThread();
-        MoreThread moreThread3 = new MoreThread();
+        Chapter04.MoreThread moreThread1 = new Chapter04.MoreThread();
+        Chapter04.MoreThread moreThread2 = new Chapter04.MoreThread();
+        Chapter04.MoreThread moreThread3 = new Chapter04.MoreThread();
         moreThread1.setName("1 号窗口");
         moreThread2.setName("2 号窗口");
         moreThread3.setName("3 号窗口");
@@ -1645,7 +1645,7 @@ public class MoreThread extends Thread {
     }
 }
 
-class MyThread1 extends Thread {
+class Chapter04.MyThread1 extends Thread {
     @Override
     public void run() {
         for (int i = 1; i < 101; i++) {
@@ -1654,7 +1654,7 @@ class MyThread1 extends Thread {
     }
 }
 
-class MyThread2 extends Thread {
+class Chapter04.MyThread2 extends Thread {
     @Override
     public void run() {
         for (int i = 1; i < 101; i++) {
@@ -1669,9 +1669,9 @@ class MyThread2 extends Thread {
 **第二种方式**：实现`Runnable`接口的方式创建线程【实现接口，实现`run`方法，将该对象传递到`Thread`构造器里头】
 
 ```java
-public class MoreThread extends Thread {
+public class Chapter04.MoreThread extends Thread {
     public static void main(String[] args) {
-        MyThread3 myThread3 = new MyThread3();
+        Chapter04.MyThread3 myThread3 = new Chapter04.MyThread3();
         Thread thread = new Thread(myThread3);
         thread.start();
         for (int i = 1; i < 101; i++) {
@@ -1680,7 +1680,7 @@ public class MoreThread extends Thread {
     }
 }
 
-class MyThread3 implements Runnable {
+class Chapter04.MyThread3 implements Runnable {
     @Override
     public void run() {
         for (int i = 1; i < 101; i++) {
@@ -1817,13 +1817,13 @@ class MyThread3 implements Runnable {
 前面我们说过单例模式中的懒汉式是线程不安全的：
 
 ```java
-public class Test {
-    private Test test = null;
+public class Chapter04.Test {
+    private Chapter04.Test test = null;
     
-    private Test() {}
+    private Chapter04.Test() {}
     
-    public static Test getTest() {
-     	if(test == null) test = new Test;
+    public static Chapter04.Test getTest() {
+     	if(test == null) test = new Chapter04.Test;
     	return test;   
     }
 }
@@ -1832,29 +1832,29 @@ public class Test {
 学习了线程安全的解决方法之后可以这样改动：
 
 ```java
-public class Test {
-    private Test test = null;
+public class Chapter04.Test {
+    private Chapter04.Test test = null;
     
-    private Test() {}
+    private Chapter04.Test() {}
     
-    public static Test getTest() {
+    public static Chapter04.Test getTest() {
         //这里也可以使用 test 当作锁【因为是唯一的】
-        synchronized(Test.class) {
-	     	if(test == null) test = new Test;
+        synchronized(Chapter04.Test.class) {
+	     	if(test == null) test = new Chapter04.Test;
 	    	else return test;	           
         }
     }
     
     //效率较低 ---> 出现安全问题的只是 test 如果 test 不为 null 直接返回即可
-    public static synchronized Test getTest1() {
-     	if(test == null) test = new Test;
+    public static synchronized Chapter04.Test getTest1() {
+     	if(test == null) test = new Chapter04.Test;
 		else return test;	           
     }
     
-    public static synchronized Test getTest2() {
+    public static synchronized Chapter04.Test getTest2() {
         if(test == null) {
-            synchronized(Test.class) {
-                if(test == null)	test = new Test();
+            synchronized(Chapter04.Test.class) {
+                if(test == null)	test = new Chapter04.Test();
             }
         }
         return test;
@@ -1864,7 +1864,7 @@ public class Test {
 
 ## 线程死锁问题
 
-死锁：很好理解，比如某个线程拿着`A`锁进入一个方法，另一个线程拿着`B`锁进入方法，`A`锁中的方法里面又需要拿到`B`锁，而`B`锁方法里边恰恰相反，需要拿到`A`锁，此时是就造成了死锁。
+死锁：很好理解，比如某个线程拿着`Chapter04.A`锁进入一个方法，另一个线程拿着`Chapter04.B`锁进入方法，`Chapter04.A`锁中的方法里面又需要拿到`Chapter04.B`锁，而`Chapter04.B`锁方法里边恰恰相反，需要拿到`Chapter04.A`锁，此时是就造成了死锁。
 
 也就是：**不同线程分别占用对方所需要的同步资源不放弃，都在等待对方放弃自己所需要的同步资源，就形成了线程死锁的问题。**
 
@@ -1988,19 +1988,19 @@ public class Test {
 1. 使用`Runnable + 同步代码块`的方式
 
    ```java
-   public class SaveMoney {
+   public class Chapter04.SaveMoney {
        public static void main(String[] args) {
-           Account account = new Account();
-           Thread A = new Thread(account);
-           Thread B = new Thread(account);
-           A.setName("张三");
-           B.setName("李四");
-           A.start();
-           B.start();
+           Chapter04.Account account = new Chapter04.Account();
+           Thread Chapter04.A = new Thread(account);
+           Thread Chapter04.B = new Thread(account);
+           Chapter04.A.setName("张三");
+           Chapter04.B.setName("李四");
+           Chapter04.A.start();
+           Chapter04.B.start();
        }
    }
    
-   class Account implements Runnable {
+   class Chapter04.Account implements Runnable {
    
        private int accountMoney = 0;
        private int saveTime = 1;
@@ -2008,7 +2008,7 @@ public class Test {
        @Override
        public void run() {
            while (true) {
-               synchronized (this/Account.class) {
+               synchronized (this/Chapter04.Account.class) {
                    if (saveTime++ < 4) {
                        accountMoney += 1000;
                        System.out.println(Thread.currentThread().getName() + "存储 1000 元，当前账户余额为：" + accountMoney);
@@ -2023,19 +2023,19 @@ public class Test {
 2. 使用`Runnable + 同步方法`的方式
 
    ```java
-   public class SaveMoney {
+   public class Chapter04.SaveMoney {
        public static void main(String[] args) {
-           Account account = new Account();
-           Thread A = new Thread(account);
-           Thread B = new Thread(account);
-           A.setName("张三");
-           B.setName("李四");
-           A.start();
-           B.start();
+           Chapter04.Account account = new Chapter04.Account();
+           Thread Chapter04.A = new Thread(account);
+           Thread Chapter04.B = new Thread(account);
+           Chapter04.A.setName("张三");
+           Chapter04.B.setName("李四");
+           Chapter04.A.start();
+           Chapter04.B.start();
        }
    }
    
-   class Account implements Runnable {
+   class Chapter04.Account implements Runnable {
    
        private int accountMoney = 0;
        private int saveTime = 1;
@@ -2047,7 +2047,7 @@ public class Test {
            }
        }
    
-       //这里的同步监视器默认使用的就是：this 还可以加个 static 表示当前类 Account.class
+       //这里的同步监视器默认使用的就是：this 还可以加个 static 表示当前类 Chapter04.Account.class
        public synchronized void show() {
            if (saveTime++ < 4) {
                try {
@@ -2069,19 +2069,19 @@ public class Test {
    ```java
    import java.util.concurrent.locks.ReentrantLock;
    
-   public class SaveMoney {
+   public class Chapter04.SaveMoney {
        public static void main(String[] args) {
-           Account account = new Account();
-           Thread A = new Thread(account);
-           Thread B = new Thread(account);
-           A.setName("张三");
-           B.setName("李四");
-           A.start();
-           B.start();
+           Chapter04.Account account = new Chapter04.Account();
+           Thread Chapter04.A = new Thread(account);
+           Thread Chapter04.B = new Thread(account);
+           Chapter04.A.setName("张三");
+           Chapter04.B.setName("李四");
+           Chapter04.A.start();
+           Chapter04.B.start();
        }
    }
    
-   class Account implements Runnable {
+   class Chapter04.Account implements Runnable {
    
        private int accountMoney = 0;
        private int saveTime = 1;
@@ -2117,18 +2117,18 @@ public class Test {
    ```java
    import java.util.concurrent.locks.ReentrantLock;
    
-   public class SaveMoney {
+   public class Chapter04.SaveMoney {
        public static void main(String[] args) {
-           Account A = new Account();
-           Account B = new Account();
-           A.setName("张三");
-           B.setName("李四");
-           A.start();
-           B.start();
+           Chapter04.Account Chapter04.A = new Chapter04.Account();
+           Chapter04.Account Chapter04.B = new Chapter04.Account();
+           Chapter04.A.setName("张三");
+           Chapter04.B.setName("李四");
+           Chapter04.A.start();
+           Chapter04.B.start();
        }
    }
    
-   class Account extends Thread {
+   class Chapter04.Account extends Thread {
    
        private static int accountMoney = 0;
        private static int saveTime = 1;
@@ -2159,18 +2159,18 @@ public class Test {
    ```java
    import java.util.concurrent.locks.ReentrantLock;
    
-   public class SaveMoney {
+   public class Chapter04.SaveMoney {
        public static void main(String[] args) {
-           Account A = new Account();
-           Account B = new Account();
-           A.setName("张三");
-           B.setName("李四");
-           A.start();
-           B.start();
+           Chapter04.Account Chapter04.A = new Chapter04.Account();
+           Chapter04.Account Chapter04.B = new Chapter04.Account();
+           Chapter04.A.setName("张三");
+           Chapter04.B.setName("李四");
+           Chapter04.A.start();
+           Chapter04.B.start();
        }
    }
    
-   class Account extends Thread {
+   class Chapter04.Account extends Thread {
    
        private static int accountMoney = 0;
        private static int saveTime = 1;
@@ -2201,18 +2201,18 @@ public class Test {
    ```java
    import java.util.concurrent.locks.ReentrantLock;
    
-   public class SaveMoney {
+   public class Chapter04.SaveMoney {
        public static void main(String[] args) {
-           Account A = new Account();
-           Account B = new Account();
-           A.setName("张三");
-           B.setName("李四");
-           A.start();
-           B.start();
+           Chapter04.Account Chapter04.A = new Chapter04.Account();
+           Chapter04.Account Chapter04.B = new Chapter04.Account();
+           Chapter04.A.setName("张三");
+           Chapter04.B.setName("李四");
+           Chapter04.A.start();
+           Chapter04.B.start();
        }
    }
    
-   class Account extends Thread {
+   class Chapter04.Account extends Thread {
    
        private static int accountMoney = 0;
        private static int saveTime = 1;
@@ -2249,7 +2249,7 @@ public class Test {
 
 - **<font color="red">【这三个方法只能用在同步代码块和同步方法中，不能用于`Lock`中！】</font>**
 
-- **<font color="red">【这三个的调用者必须跟同步监视器保持一致！否则报错，这也是为什么我写`WN.class`报错写`Object`也报错的原因，你也可以改成：`object.notify() object.wait()`但，这又是为什么一定要写成一致的呢？】</font>**
+- **<font color="red">【这三个的调用者必须跟同步监视器保持一致！否则报错，这也是为什么我写`Chapter04.WN.class`报错写`Object`也报错的原因，你也可以改成：`object.notify() object.wait()`但，这又是为什么一定要写成一致的呢？】</font>**
 
   **【上述原因：一旦将一个对象设置成锁之后，我们内存中就有一个区域叫做对象头，对象头会存放同步监视器的状态和信息，当使用`wait()`方法的时候会去找这个同步监视器然后释放】**
 
@@ -2260,9 +2260,9 @@ public class Test {
 执行两个线程，交替打印`1-100`：【写代码的时候发现用继承的方式无法写，不知道后续是否可以解决？是真的不可以还是有什么不知道的东西？还有就是这里即使使用了`Runnable`的方式来写，但是这里一旦使用了`notify`，我`synchronized`里的同步监视器就无法使用`类.class`作为同步监视器，只能用`this`，这是为何？】
 
 ```java
-public class WaitAndNotify {
+public class Chapter04.WaitAndNotify {
     public static void main(String[] args) {
-        WN wn = new WN();
+        Chapter04.WN wn = new Chapter04.WN();
         Thread t1 = new Thread(wn);
         Thread t2 = new Thread(wn);
         t1.setName("线程1");
@@ -2272,7 +2272,7 @@ public class WaitAndNotify {
     }
 }
 
-class WN implements Runnable {
+class Chapter04.WN implements Runnable {
 
     private int i = 0;
 
@@ -2323,7 +2323,7 @@ class WN implements Runnable {
 这是自己写的生产者消费者模型：生产者会线生产`20`个产品，然后进入阻塞状态唤醒消费者消费
 
 ```java
-public class ProAndCon implements Runnable {
+public class Chapter04.ProAndCon implements Runnable {
 
     private int productNum = 0;
 
@@ -2374,9 +2374,9 @@ public class ProAndCon implements Runnable {
     }
 }
 
-class ProConTest {
+class Chapter04.ProConTest {
     public static void main(String[] args) {
-        ProAndCon proAndCon = new ProAndCon();
+        Chapter04.ProAndCon proAndCon = new Chapter04.ProAndCon();
         Thread product = new Thread(proAndCon);
         Thread consumer = new Thread(proAndCon);
         product.setName("生产者");
@@ -2396,7 +2396,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
-public class CallableTest implements Callable {
+public class Chapter04.CallableTest implements Callable {
 
     private int i = 1;
 
@@ -2415,9 +2415,9 @@ public class CallableTest implements Callable {
     }
 }
 
-class CTest {
+class Chapter04.CTest {
     public static void main(String[] args) {
-        CallableTest callableTest = new CallableTest();
+        Chapter04.CallableTest callableTest = new Chapter04.CallableTest();
         FutureTask futureTask = new FutureTask(callableTest);
         new Thread(futureTask).start();
         new Thread(futureTask).start();
@@ -2455,11 +2455,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
-public class ThreadPool {
+public class Chapter04.ThreadPool {
     public static void main(String[] args) {
         ExecutorService executorService = Executors.newFixedThreadPool(10);
-        executorService.execute(new ThreadRunnable1());
-        executorService.execute(new ThreadRunnable2());
+        executorService.execute(new Chapter04.ThreadRunnable1());
+        executorService.execute(new Chapter04.ThreadRunnable2());
         //executorService.submit();//适用于Callable方法
         ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) executorService;
         threadPoolExecutor.setCorePoolSize(10);//设置核心池的大小
@@ -2469,7 +2469,7 @@ public class ThreadPool {
     }
 }
 
-class ThreadRunnable1 implements Runnable {
+class Chapter04.ThreadRunnable1 implements Runnable {
     @Override
     public void run() {
         for (int i = 1; i <= 100; i++) {
@@ -2478,7 +2478,7 @@ class ThreadRunnable1 implements Runnable {
     }
 }
 
-class ThreadRunnable2 implements Runnable {
+class Chapter04.ThreadRunnable2 implements Runnable {
     @Override
     public void run() {
         for (int i = 1; i <= 100; i++) {
@@ -2537,15 +2537,15 @@ class ThreadRunnable2 implements Runnable {
 4. 写一个线程安全的懒汉式
 
    ```java
-   public class Test {
-       private Test test = null;
+   public class Chapter04.Test {
+       private Chapter04.Test test = null;
     	
-       private Test() {}
+       private Chapter04.Test() {}
        
-       private static Test getTest() {
+       private static Chapter04.Test getTest() {
            if(test == null) {
-               synchronized(Test.class) {
-                   if(test == null) test = new Test();
+               synchronized(Chapter04.Test.class) {
+                   if(test == null) test = new Chapter04.Test();
                }
            }
            return test;
@@ -2610,7 +2610,7 @@ class ThreadRunnable2 implements Runnable {
 - `String`不同拼接方式的对比：
 
   ```java
-  public class StringTest {
+  public class Chapter04.StringTest {
       public static void main(String[] args) {
           String s1 = "abc";
           String s2 = "def";
@@ -2654,7 +2654,7 @@ class ThreadRunnable2 implements Runnable {
     ```
 
   - ```java
-    public class StringTest {
+    public class Chapter04.StringTest {
         String str = new String("good");// str 保存着堆内存地址，堆内存地址保存方法区常量池中的地址，指向真正的 good
         char[] ch = {'t', 'e', 's', 't'};
         
@@ -2664,7 +2664,7 @@ class ThreadRunnable2 implements Runnable {
         }
         
         public static void main(String[] args) {
-            Stringtest ex = new StringTest();
+            Stringtest ex = new Chapter04.StringTest();
             ex.change(ex.str, ex.ch);//good test数组
             System.out.print(ex.str + "and");//good and
     		System.out.println(ex.ch);//best
@@ -2706,7 +2706,7 @@ int lastIndexOf(String str, int fromIndex);	//反方向的 indexOf，未找到�
 String replace(char oldChar, char newChar);	//返回一个新的字符串，它是通过 newChar 替换词字符串中出现的 oldChar 得到的，如果 oldChar 不存在在原先的字符串里头则不会更改，replace 将产生一个新的字符串而不是修改原先的字符串，这也保持了 String 是不可变的这一特性
 
 String s13 = "ABC";
-System.out.println(s13.replace('B', 'E'));
+System.out.println(s13.replace('Chapter04.B', 'E'));
 System.out.println(s13.replace("BC", "E"));
 
 String replace(CharSequence target, CharSequence replacement);	//使用指定的字面值替换序列替换此字符串所有匹配字面值目标序列的子字符串
@@ -2801,7 +2801,7 @@ System.out.println(s3 == s2);//true
 ```java
 import java.util.Date;
 
-public class DateTest {
+public class Chapter04.DateTest {
     public static void main(String[] args) {
         System.out.println(System.currentTimeMillis());
         Date date = new Date();
@@ -2821,14 +2821,14 @@ public class DateTest {
   //String 实现了 Comparable 接口，重写了 CompareTo() 方法：如果当前对象 this 大于形参对象 obj 就返回正整数，如果当前 this 对象小于形参对象则返回负整数，如果相等返回 0
   import java.util.Arrays;
   
-  public class Goods implements Comparable {
+  public class Chapter04.Goods implements Comparable {
       private String name;
       private int price;
   
-      public Goods() {
+      public Chapter04.Goods() {
       }
   
-      public Goods(String name, int price) {
+      public Chapter04.Goods(String name, int price) {
           this.name = name;
           this.price = price;
       }
@@ -2851,7 +2851,7 @@ public class DateTest {
   
       @Override
       public String toString() {
-          return "Goods{" +
+          return "Chapter04.Goods{" +
                   "name='" + name + '\'' +
                   ", price=" + price +
                   '}';
@@ -2859,8 +2859,8 @@ public class DateTest {
   
       @Override
       public int compareTo(Object o) {
-          if (o instanceof Goods) {
-              Goods goods = (Goods) o;
+          if (o instanceof Chapter04.Goods) {
+              Chapter04.Goods goods = (Chapter04.Goods) o;
               if (this.price > goods.price) return 1;
               else if (this.price < goods.price) return -1;
               else return this.name.compareTo(goods.name);
@@ -2869,15 +2869,15 @@ public class DateTest {
       }
   }
   
-  class GoodsTest {
+  class Chapter04.GoodsTest {
       public static void main(String[] args) {
-          Goods goods1 = new Goods("A", 96);
-          Goods goods2 = new Goods("B", 100);
-          Goods goods3 = new Goods("C", 98);
-          Goods goods4 = new Goods("D", 99);
-          Goods goods5 = new Goods("E", 97);
-          Goods goods6 = new Goods("A", 97);
-          Goods[] goods = new Goods[]{goods1, goods2, goods3, goods4, goods5, goods6};
+          Chapter04.Goods goods1 = new Chapter04.Goods("Chapter04.A", 96);
+          Chapter04.Goods goods2 = new Chapter04.Goods("Chapter04.B", 100);
+          Chapter04.Goods goods3 = new Chapter04.Goods("Chapter04.C", 98);
+          Chapter04.Goods goods4 = new Chapter04.Goods("D", 99);
+          Chapter04.Goods goods5 = new Chapter04.Goods("E", 97);
+          Chapter04.Goods goods6 = new Chapter04.Goods("Chapter04.A", 97);
+          Chapter04.Goods[] goods = new Chapter04.Goods[]{goods1, goods2, goods3, goods4, goods5, goods6};
           Arrays.sort(goods);
           System.out.println(Arrays.toString(goods));
       }

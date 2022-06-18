@@ -1,3 +1,5 @@
+package Chapter04;
+
 public class MoreThread extends Thread {
     public static void main(String[] args) {
         MyThread3 myThread3 = new MyThread3();
