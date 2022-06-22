@@ -80,7 +80,7 @@
 
   - `double`占用`8字节`，双精度浮点型，`Java`默认浮点型数据类型
 
-  - `char`占用`2`字节，表示字符，一个汉字正好是`2`字节，所以可以直接存储汉字，`char`存储数值可以有三种表现形式：`char c1 = 'a'`，`Java`中还允许使用转义字符`\`，并且可以使用十六进制如：`\u000a`表示`\n`，`char`数据类型是可以进行运算的，因为它有对应的`Unicode`码，可以进行运算。常见的`65 - Chapter04.A， 97 - a`，为了跨界形成了万国码`Unicode`，其中最广泛应用的`Unicode`实现方式就是`UTF-8`，注意`char`跟`char`是做运算，`char`跟`string`是连接
+  - `char`占用`2`字节，表示字符，一个汉字正好是`2`字节，所以可以直接存储汉字，`char`存储数值可以有三种表现形式：`char c1 = 'a'`，`Java`中还允许使用转义字符`\`，并且可以使用十六进制如：`\u000a`表示`\n`，`char`数据类型是可以进行运算的，因为它有对应的`Unicode`码，可以进行运算。常见的`65 - A， 97 - a`，为了跨界形成了万国码`Unicode`，其中最广泛应用的`Unicode`实现方式就是`UTF-8`，注意`char`跟`char`是做运算，`char`跟`string`是连接
 
   - <font color="red">**基本数据类型转换：**</font>分为自动类型转换和强制类型转换，自动类型转换就是容量小的类型可以自动转换为容量大的类型，数据类型容量按从小到大的排序为：`byte ---> short|char ---> int ---> long ---> float ---> double `
 
@@ -124,7 +124,7 @@
 
 **关于进制：**
 
-二进制以`0b 0B`开头，八进制以`0`开头`3 位二进制表示`，十六进制以`0x 0X`开头`4 位二进制表示`，`Chapter04.A-F`不区分大小写。<font color="red">**计算机存储都是以补码的形式存储数据**</font>，正数的原码反码和补码都是它本身，负数的补码是原码取反码+1。
+二进制以`0b 0B`开头，八进制以`0`开头`3 位二进制表示`，十六进制以`0x 0X`开头`4 位二进制表示`，`A-F`不区分大小写。<font color="red">**计算机存储都是以补码的形式存储数据**</font>，正数的原码反码和补码都是它本身，负数的补码是原码取反码+1。
 
 `10111011`有可能是正数也可能是负数：
 
@@ -399,7 +399,7 @@ public static void test(int a, String book);
 2. 最后结果为：一是在方法中打印完就退出程序：`System.exit(0)`，二是可以重写`println()`方法
 
    ```java
-   public class Chapter04.Test {
+   public class Test {
        public static void main(String[] args) {
            int a = 10;
            int b = 10;
@@ -561,7 +561,7 @@ public static void getNum() {
 习题：
 
 ```java
-class Chapter04.Base {
+class Base {
     int count = 10;
 
     public void display() {
@@ -569,7 +569,7 @@ class Chapter04.Base {
     }
 }
 
-class Chapter04.Sub extends Chapter04.Base {
+class Sub extends Base {
     int count = 20;
 
     public void display() {
@@ -577,15 +577,15 @@ class Chapter04.Sub extends Chapter04.Base {
     }
 }
 
-public class Chapter04.FieldMethodTest {
+public class FieldMethodTest {
     public static void main(String[] args) {
-        Chapter04.Sub s = new Chapter04.Sub();
+        Sub s = new Sub();
         System.out.println(s.count);//输出 20
-        s.display();//Chapter04.Sub 重写了父类 Chapter04.Base 中的 display 方法，打印 20
-        Chapter04.Base b = s;//父类引用指向子类对象，这里用到了多态，所以 b 其实是一个 Chapter04.Sub 对象，跟 s 指向同一个地址
+        s.display();//Sub 重写了父类 Base 中的 display 方法，打印 20
+        Base b = s;//父类引用指向子类对象，这里用到了多态，所以 b 其实是一个 Sub 对象，跟 s 指向同一个地址
         System.out.println(b == s);//这里比较的是内存地址，b 跟 s 都指向同一个内存地址，所以为 true
-        System.out.println(b.count);//10 这里因为 Chapter04.Base b 的缘故，所以在堆内存中会有父类的属性，找的话是先找父类的属性
-        b.display();//20 因为这里是 this ，指向的是 Chapter04.Sub 类对象方法区中的方法，如果这里改成 super，那么指向的就是父类的，结果就变为 10，或者找不到才会去找父类的
+        System.out.println(b.count);//10 这里因为 Base b 的缘故，所以在堆内存中会有父类的属性，找的话是先找父类的属性
+        b.display();//20 因为这里是 this ，指向的是 Sub 类对象方法区中的方法，如果这里改成 super，那么指向的就是父类的，结果就变为 10，或者找不到才会去找父类的
     }
 }
 ```
@@ -598,13 +598,13 @@ public class Chapter04.FieldMethodTest {
 - 答：只有在调用的那一刻才知道到底调用的是哪个类的方法，所以是运行时行为。
 
 ```java
-class Chapter04.Base {
+class Base {
     public void add(int a, int...arr) {
         System.out.println("base");
     }
 }
 
-class Chapter04.Sub extends Chapter04.Base {
+class Sub extends Base {
     public void add(int a, int[] arr) {
         System.out.println("sub_1");
     }
@@ -614,11 +614,11 @@ class Chapter04.Sub extends Chapter04.Base {
     }
 }
 
-public class Chapter04.FieldMethodTest {
+public class FieldMethodTest {
     public static void main(String[] args) {
-        Chapter04.Base base = new Chapter04.Sub();
-        base.add(1, 2, 3);//输出 sub_1，编译没问题，调用的是 Chapter04.Sub 类的 add 方法，编译器认为int...arr 和 int[] arr 是一样的 如果把 sub_2 打开把 sub_1 合上输出的则为 base，如果不合上，输出的还是 base_1
-        Chapter04.Sub s = (Chapter04.Sub)base;//s 指向的跟 base 一样 指向在堆内存中的一个 Chapter04.Sub 对象
+        Base base = new Sub();
+        base.add(1, 2, 3);//输出 sub_1，编译没问题，调用的是 Sub 类的 add 方法，编译器认为int...arr 和 int[] arr 是一样的 如果把 sub_2 打开把 sub_1 合上输出的则为 base，如果不合上，输出的还是 base_1
+        Sub s = (Sub)base;//s 指向的跟 base 一样 指向在堆内存中的一个 Sub 对象
         s.add(1, 2, 3);//sub_2 确定个数的优先调用
     }
 }
@@ -658,7 +658,7 @@ public class Chapter04.FieldMethodTest {
   System.out.println(i == b);//编译错误
   char c = 10;
   System.out.println(i == c);//true
-  char a = 'Chapter04.A';
+  char a = 'A';
   char e = 65;
   System.out.println(a == e);//true
   ```
@@ -732,7 +732,7 @@ System.out.println(it == fl);//true 存在自动类型提升
 ```
 
 ```java
-char ch1 = 'Chapter04.A';
+char ch1 = 'A';
 char ch2 = 12;
 System.out.println(65 == ch1);//true
 System.out.println(12 == ch2);//true
@@ -1008,12 +1008,12 @@ private static class IntegerCache {
 - 饿汉式单例模式：【定义一个静态对象然后返回这个静态对象，比较饥渴上来就`new`一个对象】
 
   ```java
-  private static Chapter04.Test test = new Chapter04.Test();
+  private static Test test = new Test();
   
-  private Chapter04.Test() {
+  private Test() {
   }
   
-  public static Chapter04.Test getObject() {
+  public static Test getObject() {
       return test;
   }
   ```
@@ -1021,14 +1021,14 @@ private static class IntegerCache {
 - 懒汉式单例模式：【每次要创建都判断定义的对象是不是`null`，如果是就`new`一个不是的话就直接返回，太懒了，你要的话我才给你】
 
   ```java
-  private static Chapter04.Test test = null;
+  private static Test test = null;
   
-  private Chapter04.Test() {
+  private Test() {
   }
   
-  private static Chapter04.Test getObject() {
+  private static Test getObject() {
       if(test != null) return test;
-      else return new Chapter04.Test();
+      else return new Test();
   }
   ```
 
@@ -1060,13 +1060,13 @@ public static void main(String[] args) {}
 - 代码块只能使用`static`用来修饰，表示静态代码块，没有使用`static`修饰的叫做非静态代码块，**<font color="red">静态代码块随着类的加载而执行。</font>**而非静态代码块是随着对象的创建而执行的，**<font color="red">并且每创建一个对象都会执行一次代码块。除此之外还有很重要很重要很重要的一点！！！！！！！！！！就是代码块会先执行然后才会执行构造器！！！！代码块先执行然后才执行构造器！！！</font>**
 
   ```java
-  public class Chapter04.FieldMethodTest {
-      public Chapter04.FieldMethodTest() {
+  public class FieldMethodTest {
+      public FieldMethodTest() {
           System.out.println("这是构造器！");
       }
   
       public static void main(String[] args) {
-          Chapter04.FieldMethodTest fieldMethodTest = new Chapter04.FieldMethodTest();
+          FieldMethodTest fieldMethodTest = new FieldMethodTest();
       }
   
       static {
@@ -1102,7 +1102,7 @@ public static void main(String[] args) {}
 
 - 当`final`修饰一个方法时：则表示这个方法是一个最终方法，**表明该方法无法被重写**。
 
-  `Object`类中的`getClass()`方法就被`final`修饰了，表明无法被重写，因为这个方法只有这种搞法，无需重写，没那个必要。可以发现有一个`native`，`native`的意思就是接下来要调用的底层的`Chapter04.C/Chapter04.C++`了。
+  `Object`类中的`getClass()`方法就被`final`修饰了，表明无法被重写，因为这个方法只有这种搞法，无需重写，没那个必要。可以发现有一个`native`，`native`的意思就是接下来要调用的底层的`C/C++`了。
 
 - 当`final`修饰一个变量时：则表示这个变量是一个常量。可以考虑给一个常量赋值的地方有：
 
@@ -1168,12 +1168,12 @@ public static void main(String[] args) {}
 3. 代码实现单例模式的饿汉式【线程安全】
 
    ```java
-   private Chapter04.Test test = new Chapter04.Test();
+   private Test test = new Test();
    
-   private Chapter04.Test() {
+   private Test() {
    }
    
-   public Chapter04.Test getTest() {
+   public Test getTest() {
        return test;
    }
    ```
@@ -1181,13 +1181,13 @@ public static void main(String[] args) {}
 4. 代码实现单例模式的懒汉式【线程不安全】
 
    ```java
-   private Chapter04.Test test = null;
+   private Test test = null;
    
-   private Chapter04.Test() {
+   private Test() {
    }
    
-   public Chapter04.Test getTest() {
-       if(test == null) return new Chapter04.Test();
+   public Test getTest() {
+       if(test == null) return new Test();
        else return test;
    }
    ```
@@ -1219,32 +1219,32 @@ public static void main(String[] args) {}
 3. **`abstract`关键字不能用来修饰`static`修饰的静态方法**，因为静态方法是随着类的加载而加载的，而被`abstract`关键字修饰的方法只有被重写才有意义，但是静态方法因为随着类的加载而加载，它并不关父类的事情，但是它可以找得到父类的东西。这里涉及到`JVM`的底层知识，以现在的知识无法讲清楚，但是可以通过一个多态的例子来说明：
 
    ```java
-   public class Chapter04.Father {
+   public class Father {
        public static void method() {
-           System.out.println("This is a Chapter04.Father method.");
+           System.out.println("This is a Father method.");
        }
    }
    
-   class Chapter04.Son extends Chapter04.Father {
+   class Son extends Father {
        public static void method() {
-           System.out.println("This is a Chapter04.Son method");
+           System.out.println("This is a Son method");
        }
    
        public static void main(String[] args) {
-          Chapter04.Father son  = new Chapter04.Son();
+          Father son  = new Son();
           son.method();
        }
    }
    ```
 
-   上述代码如果`method`重写了的话，那么调用的时候肯定是打印`Chapter04.Son`中的，但是现在这里打印的是`Chapter04.Father`中的，也就是说静态方法看似被重写了，其实并没有。那暂时就先记住，静态方法看似重写实则没有重写，而被`abstract`修饰的方法是必须被重写才有意义的，所以`abstract`关键字无法修饰静态方法
+   上述代码如果`method`重写了的话，那么调用的时候肯定是打印`Son`中的，但是现在这里打印的是`Father`中的，也就是说静态方法看似被重写了，其实并没有。那暂时就先记住，静态方法看似重写实则没有重写，而被`abstract`修饰的方法是必须被重写才有意义的，所以`abstract`关键字无法修饰静态方法
 
 4. **`abstract`关键字不能用来修饰`final`修饰的最终方法以及最终类**，因为`final`修饰的方法表示最终的，无法被子类重写，那就与被`abstract`关键字修饰的方法必须被重写是相互违背的，所以`abstract`无法修饰被`final`关键字修饰的方法，相应的也无法修饰被`final`修饰的类，因为无法被继承。
 
 抽象类的匿名子类对象：
 
 ```java
-Chapter04.Father father = new Chapter04.Father() {
+Father father = new Father() {
     @Override
     public void method() {
         System.out.println("This is a FFF method.");
@@ -1263,9 +1263,9 @@ Chapter04.Father father = new Chapter04.Father() {
 - 接口时比抽象类还要抽象的类，它里面全都是抽象方法。接口的出现是为了解决`Java`类单继承的问题，因为接口是可以被多个类实现的，抽象类是可以有具体被实现的方法的，但是接口不行。
 - 说白了，接口就是一种规范，一种法律，你要想实现我，然后实例化你就必须实现我所有的抽象方法才可以。
 
-接口中的属性默认是静态常量：`public static final int Chapter04.A = 1;`
+接口中的属性默认是静态常量：`public static final int A = 1;`
 
-接口中的方法默认是公共抽象方法：`public abstract void Chapter04.B();**`**
+接口中的方法默认是公共抽象方法：`public abstract void B();**`**
 
 **<font color="red">相比于抽象类，抽象类是有构造器的，但是接口不允许有构造器，因为接口比抽象类还要抽象，抽象类可以通过多态机制实现间接实例化，但是接口无法被实例化【这里暂且忽视掉匿名内部类】，因为它压根就没有构造器！</font>**
 
@@ -1279,51 +1279,51 @@ Chapter04.Father father = new Chapter04.Father() {
 
 **习题：**
 
-1. 排错：编译错误，接口`Chapter04.A`和类`Chapter04.B`都声明了属性`x`，`pX()`方法中不知道到底要用哪个
+1. 排错：编译错误，接口`A`和类`B`都声明了属性`x`，`pX()`方法中不知道到底要用哪个
 
-   可以改成：`Chapter04.A.x`或者`super.x`
+   可以改成：`A.x`或者`super.x`
 
    ```java
-   interface Chapter04.A {
+   interface A {
        public static final int x = 0;
    }
    
-   class Chapter04.B {
+   class B {
        int x = 1;
    }
    
-   class Chapter04.C extends Chapter04.B implements Chapter04.A {
+   class C extends B implements A {
        public void pX() {
            System.out.println(x);
        }
        
        public static void main(String[] args) {
-           new Chapter04.C().pX();
+           new C().pX();
        }
    }
    ```
 
 ## 代理模式设计模式
 
-代理模式是`Java`开发中比较常用的设计模式，前面我们学习了：单例模式【懒汉式、饿汉式】还有模板方法设计模式。这些都是常用的设计模式。代理模式这种设计模式就是为其他对象提供一种代理以控制对这个对象的访问。所谓代理其实就是中介。**其实就是把本身`Chapter04.A`要做的事情，`Chapter04.B`把它给做了。**比如这里：`Chapter04.ProxyServer`做了检查但是`Chapter04.Server`并没有做检查，这就是代理。
+代理模式是`Java`开发中比较常用的设计模式，前面我们学习了：单例模式【懒汉式、饿汉式】还有模板方法设计模式。这些都是常用的设计模式。代理模式这种设计模式就是为其他对象提供一种代理以控制对这个对象的访问。所谓代理其实就是中介。**其实就是把本身`A`要做的事情，`B`把它给做了。**比如这里：`ProxyServer`做了检查但是`Server`并没有做检查，这就是代理。
 
 ```java
-public interface Chapter04.Network {
+public interface Network {
     public abstract void work();
 }
 
-class Chapter04.Server implements Chapter04.Network {
+class Server implements Network {
     @Override
     public void work() {
         System.out.println("服务器完成联网，开始工作...");
     }
 }
 
-class Chapter04.ProxyServer implements Chapter04.Network {
+class ProxyServer implements Network {
 
-    private Chapter04.Server server = null;
+    private Server server = null;
 
-    public Chapter04.ProxyServer(Chapter04.Server server) {
+    public ProxyServer(Server server) {
         this.server = server;
     }
 
@@ -1338,10 +1338,10 @@ class Chapter04.ProxyServer implements Chapter04.Network {
     }
 }
 
-class Chapter04.Test {
+class Test {
     public static void main(String[] args) {
-        Chapter04.Server server = new Chapter04.Server();
-        Chapter04.ProxyServer proxyServer = new Chapter04.ProxyServer(server);
+        Server server = new Server();
+        ProxyServer proxyServer = new ProxyServer(server);
         proxyServer.work();
     }
 }
@@ -1419,7 +1419,7 @@ class Chapter04.Test {
 **<font color="red">`finally`中声明的是一定会被执行的代码，通常用于资源的释放，即使`try`跟`catch`里面都有`return`语句但是依然会执行`finally`中的代码</font>**
 
 ```java
-public class Chapter04.SomeElse {
+public class SomeElse {
     public static void main(String[] args) {
         System.out.println(method());
     }
@@ -1447,13 +1447,13 @@ public class Chapter04.SomeElse {
 - 自定义异常：【异常的顶层是一个叫`Throwable`的类，再往上就是`Object`类了】
 
   ```java
-  public class Chapter04.MyException extends RuntimeException {
+  public class MyException extends RuntimeException {
       static final long serialVersionUID = -7034897190745766939L;
   
-      public Chapter04.MyException() {
+      public MyException() {
       }
   
-      public Chapter04.MyException(String msg) {
+      public MyException(String msg) {
           super(msg);
       }
   }
@@ -1493,15 +1493,15 @@ public class ReturnExceptionDemo {
 
 将会输出：
 
-> 进入方法`Chapter04.A` 
+> 进入方法`A` 
 >
-> 方法`Chapter04.A`中的`finally`
+> 方法`A`中的`finally`
 >
 > 制造异常
 >
-> 进入方法`Chapter04.A` 
+> 进入方法`A` 
 >
-> 方法`Chapter04.A`中的`finally`
+> 方法`A`中的`finally`
 
 **`final finally finalize`三者的区别？**
 
@@ -1560,7 +1560,7 @@ public class ReturnExceptionDemo {
 
 ```java
 //只用一次所以可以采用匿名内部类的方式直接写
-public class Chapter04.MoreThread extends Thread {
+public class MoreThread extends Thread {
     public static void main(String[] args) {
         new Thread() {
             @Override
@@ -1617,7 +1617,7 @@ public class Chapter04.MoreThread extends Thread {
 三个窗口同时售卖`100`张票：【这里如果把`ticket--`单独放一行会导致线程安全问题】
 
 ```java
-public class Chapter04.MoreThread extends Thread {
+public class MoreThread extends Thread {
 
     private static int ticket = 100;
 
@@ -1633,9 +1633,9 @@ public class Chapter04.MoreThread extends Thread {
     }
 
     public static void main(String[] args) {
-        Chapter04.MoreThread moreThread1 = new Chapter04.MoreThread();
-        Chapter04.MoreThread moreThread2 = new Chapter04.MoreThread();
-        Chapter04.MoreThread moreThread3 = new Chapter04.MoreThread();
+        MoreThread moreThread1 = new MoreThread();
+        MoreThread moreThread2 = new MoreThread();
+        MoreThread moreThread3 = new MoreThread();
         moreThread1.setName("1 号窗口");
         moreThread2.setName("2 号窗口");
         moreThread3.setName("3 号窗口");
@@ -1645,7 +1645,7 @@ public class Chapter04.MoreThread extends Thread {
     }
 }
 
-class Chapter04.MyThread1 extends Thread {
+class MyThread1 extends Thread {
     @Override
     public void run() {
         for (int i = 1; i < 101; i++) {
@@ -1654,7 +1654,7 @@ class Chapter04.MyThread1 extends Thread {
     }
 }
 
-class Chapter04.MyThread2 extends Thread {
+class MyThread2 extends Thread {
     @Override
     public void run() {
         for (int i = 1; i < 101; i++) {
@@ -1669,9 +1669,9 @@ class Chapter04.MyThread2 extends Thread {
 **第二种方式**：实现`Runnable`接口的方式创建线程【实现接口，实现`run`方法，将该对象传递到`Thread`构造器里头】
 
 ```java
-public class Chapter04.MoreThread extends Thread {
+public class MoreThread extends Thread {
     public static void main(String[] args) {
-        Chapter04.MyThread3 myThread3 = new Chapter04.MyThread3();
+        MyThread3 myThread3 = new MyThread3();
         Thread thread = new Thread(myThread3);
         thread.start();
         for (int i = 1; i < 101; i++) {
@@ -1680,7 +1680,7 @@ public class Chapter04.MoreThread extends Thread {
     }
 }
 
-class Chapter04.MyThread3 implements Runnable {
+class MyThread3 implements Runnable {
     @Override
     public void run() {
         for (int i = 1; i < 101; i++) {
@@ -1771,7 +1771,7 @@ class Chapter04.MyThread3 implements Runnable {
   >
   >    ```java
   >    package Chapter03;
-  >          
+  >                                              
   >    public class ShowTicket extends Thread {
   >        public static void main(String[] args) {
   >            ST st1 = new ST();
@@ -1785,10 +1785,10 @@ class Chapter04.MyThread3 implements Runnable {
   >            st3.start();
   >        }
   >    }
-  >          
+  >                                              
   >    class ST extends Thread {
   >        private static int ticket = 100;
-  >          
+  >                                              
   >        @Override
   >        public void run() {
   >            while (true) {
@@ -1796,7 +1796,7 @@ class Chapter04.MyThread3 implements Runnable {
   >                show();
   >            }
   >        }
-  >          
+  >                                              
   >        //加了 static 相当于锁为：ST.class
   >        private static synchronized void show() {
   >            if (ticket > 0) {
@@ -1817,13 +1817,13 @@ class Chapter04.MyThread3 implements Runnable {
 前面我们说过单例模式中的懒汉式是线程不安全的：
 
 ```java
-public class Chapter04.Test {
-    private Chapter04.Test test = null;
+public class Test {
+    private Test test = null;
     
-    private Chapter04.Test() {}
+    private Test() {}
     
-    public static Chapter04.Test getTest() {
-     	if(test == null) test = new Chapter04.Test;
+    public static Test getTest() {
+     	if(test == null) test = new Test;
     	return test;   
     }
 }
@@ -1832,29 +1832,29 @@ public class Chapter04.Test {
 学习了线程安全的解决方法之后可以这样改动：
 
 ```java
-public class Chapter04.Test {
-    private Chapter04.Test test = null;
+public class Test {
+    private Test test = null;
     
-    private Chapter04.Test() {}
+    private Test() {}
     
-    public static Chapter04.Test getTest() {
+    public static Test getTest() {
         //这里也可以使用 test 当作锁【因为是唯一的】
-        synchronized(Chapter04.Test.class) {
-	     	if(test == null) test = new Chapter04.Test;
+        synchronized(Test.class) {
+	     	if(test == null) test = new Test;
 	    	else return test;	           
         }
     }
     
     //效率较低 ---> 出现安全问题的只是 test 如果 test 不为 null 直接返回即可
-    public static synchronized Chapter04.Test getTest1() {
-     	if(test == null) test = new Chapter04.Test;
+    public static synchronized Test getTest1() {
+     	if(test == null) test = new Test;
 		else return test;	           
     }
     
-    public static synchronized Chapter04.Test getTest2() {
+    public static synchronized Test getTest2() {
         if(test == null) {
-            synchronized(Chapter04.Test.class) {
-                if(test == null)	test = new Chapter04.Test();
+            synchronized(Test.class) {
+                if(test == null)	test = new Test();
             }
         }
         return test;
@@ -1864,7 +1864,7 @@ public class Chapter04.Test {
 
 ## 线程死锁问题
 
-死锁：很好理解，比如某个线程拿着`Chapter04.A`锁进入一个方法，另一个线程拿着`Chapter04.B`锁进入方法，`Chapter04.A`锁中的方法里面又需要拿到`Chapter04.B`锁，而`Chapter04.B`锁方法里边恰恰相反，需要拿到`Chapter04.A`锁，此时是就造成了死锁。
+死锁：很好理解，比如某个线程拿着`A`锁进入一个方法，另一个线程拿着`B`锁进入方法，`A`锁中的方法里面又需要拿到`B`锁，而`B`锁方法里边恰恰相反，需要拿到`A`锁，此时是就造成了死锁。
 
 也就是：**不同线程分别占用对方所需要的同步资源不放弃，都在等待对方放弃自己所需要的同步资源，就形成了线程死锁的问题。**
 
@@ -1988,19 +1988,19 @@ public class Chapter04.Test {
 1. 使用`Runnable + 同步代码块`的方式
 
    ```java
-   public class Chapter04.SaveMoney {
+   public class SaveMoney {
        public static void main(String[] args) {
-           Chapter04.Account account = new Chapter04.Account();
-           Thread Chapter04.A = new Thread(account);
-           Thread Chapter04.B = new Thread(account);
-           Chapter04.A.setName("张三");
-           Chapter04.B.setName("李四");
-           Chapter04.A.start();
-           Chapter04.B.start();
+           Account account = new Account();
+           Thread A = new Thread(account);
+           Thread B = new Thread(account);
+           A.setName("张三");
+           B.setName("李四");
+           A.start();
+           B.start();
        }
    }
    
-   class Chapter04.Account implements Runnable {
+   class Account implements Runnable {
    
        private int accountMoney = 0;
        private int saveTime = 1;
@@ -2008,7 +2008,7 @@ public class Chapter04.Test {
        @Override
        public void run() {
            while (true) {
-               synchronized (this/Chapter04.Account.class) {
+               synchronized (this/Account.class) {
                    if (saveTime++ < 4) {
                        accountMoney += 1000;
                        System.out.println(Thread.currentThread().getName() + "存储 1000 元，当前账户余额为：" + accountMoney);
@@ -2023,19 +2023,19 @@ public class Chapter04.Test {
 2. 使用`Runnable + 同步方法`的方式
 
    ```java
-   public class Chapter04.SaveMoney {
+   public class SaveMoney {
        public static void main(String[] args) {
-           Chapter04.Account account = new Chapter04.Account();
-           Thread Chapter04.A = new Thread(account);
-           Thread Chapter04.B = new Thread(account);
-           Chapter04.A.setName("张三");
-           Chapter04.B.setName("李四");
-           Chapter04.A.start();
-           Chapter04.B.start();
+           Account account = new Account();
+           Thread A = new Thread(account);
+           Thread B = new Thread(account);
+           A.setName("张三");
+           B.setName("李四");
+           A.start();
+           B.start();
        }
    }
    
-   class Chapter04.Account implements Runnable {
+   class Account implements Runnable {
    
        private int accountMoney = 0;
        private int saveTime = 1;
@@ -2047,7 +2047,7 @@ public class Chapter04.Test {
            }
        }
    
-       //这里的同步监视器默认使用的就是：this 还可以加个 static 表示当前类 Chapter04.Account.class
+       //这里的同步监视器默认使用的就是：this 还可以加个 static 表示当前类 Account.class
        public synchronized void show() {
            if (saveTime++ < 4) {
                try {
@@ -2069,19 +2069,19 @@ public class Chapter04.Test {
    ```java
    import java.util.concurrent.locks.ReentrantLock;
    
-   public class Chapter04.SaveMoney {
+   public class SaveMoney {
        public static void main(String[] args) {
-           Chapter04.Account account = new Chapter04.Account();
-           Thread Chapter04.A = new Thread(account);
-           Thread Chapter04.B = new Thread(account);
-           Chapter04.A.setName("张三");
-           Chapter04.B.setName("李四");
-           Chapter04.A.start();
-           Chapter04.B.start();
+           Account account = new Account();
+           Thread A = new Thread(account);
+           Thread B = new Thread(account);
+           A.setName("张三");
+           B.setName("李四");
+           A.start();
+           B.start();
        }
    }
    
-   class Chapter04.Account implements Runnable {
+   class Account implements Runnable {
    
        private int accountMoney = 0;
        private int saveTime = 1;
@@ -2117,18 +2117,18 @@ public class Chapter04.Test {
    ```java
    import java.util.concurrent.locks.ReentrantLock;
    
-   public class Chapter04.SaveMoney {
+   public class SaveMoney {
        public static void main(String[] args) {
-           Chapter04.Account Chapter04.A = new Chapter04.Account();
-           Chapter04.Account Chapter04.B = new Chapter04.Account();
-           Chapter04.A.setName("张三");
-           Chapter04.B.setName("李四");
-           Chapter04.A.start();
-           Chapter04.B.start();
+           Account A = new Account();
+           Account B = new Account();
+           A.setName("张三");
+           B.setName("李四");
+           A.start();
+           B.start();
        }
    }
    
-   class Chapter04.Account extends Thread {
+   class Account extends Thread {
    
        private static int accountMoney = 0;
        private static int saveTime = 1;
@@ -2159,18 +2159,18 @@ public class Chapter04.Test {
    ```java
    import java.util.concurrent.locks.ReentrantLock;
    
-   public class Chapter04.SaveMoney {
+   public class SaveMoney {
        public static void main(String[] args) {
-           Chapter04.Account Chapter04.A = new Chapter04.Account();
-           Chapter04.Account Chapter04.B = new Chapter04.Account();
-           Chapter04.A.setName("张三");
-           Chapter04.B.setName("李四");
-           Chapter04.A.start();
-           Chapter04.B.start();
+           Account A = new Account();
+           Account B = new Account();
+           A.setName("张三");
+           B.setName("李四");
+           A.start();
+           B.start();
        }
    }
    
-   class Chapter04.Account extends Thread {
+   class Account extends Thread {
    
        private static int accountMoney = 0;
        private static int saveTime = 1;
@@ -2201,18 +2201,18 @@ public class Chapter04.Test {
    ```java
    import java.util.concurrent.locks.ReentrantLock;
    
-   public class Chapter04.SaveMoney {
+   public class SaveMoney {
        public static void main(String[] args) {
-           Chapter04.Account Chapter04.A = new Chapter04.Account();
-           Chapter04.Account Chapter04.B = new Chapter04.Account();
-           Chapter04.A.setName("张三");
-           Chapter04.B.setName("李四");
-           Chapter04.A.start();
-           Chapter04.B.start();
+           Account A = new Account();
+           Account B = new Account();
+           A.setName("张三");
+           B.setName("李四");
+           A.start();
+           B.start();
        }
    }
    
-   class Chapter04.Account extends Thread {
+   class Account extends Thread {
    
        private static int accountMoney = 0;
        private static int saveTime = 1;
@@ -2249,7 +2249,7 @@ public class Chapter04.Test {
 
 - **<font color="red">【这三个方法只能用在同步代码块和同步方法中，不能用于`Lock`中！】</font>**
 
-- **<font color="red">【这三个的调用者必须跟同步监视器保持一致！否则报错，这也是为什么我写`Chapter04.WN.class`报错写`Object`也报错的原因，你也可以改成：`object.notify() object.wait()`但，这又是为什么一定要写成一致的呢？】</font>**
+- **<font color="red">【这三个的调用者必须跟同步监视器保持一致！否则报错，这也是为什么我写`WN.class`报错写`Object`也报错的原因，你也可以改成：`object.notify() object.wait()`但，这又是为什么一定要写成一致的呢？】</font>**
 
   **【上述原因：一旦将一个对象设置成锁之后，我们内存中就有一个区域叫做对象头，对象头会存放同步监视器的状态和信息，当使用`wait()`方法的时候会去找这个同步监视器然后释放】**
 
@@ -2260,9 +2260,9 @@ public class Chapter04.Test {
 执行两个线程，交替打印`1-100`：【写代码的时候发现用继承的方式无法写，不知道后续是否可以解决？是真的不可以还是有什么不知道的东西？还有就是这里即使使用了`Runnable`的方式来写，但是这里一旦使用了`notify`，我`synchronized`里的同步监视器就无法使用`类.class`作为同步监视器，只能用`this`，这是为何？】
 
 ```java
-public class Chapter04.WaitAndNotify {
+public class WaitAndNotify {
     public static void main(String[] args) {
-        Chapter04.WN wn = new Chapter04.WN();
+        WN wn = new WN();
         Thread t1 = new Thread(wn);
         Thread t2 = new Thread(wn);
         t1.setName("线程1");
@@ -2272,7 +2272,7 @@ public class Chapter04.WaitAndNotify {
     }
 }
 
-class Chapter04.WN implements Runnable {
+class WN implements Runnable {
 
     private int i = 0;
 
@@ -2323,7 +2323,7 @@ class Chapter04.WN implements Runnable {
 这是自己写的生产者消费者模型：生产者会线生产`20`个产品，然后进入阻塞状态唤醒消费者消费
 
 ```java
-public class Chapter04.ProAndCon implements Runnable {
+public class ProAndCon implements Runnable {
 
     private int productNum = 0;
 
@@ -2374,9 +2374,9 @@ public class Chapter04.ProAndCon implements Runnable {
     }
 }
 
-class Chapter04.ProConTest {
+class ProConTest {
     public static void main(String[] args) {
-        Chapter04.ProAndCon proAndCon = new Chapter04.ProAndCon();
+        ProAndCon proAndCon = new ProAndCon();
         Thread product = new Thread(proAndCon);
         Thread consumer = new Thread(proAndCon);
         product.setName("生产者");
@@ -2396,7 +2396,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
-public class Chapter04.CallableTest implements Callable {
+public class CallableTest implements Callable {
 
     private int i = 1;
 
@@ -2415,9 +2415,9 @@ public class Chapter04.CallableTest implements Callable {
     }
 }
 
-class Chapter04.CTest {
+class CTest {
     public static void main(String[] args) {
-        Chapter04.CallableTest callableTest = new Chapter04.CallableTest();
+        CallableTest callableTest = new CallableTest();
         FutureTask futureTask = new FutureTask(callableTest);
         new Thread(futureTask).start();
         new Thread(futureTask).start();
@@ -2455,11 +2455,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
-public class Chapter04.ThreadPool {
+public class ThreadPool {
     public static void main(String[] args) {
         ExecutorService executorService = Executors.newFixedThreadPool(10);
-        executorService.execute(new Chapter04.ThreadRunnable1());
-        executorService.execute(new Chapter04.ThreadRunnable2());
+        executorService.execute(new ThreadRunnable1());
+        executorService.execute(new ThreadRunnable2());
         //executorService.submit();//适用于Callable方法
         ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) executorService;
         threadPoolExecutor.setCorePoolSize(10);//设置核心池的大小
@@ -2469,7 +2469,7 @@ public class Chapter04.ThreadPool {
     }
 }
 
-class Chapter04.ThreadRunnable1 implements Runnable {
+class ThreadRunnable1 implements Runnable {
     @Override
     public void run() {
         for (int i = 1; i <= 100; i++) {
@@ -2478,7 +2478,7 @@ class Chapter04.ThreadRunnable1 implements Runnable {
     }
 }
 
-class Chapter04.ThreadRunnable2 implements Runnable {
+class ThreadRunnable2 implements Runnable {
     @Override
     public void run() {
         for (int i = 1; i <= 100; i++) {
@@ -2537,15 +2537,15 @@ class Chapter04.ThreadRunnable2 implements Runnable {
 4. 写一个线程安全的懒汉式
 
    ```java
-   public class Chapter04.Test {
-       private Chapter04.Test test = null;
+   public class Test {
+       private Test test = null;
     	
-       private Chapter04.Test() {}
+       private Test() {}
        
-       private static Chapter04.Test getTest() {
+       private static Test getTest() {
            if(test == null) {
-               synchronized(Chapter04.Test.class) {
-                   if(test == null) test = new Chapter04.Test();
+               synchronized(Test.class) {
+                   if(test == null) test = new Test();
                }
            }
            return test;
@@ -2610,7 +2610,7 @@ class Chapter04.ThreadRunnable2 implements Runnable {
 - `String`不同拼接方式的对比：
 
   ```java
-  public class Chapter04.StringTest {
+  public class StringTest {
       public static void main(String[] args) {
           String s1 = "abc";
           String s2 = "def";
@@ -2654,7 +2654,7 @@ class Chapter04.ThreadRunnable2 implements Runnable {
     ```
 
   - ```java
-    public class Chapter04.StringTest {
+    public class StringTest {
         String str = new String("good");// str 保存着堆内存地址，堆内存地址保存方法区常量池中的地址，指向真正的 good
         char[] ch = {'t', 'e', 's', 't'};
         
@@ -2664,7 +2664,7 @@ class Chapter04.ThreadRunnable2 implements Runnable {
         }
         
         public static void main(String[] args) {
-            Stringtest ex = new Chapter04.StringTest();
+            Stringtest ex = new StringTest();
             ex.change(ex.str, ex.ch);//good test数组
             System.out.print(ex.str + "and");//good and
     		System.out.println(ex.ch);//best
@@ -2706,7 +2706,7 @@ int lastIndexOf(String str, int fromIndex);	//反方向的 indexOf，未找到�
 String replace(char oldChar, char newChar);	//返回一个新的字符串，它是通过 newChar 替换词字符串中出现的 oldChar 得到的，如果 oldChar 不存在在原先的字符串里头则不会更改，replace 将产生一个新的字符串而不是修改原先的字符串，这也保持了 String 是不可变的这一特性
 
 String s13 = "ABC";
-System.out.println(s13.replace('Chapter04.B', 'E'));
+System.out.println(s13.replace('B', 'E'));
 System.out.println(s13.replace("BC", "E"));
 
 String replace(CharSequence target, CharSequence replacement);	//使用指定的字面值替换序列替换此字符串所有匹配字面值目标序列的子字符串
@@ -2801,7 +2801,7 @@ System.out.println(s3 == s2);//true
 ```java
 import java.util.Date;
 
-public class Chapter04.DateTest {
+public class DateTest {
     public static void main(String[] args) {
         System.out.println(System.currentTimeMillis());
         Date date = new Date();
@@ -2821,14 +2821,14 @@ public class Chapter04.DateTest {
   //String 实现了 Comparable 接口，重写了 CompareTo() 方法：如果当前对象 this 大于形参对象 obj 就返回正整数，如果当前 this 对象小于形参对象则返回负整数，如果相等返回 0
   import java.util.Arrays;
   
-  public class Chapter04.Goods implements Comparable {
+  public class Goods implements Comparable {
       private String name;
       private int price;
   
-      public Chapter04.Goods() {
+      public Goods() {
       }
   
-      public Chapter04.Goods(String name, int price) {
+      public Goods(String name, int price) {
           this.name = name;
           this.price = price;
       }
@@ -2851,7 +2851,7 @@ public class Chapter04.DateTest {
   
       @Override
       public String toString() {
-          return "Chapter04.Goods{" +
+          return "Goods{" +
                   "name='" + name + '\'' +
                   ", price=" + price +
                   '}';
@@ -2859,8 +2859,8 @@ public class Chapter04.DateTest {
   
       @Override
       public int compareTo(Object o) {
-          if (o instanceof Chapter04.Goods) {
-              Chapter04.Goods goods = (Chapter04.Goods) o;
+          if (o instanceof Goods) {
+              Goods goods = (Goods) o;
               if (this.price > goods.price) return 1;
               else if (this.price < goods.price) return -1;
               else return this.name.compareTo(goods.name);
@@ -2869,15 +2869,15 @@ public class Chapter04.DateTest {
       }
   }
   
-  class Chapter04.GoodsTest {
+  class GoodsTest {
       public static void main(String[] args) {
-          Chapter04.Goods goods1 = new Chapter04.Goods("Chapter04.A", 96);
-          Chapter04.Goods goods2 = new Chapter04.Goods("Chapter04.B", 100);
-          Chapter04.Goods goods3 = new Chapter04.Goods("Chapter04.C", 98);
-          Chapter04.Goods goods4 = new Chapter04.Goods("D", 99);
-          Chapter04.Goods goods5 = new Chapter04.Goods("E", 97);
-          Chapter04.Goods goods6 = new Chapter04.Goods("Chapter04.A", 97);
-          Chapter04.Goods[] goods = new Chapter04.Goods[]{goods1, goods2, goods3, goods4, goods5, goods6};
+          Goods goods1 = new Goods("A", 96);
+          Goods goods2 = new Goods("B", 100);
+          Goods goods3 = new Goods("C", 98);
+          Goods goods4 = new Goods("D", 99);
+          Goods goods5 = new Goods("E", 97);
+          Goods goods6 = new Goods("A", 97);
+          Goods[] goods = new Goods[]{goods1, goods2, goods3, goods4, goods5, goods6};
           Arrays.sort(goods);
           System.out.println(Arrays.toString(goods));
       }
@@ -2939,3 +2939,2537 @@ System.out.println(System.getProperty("user.dir"));
 
 ## 集合
 
+要学习的集合有两种类型：**单列集合**、**双列集合**
+
+单列集合：
+
+> 最高接口为`Collection`接口，它继承了`Iterable`接口。`Coolection`接口下面分别有`List`接口和`Set`接口，它们两个都继承了`Collection`接口【也就是在`Collection`接口的基础上由封装了各自特殊的功能】，它们两个的区别在于：`List`接口下的子类允许存放重复的元素且是有序的，但是`Set`接口下的子类存放的元素都是不重复且是无序的。
+>
+> 实现`List`接口的常见子类为：`ArrayList`、`LinkedList`。除此之外，还有个`Vector`子类，它也实现了`List`接口。总结下就是：`List ---> ArrayList LinkedList Vector`
+>
+> 实现`Set`接口的常见子类为：`HashSet`、`TreeSet`，它们都实现了`Set`接口。总结下就是：`Set ---> HashSet TreeSet`
+
+双列集合：
+
+> 双列集合最高接口是`Map`接口，常见的子类为：`HashMap`、`TreeMap`，还是继承了`HashMap`的`LinkedHashMap`，除此之外，实现`Map`接口的还有`HashTable`类，它继承了`Dictionary`抽象类实现了`Map`接口，还有`Properties`类它继承了`HashTable`类。
+>
+> 总结下就是：
+>
+> - `Map ---> HashMap TreeMap HashTable`
+> - `Map ---> HashMap ---> LinkedHashMap`
+> - `Map ---> HashTable[还继承了 Dictionary 抽象类] ---> Properties`
+
+# 2022年06月11日下午
+
+### `Collection`
+
+首先来学习下单列集合的最高接口`Collection`接口，它继承了`Iterable`接口，所以所有实现了`Collection`接口的子类都可以通过迭代器实现遍历。该接口的下实现的子类可以存储任何类型的元素即`Object`类。`Collection`接口下的抽象方法：
+
+```java
+1. add：添加单个元素，默认在集合末尾添加元素
+2. remove：删除指定元素，可以删除某个具体的元素也可以删除某个索引的元素，这里也补充一下如果有多个一样的元素，那么只会删除找到的第一个元素。
+3. contains：判断当前元素是否存在
+4. size：获取元素个数
+5. isEmpty：判断当前集合是否是空集合
+6. clear：清空集合
+7. addAll：添加多个元素[集合]，默认在集合末尾添加
+8. containsAll：判断当前集合是否存在在某个集合
+9. removeAll：删除当前集合的某个集合，如果某个集合有好多重复的元素，此时删除一个集合，则会删除全部重复的元素，但是 remove 只会删除第一个遇到的元素
+```
+
+```java
+package Chapter05;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+public class CollectionMethod {
+    public static void main(String[] args) {
+        Collection collection = new ArrayList();
+        //添加元素
+        collection.add(1);
+        collection.add("aaa");
+        collection.add(2);
+        collection.add("bbb");
+        System.out.println("collection add = " + collection);
+        //添加多个元素
+        collection.addAll(collection);
+        System.out.println("collection addAll = " + collection);
+        //删除某个具体元素
+        collection.remove(1);
+        System.out.println("collection remove = " + collection);
+        //删除某个集合【若存在某个重复元素则会删除全部重复元素】
+        Collection collection1 = new ArrayList();
+        collection1.add("aaa");
+        collection.removeAll(collection1);
+        System.out.println("collection removeAll = " + collection);
+        //查找某个元素
+        boolean contains1 = collection.contains(2);
+        boolean contains2 = collection.contains("aaa");
+        System.out.println(contains1 + " " + contains2);
+        //查找多个元素 --- 集合
+        System.out.println("collection containsAll = " + collection.containsAll(collection1));
+        Collection collection2 = new ArrayList();
+        collection2.add(2);
+        collection2.add("bbb");
+        System.out.println("collection containsAll = " + collection.containsAll(collection2));
+        //查找集合元素个数
+        System.out.println("collection size = " + collection.size());
+        //判断集合是否为空
+        System.out.println("collection isEmpty = " + collection.isEmpty());
+        //清空集合
+        collection.clear();
+        System.out.println("collection clear = " + collection);
+    }
+}
+```
+
+因为`Collection`接口继承了`Iterable`接口，所以其子类也就实现了`Iterable`接口：
+
+```java
+package Chapter05;
+
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+
+public class CollectionIterator {
+    public static void main(String[] args) {
+        Collection collection = new LinkedList();
+        collection.add("aaa");
+        collection.add("bbb");
+        collection.add("ccc");
+        collection.add("ddd");
+        collection.add("eee");
+        collection.add("fff");
+        Iterator iterator = collection.iterator();
+        while (iterator.hasNext()) {
+            System.out.print(iterator.next() + " ");
+        }
+    }
+}
+```
+
+遍历集合还可以使用增强`for`，其底层使用的还是`Iterator`迭代器：
+
+```java
+package Chapter05;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+public class CollectionFor {
+    public static void main(String[] args) {
+        Collection<Book> books = new ArrayList();
+        books.add(new Book("三国演义", "罗贯中", 10.1));
+        books.add(new Book("小李飞刀", "古龙", 5.1));
+        books.add(new Book("红楼梦", "曹雪芹", 34.6));
+        for (Book book : books) {
+            System.out.println(book.toString());
+        }
+    }
+}
+
+class Book {
+    private String name;
+    private String author;
+    private double price;
+
+    public Book(String name, String author, double price) {
+        this.name = name;
+        this.author = author;
+        this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "name='" + name + '\'' +
+                ", author='" + author + '\'' +
+                ", price=" + price +
+                '}';
+    }
+}
+```
+
+到这里`Collection`接口就学习完毕了，总结下：`collection`是单列集合的最高接口，我们学习了`collection`相关方法：`add addAll remove removeAll contains containsAll isEmpty`，还学习了`Collection`接口的两种遍历方式：实现`Iterable`接口的`Iterator`迭代器遍历方式，二是增强`for`循环方式。
+
+# 2022年06月12日下午
+
+#### `List`
+
+`List`接口是`Collection`的子接口，`List`子接口的实现类可以存储的元素是有序可重复的，相比于`Collection`接口，`List`这个继承`Collection`接口的接口有了索引，所以无论是添加元素也好，还是删除元素，还是查找某个元素出现的位置，以及设置某个索引上的元素，还是截取元素获取元素都可以使用索引进行操作，功能比`Collection`接口丰富得多。
+
+```java
+package Chapter05;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+public class ListMethod {
+    public static void main(String[] args) {
+        List list = new ArrayList<>();
+        list.add(1);
+        list.add(1, 2);
+        list.add(2, "aaa");
+        list.add("aaa");
+        list.add(3, "bbb");
+        System.out.println("List add = " + list);
+        System.out.println("List get = " + list.get(3));
+        System.out.println("List indexOf = " + list.indexOf("aaa"));
+        System.out.println("List lastIndexOf = " + list.lastIndexOf("aaa"));
+        list.remove(4);
+        list.remove("bbb");
+        Collection collection = new ArrayList();
+        collection.add(1);
+        collection.add(2);
+        list.removeAll(collection);
+        System.out.println("List remove = " + list);
+        list.set(0, 1);
+        System.out.println("List set = " + list);
+        list.add("aaa");
+        list.add("bbb");
+        list.add("ccc");
+        collection.clear();
+        collection = list.subList(1, 3);//左闭右开
+        System.out.println("List subList = " + collection);
+    }
+}
+```
+
+- **这里注意下`add`方法：如果按照索引添加则后续的元素会往后移动而不是覆盖，想要覆盖用`set`**
+- **`List`接口的`subList(int fromIndex, int toIndex)`方法采用的是左闭右开原则**
+
+遍历`Lsit`有三种方式：
+
+- 一是普通`for`循环【因为有索引，所以你可以用`get`获取元素】
+- 二是增强`for`循环
+- 三是迭代器方式
+
+这后两种都是从`Collection`接口继承过来的了，前面学习过。
+
+```java
+package Chapter05;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+public class ListCirculate {
+    public static void main(String[] args) {
+        List list = new ArrayList();
+        list.add("青椒炒肉");
+        list.add("宫保鸡丁");
+        list.add("鱼香肉丝");
+        list.add("北京烤鸭");
+        list.add("麻婆豆腐");
+        //普通 for 循环
+        for (int i = 0; i < list.size(); i++) {
+            System.out.println(list.get(i));
+        }
+        System.out.println("-------");
+        //增强 for 循环
+        for (Object food : list) {
+            System.out.println(food);
+        }
+        System.out.println("-------");
+        //迭代器方式
+        Iterator iterator = list.iterator();
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next());
+        }
+    }
+}
+```
+
+##### `ArrayList`
+
+```java
+package Chapter05;
+
+import java.util.ArrayList;
+
+public class ArrayListSource {
+    public static void main(String[] args) {
+        ArrayList arrayList = new ArrayList();
+        for (int i = 1; i <= 10; i++) {
+            arrayList.add(i);
+        }
+        for (int i = 11; i <= 15; i++) arrayList.add(i);
+        arrayList.add(100);
+        arrayList.add(200);
+        arrayList.add(null);
+    }
+}
+```
+
+从创建`ArrayList`的空参构造器出发，可以看到其实是创建了一个空的静态不可变的存储对象的数组，到这里就产生了一个很好奇的疑问？如果这里指向的是一个静态不可变的常量，那多个`ArrayList`岂不是修改的都是同一个东西？这个疑问非常好，目前来看是非常正确的，后续涉及到扩容`grow()`方法里边，会使用到`Arrays.copyOf()`方法，会返回一个新的数组：
+
+```java
+public ArrayList() {
+    this.elementData = DEFAULTCAPACITY_EMPTY_ELEMENTDATA;
+}
+
+transient Object[] elementData;//不可序列化的
+private static final Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA = {};//静态不可变数组
+```
+
+数组的扩容机制：【`size`在`Java`里面代表的是元素个数，`length`代表长度，比如：`int[] a = new int[10]; a[0] = 1`，则`size == 1;【数组没有 size 这种用法，集合有】 a.length == 10`】
+
+```java
+new ArrayList() ---> add() ---> ensureCapacittInternale(size + 1)
+```
+
+- `ArrayList`的底层就是`elementData`数组，刚开始没有数据的时候指向的是一个`DEFAULTCAPACITY_EMPTY_ELEMENTDATA`空静态不可变数组【这是为了节省内存空间所设计的】
+
+- 接下来开始调用`add()`方法存储元素，`add()`方法里头会调用`ensureCapacityInternal(int minCapacity)`
+
+  - `ensureCapacityInternal(int minCapacity)`传入了`size + 1`，这里的`size = 0`，因为这里是空参构造器的`ArrayList`且是第一次添加元素
+
+    ```java
+    private void ensureCapacityInternal(int minCapacity) {
+        ensureExplicitCapacity(calculateCapacity(elementData, minCapacity));
+    }
+    ```
+
+    然后需要通过`calculateCapacity(elementData, minCapacity)`计算出真正所需要的容量，如果`ArrayList`的底层数组`elementData`指向静态不可变的空数组，则取默认数组容量跟`DEFAULT_CAPACITY`跟`minCapacity`的最大值。`DEFAULT_CAPACITY`为`10`。
+
+    ```java
+    private static int calculateCapacity(Object[] elementData, int minCapacity) {
+        if (elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA) {
+            return Math.max(DEFAULT_CAPACITY, minCapacity);
+        }
+        return minCapacity;
+    }
+    ```
+
+    `calculateCapacity(elementData, minCapacity)`计算出来的容量 ---> 这里为`10`，返还给`ensureExplicitCapacity()`方法确认容量[这里就是用来做扩容的]，只要所需要的容量即`minCapacity`大于数组长度`elementData.length`[当前为`0`]，则需要进行扩容：【你需要的跟你当前的状态不匹配那你当然得要做点什么，这里指的就是扩容】：`grow(minCapacity)`
+
+  - `grow(int minCapacity)`：
+
+    - 获取到原先数组的长度：`elementData.length`这里是`0`
+
+    - 获取到新数组的长度：原先数组长度的`1.5`倍，如果新数组长度大于原先数组长度，因为这里是第一次所以都是`0`
+
+    - 如果新数组长度跟最小需要的长度【就是传递进来的`minCapacity`】相比较，最新长度比所需要的长度要小，那就把需要长度赋值给最新长度即：`newCapacity = minCapacity`
+
+    - 判断下当前长度比最大长度`MAX_ARRAY_SIZE`还要大的话，就需要更大的容量`hugeCapacity()`这里不多做解释
+
+    - 获取并确认到了新长度`newCapacity`，此时新建一个数组对象赋值给`elementData`，这里使用`Arrays.copyOf()`确保了原来的数据不会丢失
+
+      【扩容完毕，得到一个新的数组，此时数组长度为：10（第一次）】
+
+    ```java
+    private void grow(int minCapacity) {
+        // overflow-conscious code
+        int oldCapacity = elementData.length;
+        int newCapacity = oldCapacity + (oldCapacity >> 1);
+        if (newCapacity - minCapacity < 0)
+            newCapacity = minCapacity;
+        if (newCapacity - MAX_ARRAY_SIZE > 0)
+            newCapacity = hugeCapacity(minCapacity);
+        // minCapacity is usually close to size, so this is a win:
+        elementData = Arrays.copyOf(elementData, newCapacity);
+    }
+    ```
+
+  - 此时数组长度为`10`，先扩容，后添加元素：`elementData[size++] = e`【e 为需要存储的数据】然后返回`true`表示添加成功
+
+- 此时一直添加元素直到添加到第`11`个元素，那么此时需要的最小容量为：`minCapacity = 11`，这是`calculateCapacity(elementData, int minCapacity)`获取到的数据。
+
+  - `calculateCapacity()`方法获取到的最小所需容量返回给`ensureExplicityCapacity()`方法
+
+    - 在`ensureExplicityCapacity(int minCapacity)`中，判断当前数组容量是否比所需最小的数组容量要小，如果小就说明需要扩容了，此时数组容量为：`10`，所需最小容量为：`11`，表示需要扩容了，调用`grow()`方法进行扩容。
+
+      1. 获取到原先容量：`int oldCapacity = elementData.length;//10`
+      2. 然后获取新容量：`int newCapacity = oldCapacity + (oldCapacity >> 1);//原先容量的1.5倍即 15`
+      3. 如果新容量`15`比最小所需容量`minCapacity`即`11`要大的话，就用不着`minCapacity`【反正你都要扩容，就要往大了的取】
+      4. 确定新容量为：`15`，调用`Arrays.copyOf(elementData, newCapacity);`将数组长度扩容至`15`
+
+      【需要设置下才可以看到`elementData` ---> `ctrl + alt + s` ---> `Build,Execution,Deployment` ---> `Debugger` ---> `Data Views` ---> `Java`】
+
+      ```java
+      private void grow(int minCapacity) {
+          // overflow-conscious code
+          int oldCapacity = elementData.length;
+          int newCapacity = oldCapacity + (oldCapacity >> 1);
+          if (newCapacity - minCapacity < 0)
+              newCapacity = minCapacity;
+          if (newCapacity - MAX_ARRAY_SIZE > 0)
+              newCapacity = hugeCapacity(minCapacity);
+          // minCapacity is usually close to size, so this is a win:
+          elementData = Arrays.copyOf(elementData, newCapacity);
+      }
+      ```
+
+  - 继续返回给`ensureCapacityInternal(size + 1);`
+
+  - 返回给`add(E e)`
+
+- 添加元素：`elementData[size++] = e;`
+
+- 返回`true`表示添加成功
+
+总结写就是：
+
+```java
+add ---> ensureCapacityInternal ---> calculateCapacity ---> ensureExplicitCapacity ---> grow() ---> elementData[size++] = e ---> return true
+```
+
+# 2022年06月17日下午
+
+##### `Vector`
+
+1. 源码中，如果不传递初始化容量值则默认初始化容量为：`10`
+2. `add`方法被`synchronized`关键字修饰，表示`Vector`是线程安全的
+3. `Vector`需要扩容的原因跟`ArrayList`一样都是当前数组长度比需要的最小容量要小的时候就扩调用`grow()`方法：`minCapacity - elementData.length > 0s`
+4. 如果用户没有在定义`Vector`的时候就传入扩容因子：`capacityIncrement`的话，默认就是扩容`1`倍，如果有的话就是`原有容量 + capacityIncrement`
+
+总结写就是：
+
+```java
+add ---> ensureCapacityHelper (grow) ---> elementData[elementCount++] = e ---> return true
+```
+
+##### `LinkedList`
+
+`LinkedList`底层维护了一个双向链表，链表删除和添加元素的效率比数组要高，数组查找元素的效率比链表高。业务代码中`80% - 90%`的操作其实都是查找，所以大部分时间选择`ArrayList`是比较好的选择。
+
+#### `Set`
+
+`Set`接口继承了`Collection`接口，其特点就是：无序且不可重复并且没有索引，不支持随机访问。
+
+##### `HashSet`
+
+`HashSet`的底层其实就是`HashMap`，其底层由`数组 + 单向链表 + 红黑树`构成。通过`Hash`值确定是数组的哪个节点，然后通过索引确定是单向链表中的哪个元素，当某个单向链表中的元素到达某一个数量的时候就会从单向链表变成红黑树。
+
+`HashSet`底层结构的详细说明：
+
+1. 首先通过调用元素的`hashCode()`方法获取要存储元素的哈希值
+
+##### `TreeSet`
+
+## 泛型
+
+一定程度上可以理解为标签，一眼就可以认出里面装什么。`JDK1.5`之后加入了泛型的特性。可自定义泛型：
+
+```java
+package Chapter04;
+
+public class Order<T> {
+    String name;
+    T orderT;
+
+    public Order() {
+    }
+
+    public Order(String name, T orderT) {
+        this.name = name;
+        this.orderT = orderT;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "name='" + name + '\'' +
+                ", orderT=" + orderT +
+                '}';
+    }
+}
+
+class TestOrder {
+    public static void main(String[] args) {
+        Order<String> order = new Order<String>("张三", "历史");
+        System.out.println(order.toString());
+    }
+}
+```
+
+## `File`
+
+> 相对路径：相对于`module`
+>
+> 绝对路径：整个磁盘一直到当前文件的路径，不同操作系统的分隔符不一样，`Windows`是`\`，`Unix`是`/`，所以最好是使用`File.separator`来做分隔符
+
+`File`对象如果没有`createNewFile/mkdir/mkdirs`这些仅仅停留在内存层面。注意一下`file.delete()`如果文件夹里面有文件则无法删除，必须删除里面的文件才可以删除
+
+```java
+package Chapter04;
+
+import java.io.File;
+import java.io.IOException;
+
+public class FileTest {
+    public static void main(String[] args) {
+        /*File file = new File("hello.txt");
+        System.out.println(file.getName());
+        System.out.println(file.getAbsolutePath());
+        System.out.println(file.getPath());
+        System.out.println(file.getParent());
+        System.out.println(file.length());
+        System.out.println(file.lastModified());
+        File file3 = new File("world.txt");
+        boolean rename = file.renameTo(file3);
+        System.out.println(rename);//需要保证 file 存在并且 file3 不存在才能保证 rename 为 true
+        File file1 = new File("E:\\2022年\\学习\\计算机学习\\Java\\JavaSEStudy");
+        File[] files = file1.listFiles();
+        for(File file2 : files) System.out.println(file2.getAbsolutePath());*/
+        //file.isDirectory() 判断是否是文件目录
+        //file.isFile() 判断是否是文件
+        //file.exists() 判断是否存在
+        //file.canRead() 判断是否可读
+        //file.canWrite() 判断是否可写
+        //file.isHidden() 判断是否隐藏
+        //boolean file.createNewFile() 创建文件，若文件存在则不创建返回 false
+        //boolean file.mkdir() 创建文件目录
+        //boolean file.mkdirs() 如果上层文件目录不存在一并创建
+        //boolean delete() 删除文件或者文件夹
+        File file = new File("E:\\2022年\\学习\\计算机学习\\Java\\JavaSEStudy\\io1\\io2\\io3\\io4\\io5\\io6");
+        if(!file.exists()) {
+            boolean mkdirs = file.mkdirs();
+            System.out.println("文件夹是否创建成功？" + mkdirs);
+        }
+        file.delete();
+        File file1 = new File("E:\\2022年\\学习\\计算机学习\\Java\\JavaSEStudy\\io1\\io2\\io3\\io4\\io5\\hello.txt");
+        if(!file1.exists()) {
+            try {
+                file1.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        File file2 = new File("E:\\2022年\\学习\\计算机学习\\Java\\JavaSEStudy\\io1\\io2\\io3\\io4\\io5");
+        file2.delete();//内有文件无法删除
+        System.out.println(file2.isDirectory());
+    }
+}
+```
+
+## `I/O`流
+
+`I/O`是`Input/Output`的缩写，是非常实用的技术，用于处理设备之间的数据传输。`input`我们称为输入 ---> 将磁盘/光盘等存储设备中的数据读取到内存中，`output`称为输出 ---> 将内存中数据写入到磁盘/光盘等存储设备中。
+
+其实这个也很好理解，以计算机的显示器为中心，输入`input`就是读【从磁盘读】，从屏幕看到的就是从内存中读出来的也就是从屏幕读出来的，我们称之为输入。输出`output`就是写【写入磁盘】，从屏幕上写到磁盘中就是输出。还有一种比较好理解的说法就是：我们直到程序是在内存中运行的，所以如果是从磁盘等存储设备获取数据，那么就是输入也可以叫读取，如果是从程序往磁盘等存储设备写入数据，我们可以叫输出也可以叫做写入。
+
+`I/O`流的分类：
+
+- `I/O`流按照数据单位不同分为：字节流【`1`个字节更适合处理图片非文本数据】、字符流【`2`个字节代表一个字符更适合处理文本】。简单说就是`byte`和`char`的区别。
+
+  - 字节流：`InputStream`、`OutputStream`
+
+  - 字符流：`Writer`、`Reader`
+
+- 也可以按照流向不同分为输入流、输出流：输入流包括`InputStream`、`Reader`，输出流包括`OutputStream`、`Writer`
+
+- 还可以按照流的角色分为：节点流、处理流【节点流的基础上附加了其它功能】，节点流只有：`FileInputStream FileOutputStream FileReader FileWriter`
+
+注：`InputStream OutputStream Reader Writer`都是抽象类，是所有`I/O`流里实现类中的抽象基类。具体说下就是：字节输入流、字节输出流、字符输入流、字符输出流。`I/O`流这一章最重要要学习的内容就是：`FileInputStream FileOutputStream FileReader FileWriter InputStreamReader OutputStreamWriter BufferedInputStream BufferedOutputStream BufferedReader BufferedWriter ObjectInputStream ObjectOutputStream`。【抽象基类、文件流 、缓冲流、转换流】
+
+### `FileReader`
+
+为了保证流资源可以正常关闭所以需要使用`try-catch-finally`，否则只是做了一个抛出问题但不解决问题的人。
+
+`FileReader`的第一种使用方式：
+
+```java
+package Chapter04;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class FileReaderAndWriterTest {
+    public static void main(String[] args) {
+        FileReader fileReader = null;
+        try {
+            fileReader = new FileReader("hello.txt");
+            int data = -1;
+            while ((data = fileReader.read()) != -1) {
+                System.out.print((char) data);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fileReader != null) {
+                try {
+                    fileReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}
+```
+
+`FileReader`的第二种使用方式：
+
+```java
+public static void fileReaderM2() {
+    FileReader fileReader = null;
+    char[] cBuf = new char[5];
+    try {
+        fileReader = new FileReader("hello.txt");
+        int len;
+        while ((len = fileReader.read(cBuf, 0, cBuf.length)) != -1) {
+            for (int i = 0; i < len; i++) System.out.print(cBuf[i]);
+        }
+        while ((len = fileReader.read(cBuf)) != -1) {
+            //for (int i = 0; i < len; i++) System.out.print(cBuf[i]);
+            String str = new String(cBuf, 0, len);
+            System.out.println(str);
+        }
+    } catch (FileNotFoundException e) {
+        e.printStackTrace();
+    } catch (IOException e) {
+        e.printStackTrace();
+    } finally {
+        if (fileReader != null) {
+            try {
+                fileReader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+```
+
+### `FileWriter`
+
+没有文件会创建文件然后再写入。`new FileWriter(file, true);`表示追加，`false`表示重写覆盖，默认就是覆盖重写。
+
+```java
+public static void fileReaderM3() {
+    FileWriter fileWriter = null;
+    try {
+        fileWriter = new FileWriter("hello.txt", true);
+        fileWriter.write("!!!\n1234567890");
+        //fileWriter.write("hello world");
+    } catch (IOException e) {
+        e.printStackTrace();
+    } finally {
+        try {
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+这里需要使用`fileWriter.flush()`对文件进行刷新，否则读不出来数据。
+
+```java
+public static void fileReaderM4() {
+    FileReader fileReader = null;
+    FileWriter fileWriter = null;
+    try {
+        File file = new File("text.txt");
+        fileWriter = new FileWriter(file, false);
+        fileWriter.write("This is a Reader and Writer text!!!\nYeah Yeah Yeah!!!");
+        fileWriter.flush();
+        fileReader = new FileReader(file);
+        char[] cBuf = new char[5];
+        int len;
+        while ((len = fileReader.read(cBuf, 0, cBuf.length)) != -1) {
+            //for (int i = 0; i < len; i++) System.out.print(cBuf[i]);
+            System.out.print(new String(cBuf, 0, len));
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    } finally {
+        if (fileReader != null) {
+            try {
+                fileReader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if (fileWriter != null) {
+            try {
+                fileWriter.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+```
+
+### `FileInputStream`
+
+对于图片这种字节数据，无法使用字符流来处理，这种情况下需要使用字节流。
+
+```java
+public static void fileInputOutputM1() {
+    FileInputStream fileInputStream = null;
+    try {
+        fileInputStream = new FileInputStream("19.jpg");
+        int data;
+        while((data = fileInputStream.read()) != -1) {
+            System.out.print((char)data);
+        }
+    } catch (FileNotFoundException e) {
+        e.printStackTrace();
+    } catch (IOException e) {
+        e.printStackTrace();
+    } finally {
+        if (fileInputStream != null) {
+            try {
+                fileInputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+```
+
+```java
+public static void fileInputOutputM2() {
+    FileInputStream fileInputStream = null;
+    try {
+        fileInputStream = new FileInputStream("19.jpg");
+        byte[] buffer = new byte[5];
+        int len;
+        while ((len = fileInputStream.read(buffer, 0, buffer.length)) != -1) {
+            //for (int i = 0; i < len; i++) System.out.print((char)buffer[i]);
+            System.out.print(new String(buffer, 0, len));
+        }
+    } catch (
+            FileNotFoundException e) {
+        e.printStackTrace();
+    } catch (
+            IOException e) {
+        e.printStackTrace();
+    } finally {
+        if (fileInputStream != null) {
+            try {
+                fileInputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+```
+
+### `FileOutputStream`
+
+```java
+public static void fileInputOutputM3() {
+    FileOutputStream fileOutputStream = null;
+    FileInputStream fileInputStream = null;
+    try {
+        fileInputStream = new FileInputStream("19.jpg");
+        fileOutputStream = new FileOutputStream("19copy.jpg");
+        byte[] buffer = new byte[5];
+        int len;
+        while ((len = fileInputStream.read(buffer, 0, buffer.length)) != -1) {
+            for (int i = 0; i < len; i++) {
+                System.out.print((char) buffer[i]);
+                fileOutputStream.write(buffer[i]);
+            }
+            //System.out.print(new String(buffer, 0, len));
+        }
+        fileOutputStream.flush();
+    } catch (
+            FileNotFoundException e) {
+        e.printStackTrace();
+    } catch (
+            IOException e) {
+        e.printStackTrace();
+    } finally {
+        if (fileOutputStream != null) {
+            try {
+                fileOutputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if (fileInputStream != null) {
+            try {
+                fileInputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+```
+
+### `BufferedInputStream`
+
+### `BufferedOutputStream`
+
+### `BufferedReader`
+
+### `BufferedWriter`
+
+缓冲流是处理流，比文件流这种节点流的效率要高很多。处理流包裹着节点流。写法其实没什么变，只不过效率变高了，这不是更好的事情吗？关闭流的顺序是从外往内脱，并且关闭外层流的时候会自动关闭内层流。
+
+缓冲流内部提供了缓冲区，提高了读写速度。`BufferedReader`多了一个方法：`readLine()`一次可以读取一行数据。
+
+### `InputStreamReader`
+
+### `OutputStreamWriter`
+
+这两个是转换流，如果内容是字符，将字节流转换成字符流效率会更高。`InputStreamReader`的第二个参数可以设定存储数据的编码。
+
+### `ObjectInputStream`
+
+### `ObjectOutputStream`
+
+- 对象流，强大之处在于可以把`Java`对象写入到数据源中，也能把对象从数据源中还原回来。序列化就是将对象/基本数据类型写入到磁盘等存储设备中，反序列化就是将磁盘等设备中读取基本数据类型/对象。
+
+- 序列化就是将对象转换成平台无关的二进制流，从而允许把二进制流持久地保存在磁盘上，或通过网络将这种二进制流传输到另外一个网站节点【是所有远程方法调用`RMI`必须实现的机制，`RMI`是`JavaEE`的基础，所以序列化时`JavaEE`平台的基础】。当其它程序获取了这种二进制流，就可以恢复成原来的`Java`对象。
+
+- 序列化的好处在于可以将任何实现了`Serializable`接口的对象转化为**字节数据**，使其在保存和传输时可被还原。
+
+```java
+package Chapter04;
+
+import java.io.*;
+
+public class ObjectStreamTest {
+    public static void main(String[] args) {
+        ObjectOutputStream objectOutputStream = null;
+        ObjectInputStream objectInputStream = null;
+        try {
+            objectOutputStream = new ObjectOutputStream(new FileOutputStream("object.dat"));
+            objectOutputStream.writeObject(new String("我爱北京天安门"));
+            objectOutputStream.flush();
+            objectInputStream = new ObjectInputStream(new FileInputStream("object.dat"));
+            Object str = objectInputStream.readObject();
+            System.out.println(str);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            if (objectOutputStream != null) {
+                try {
+                    objectOutputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (objectInputStream != null) {
+                try {
+                    objectInputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}
+```
+
+凡是实现`Serializable`接口的类都有一个表示序列化版本标识符的静态变量：`private static final long serialVersionUID;`用来表明类不同版本间的兼容性，如果没有显式定义这个静态变量，它的值时`Java`运行时环境根据类的内部细节自动生成的。若类的实例变量做了修改，`serialVersionUID`可能会发生变化，所以建议显示声明，变化的影响就是序列化后可能无法进行反序列化，要想进行反序列化前提是序列化版本需要一致。
+
+### `RandomAccessFile`
+
+这是一个随机存取文件流，既可以作为输入流也可以作为输出流，支持随机访问的方式，程序可以直接跳到文件的任意地方来进行读、写文件。
+
+- 支持只访问文件的部分内容
+- 可以向已经存在的文件后面追加内容
+
+> `long getFilePointer();`获取文件记录指针的当前位置
+>
+> `void seek(long pos);`将文件记录指针定位到`pos`位置
+
+`RandomAccessFile`有四种访问模式：`r rw rwd[同步文件内容的更新] rws[同步文件内容和元数据的更新]`
+
+可以通过`getBytes()`实现插入数据的效果：
+
+```java
+package Chapter04;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+
+public class RandomAccessFileTest {
+    public static void main(String[] args) {
+        RandomAccessFile randomAccessFile = null;
+        try {
+            randomAccessFile = new RandomAccessFile("raf.txt", "rw");
+            randomAccessFile.seek(3);
+            //先读取然后插入再覆盖
+            byte[] buffer = new byte[1024];
+            int len;
+            StringBuilder stringBuilder = new StringBuilder();
+            while ((len = randomAccessFile.read(buffer)) != -1) {
+                stringBuilder.append(new String(buffer, 0, len));
+            }
+            randomAccessFile.seek(3);
+            randomAccessFile.write("xyz".getBytes());
+            randomAccessFile.write(stringBuilder.toString().getBytes());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (randomAccessFile != null) {
+                try {
+                    randomAccessFile.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}
+```
+
+# 2022年06月18日下午
+
+### `Java NIO`
+
+`NIO`是`Java`从`1.4`版本引入的一套新的`IO API`，可以替代标准的`Java IO API`。简单说：`IO`是面向流的，而`NIO`是面向缓冲区的，可以以更加高效的方式对文件进行读写。【`NIO`刚开始出来的时候并没有多好，所以在`1.7`就出现了`NIO2`，并且起到了越来越重要的作用】
+
+`Java`中提供了两套`NIO`：一套是针对标准输入输出的`NIO`，另一套就是网络编程`NIO`【这里学习的是标准输入输出的`NIO`】
+
+> - `java.nio.channels.Channel`
+>   - `FileChannel;`处理本地文件
+>   - `SocketChannel;` `TCP`网络编程客户端的`Channel`
+>   - `ServerSocketChannel;` `TCP`网络编程服务器端的`Channel`
+>   - `DatagramChannel;` `UDP`网络编程中发送端和接收端的`Channel`
+
+许多框架的底层会对`NIO`进行封装，可以在学习框架的时候再具体学习。
+
+#### `Path Paths Files`类的使用
+
+- 早期的`Java`只提供了一个`File`类来访问文件系统，但是`File`类提供的功能比较优先，提供的方法性能也不高，而且大多数方法出错的时候仅仅返回一个`false`布尔值，并不会抛异常告诉具体到底什么出错了。
+
+- `NIO.2`弥补了这种不足，引入了`Path`接口，它可以在出错的时候抛出异常，实际上可以看成是一个`File`类的升级版本，实际引用的资源可以不存在
+
+  `Path path = Paths.get("index.html");`
+
+#### `commons-io`开源包的直接使用
+
+可以直接使用更简单方便的`jar`包，直接用`Maven`导入即可，内含丰富`IO`简单易用的`API`：
+
+- 使用`FileUtils.copyFile(File srcFile, File destFile);`即可直接复制文件【注：`main`方法中的相对路径是从当前工程出发的】
+
+## 网络编程
+
+### 网络编程概述
+
+- `JVM`隐藏了网络连接的细节，实现了一个跨平台的网络库，程序员面对的是一个同一的网络编程环境，实现了跨平台性。
+
+- **计算机网络：**把分布在不同地理区域的计算机与专门的外部设备用通信线路互连成一个规模大、功能强的网络系统，从而使众多计算机之间可以方便地互相传递信息，共享软硬件、数据信息等资源。【说白了就是用来通信跟共享资源的】
+- **网络编程的目的：**直接或间接地通过网络协议与其他计算机实现数据交换，进行通讯
+  - 如何准确定位网络上地一台或者多台主机？【**发给谁？**】`Who`
+  - 如何在找到主机后进行可靠高效地进行数据传输？【**怎么发？**】`How`
+  - 【**发什么**】`What`
+
+### 网络通信要素
+
+`Who`发给谁问题：`IP + Port`即可定位一台主机
+
+`How`怎么发问题：`TCP/IP`协议 + `OSI`参考模型【网络传输协议】【前者：物理+数据链路层、网络层、传输层、应用层`HTTP FTP Telnet DNS...`】【后者：物理层、数据链路层、网络层`IP ICMP ARP`、传输层`TCP UDP`、会话层、表示层、应用层】
+
+总结：**`IP + Port + 网络通信协议`**即可给一台主机发送消息。其中：**<font color="red">`IP + Port`就组成了一个网络套接字`Socket`。</font>**因为网络编程必然涉及到`IP + Port`也就是套接字`Socket`，所以网络编程又会称为套接字编程/`Socket`编程。
+
+常见的端口号：`21-FTP`、`23-Telnet`、`80-HTTP`、`8080-Tomcat`、`3306-MySQL`、`1521-Oracle`
+
+### `InetAddress`类
+
+```java
+package Chapter06;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
+public class InetAddressTest {
+    public static void main(String[] args) {
+        try {
+            InetAddress inetAddress1 = InetAddress.getByName("www.baidu.com");
+            System.out.println(inetAddress1);
+            InetAddress inetAddress2 = InetAddress.getLocalHost();
+            System.out.println(inetAddress2);
+            String hostName = InetAddress.getLocalHost().getHostName();
+            String hostAddress = InetAddress.getLocalHost().getHostAddress();
+            System.out.println(hostName);
+            System.out.println(hostAddress);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+# 2022年06月18日晚上
+
+### 网络协议
+
+网络协议非常复杂，这么复杂的东西当然选择将它拆分掉呀，拆分后然后再复合，复合的方式就是层次方式，即同层间可以通信，上一层可以调用下一层，而与再下一层不发生关系。各层互不影响，利于系统的开发和扩展。
+
+其中最重要的就是传输层，而传输层中最重要的就是：`TCP`协议和`UDP`协议。
+
+#### `TCP`协议
+
+> - 使用`TCP`协议之前，需要先建立`TCP`连接，形成传输数据通道，
+>
+> - 传输前，采用三次握手的方式，实现点对点通信，可实现大数据传输并且是通信是可靠的
+>   - 客户端发送`SYN`报文，并且置发送号为`x`
+>   - 服务端发送`SYN + ACK`报文，并且发送`ACK`序号为`x + 1`，并置发送号为`y`
+>   - 客户端发送`ACK`报文，并置发送号为`z`，`ACK = y + 1`
+>
+> - `TCP`涉及两个应用程序：客户端、服务端
+> - 传输完毕，需释放已建立的连接，效率较低，释放连接需要进行四次挥手，主动挥手的可以是客户端也可以是服务端，通常情况下是客户端发起的，下面以客户端为例说明四次挥手
+>   - 客户端发送`FIN + ACK`报文`FIN = 1, ACK = Z, SEQ = X`，并置发送序号为：`X`
+>   - 服务端接受客户端发送的`FIN + ACK`报文，发送确认报文即`ACK`报文`ACK = X + 1, SEQ = Z`，并置发送序号为：`Z`
+>   - 然后服务端这边再立马发送`FIN + ACK`报文表示也要断开，并置发送序号为：`X`即`FIN = 1, ACK = X, SEQ = Y`
+>   - 最后客户端收到来自服务端的断开信号即`FIN + ACK`报文，随即发送确认报文即`ACK`报文：`ACK = Y, SEQ = X`，并置发送序号为`X`
+
+#### `UDP`协议
+
+> - 将数据、源、目的封装成数据包，不需要建立连接
+> - 每个数据报的大小限制在`64kb`以内
+> - 发送方不管对方是否准备好，接收方也无需确认是否收到，所以传输效率很快，但这也产生了不可靠的问题
+> - 可以广播发送
+> - 发送数据结束时无需释放资源，开销小速度快
+
+总结下：
+
+- `TCP`传输数据前需要进行三次握手，这样传输的数据很可靠，并且数据发送完毕之后需要释放已经建立的连接所以传输速度相对于`UDP`来说较慢。【常用于：`打电话`】
+- `UDP`传输数据前不需要进行连接，不用等待接收方准备好，接收方也无需向发送方确认数据是否收到，丢一点数据也无所谓，所以传输速度相对于`TCP`来说较快。【常用于：`微信/QQ小心`、`直播`、`视频`】
+
+### `Java-Socket`模拟发送`TCP`数据一
+
+客户端发送内容给服务端，服务端将内容打印到控制台上。
+
+客户端：
+
+```java
+package Chapter06;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
+public class TCPTest1Client {
+    public static void main(String[] args) {
+        client();
+    }
+
+    //客户端
+    public static void client() {
+        Socket socket = null;
+        OutputStream outputStream = null;
+        try {
+            InetAddress inetAddress = InetAddress.getByName("127.0.0.1");
+            //向谁发 ---> 套接字 IP + Port
+            socket = new Socket(inetAddress, 9527);
+            outputStream = socket.getOutputStream();
+            outputStream.write("Hello World!".getBytes());
+            outputStream.flush();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (outputStream != null) {
+                try {
+                    outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (socket != null) {
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}
+```
+
+服务端：
+
+```java
+package Chapter06;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.UnknownHostException;
+
+public class TCPTest1Server {
+    public static void main(String[] args) {
+        TCPTest1Server tcpTest11 = new TCPTest1Server();
+        tcpTest11.server();
+    }
+
+    //服务端
+    public void server() {
+        //获取套接字发送过来的消息
+        ServerSocket serverSocket = null;
+        InputStream inputStream = null;
+        try {
+            serverSocket = new ServerSocket(9527);
+            inputStream = serverSocket.accept().getInputStream();
+            int len;
+            byte[] buffer = new byte[1024];
+            while ((len = inputStream.read(buffer, 0, buffer.length)) != -1) {
+                System.out.print(new String(buffer, 0, len));
+            }
+            System.out.println("谁给我发的？" + serverSocket.getInetAddress().getHostAddress());
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (serverSocket != null) {
+                try {
+                    serverSocket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}
+```
+
+### `Java-Socket`模拟发送`TCP`数据二
+
+客户端发送文件给服务端，服务端将文件保存在本地。
+
+客户端：
+
+```java
+package Chapter06;
+
+import java.io.*;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
+public class TCPTest2Client {
+    public static void main(String[] args) {
+        Socket socket = null;
+        OutputStreamWriter outputStreamWriter = null;
+        BufferedReader bufferedReader = null;
+        try {
+            InetAddress inetAddress = InetAddress.getByName("127.0.0.1");
+            socket = new Socket(inetAddress, 8888);
+            outputStreamWriter = new OutputStreamWriter(socket.getOutputStream());
+            bufferedReader = new BufferedReader(new FileReader("text.txt"));
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                outputStreamWriter.write(line + "\n");
+            }
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (outputStreamWriter != null) {
+                try {
+                    outputStreamWriter.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (socket != null) {
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}
+```
+
+服务端：
+
+```java
+package Chapter06;
+
+import java.io.*;
+import java.net.ServerSocket;
+
+public class TCPTest2Server {
+    public static void main(String[] args) {
+        ServerSocket serverSocket = null;
+        InputStreamReader inputStreamReader = null;
+        BufferedWriter bufferedWriter = null;
+        try {
+            serverSocket = new ServerSocket(8888);
+            inputStreamReader = new InputStreamReader(serverSocket.accept().getInputStream());
+            char[] buffer = new char[1024];
+            int len;
+            bufferedWriter = new BufferedWriter(new FileWriter("textCopy.txt"));
+            while ((len = inputStreamReader.read(buffer, 0, buffer.length)) != -1) {
+                bufferedWriter.write(new String(buffer, 0, len));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (bufferedWriter != null) {
+                try {
+                    bufferedWriter.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (inputStreamReader != null) {
+                try {
+                    inputStreamReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (serverSocket != null) {
+                try {
+                    serverSocket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}
+```
+
+### `Java-Socket`模拟发送`TCP`数据三
+
+客户端发送文件给服务端，服务端保存到本地，并返回发送成功给客户端，然后关闭相应的连接。
+
+前面发送文件然后保存这件事情在第二个案例中其实已经完成了，问题就是服务端怎么发送数据给客户端呢？
+
+- 注意这里是的`IO`是阻塞式的，客户端没有说发完，则服务端这边一直会保持接收状态，所以需要在客户端这边添加如下语句：`socket.shutdownOutput();`
+- 其次需要注意的就是`Server`服务端的`serverSocket.accept();`返回一个`Socket socket;`套接字，并且只返回一次，所以后面想要给客户端发送消息，不能用`serverSocket.accept().getOutputStream();`，只能是在前面定义接收好`Socket socket = serverSocket.accept();`再做输入输出。
+
+客户端：
+
+```java
+package Chapter06;
+
+import java.io.*;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
+public class TCPTest3Client {
+    public static void main(String[] args) {
+        Socket socket = null;
+        OutputStreamWriter outputStreamWriter = null;
+        BufferedReader bufferedReader = null;
+        InputStream inputStream = null;
+        try {
+            socket = new Socket(InetAddress.getByName("127.0.0.1"), 8888);
+            outputStreamWriter = new OutputStreamWriter(socket.getOutputStream());
+            bufferedReader = new BufferedReader(new FileReader("text.txt"));
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                outputStreamWriter.write(line + "\n");
+            }
+            outputStreamWriter.flush();
+            //这里传输完数据需要手动关闭下输出流
+            socket.shutdownOutput();
+            //客户端接收服务端发送的消息
+            inputStream = socket.getInputStream();
+            int len;
+            byte[] buffer = new byte[1024];
+            System.out.print("收到了来自服务端的消息：");
+            while ((len = inputStream.read(buffer, 0, buffer.length)) != -1) {
+                System.out.print(new String(buffer, 0, len));
+            }
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if(inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (outputStreamWriter != null) {
+                try {
+                    outputStreamWriter.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (socket != null) {
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}
+```
+
+服务端：
+
+```java
+package Chapter06;
+
+import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class TCPTest3Server {
+    public static void main(String[] args) {
+        ServerSocket serverSocket = null;
+        InputStreamReader inputStreamReader = null;
+        BufferedWriter bufferedWriter = null;
+        OutputStream outputStream = null;
+        try {
+            serverSocket = new ServerSocket(8888);
+            Socket socket = serverSocket.accept();//socket 只能接收一个且只能接收一次
+            inputStreamReader = new InputStreamReader(socket.getInputStream());
+            char[] buffer = new char[1024];
+            int len;
+            bufferedWriter = new BufferedWriter(new FileWriter("textCopy.txt"));
+            while ((len = inputStreamReader.read(buffer, 0, buffer.length)) != -1) {
+                bufferedWriter.write(new String(buffer, 0, len));
+            }
+            bufferedWriter.flush();
+            //下列代码没有执行：
+            System.out.print("成功接收来自客户端的文件！");
+            outputStream = socket.getOutputStream();
+            outputStream.write("中国出了个毛泽东！".getBytes());
+            outputStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if(outputStream != null) {
+                try {
+                    outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (bufferedWriter != null) {
+                try {
+                    bufferedWriter.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (inputStreamReader != null) {
+                try {
+                    inputStreamReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (serverSocket != null) {
+                try {
+                    serverSocket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}
+```
+
+### `Java-DatagramSocket`模拟发送`UDP`数据
+
+`UDP`将数据直接封装成包`DatagramPacket`
+
+客户端：
+
+```java
+package Chapter06;
+
+import java.io.IOException;
+import java.net.*;
+
+public class UDPTestClient {
+    public static void main(String[] args) {
+        DatagramSocket datagramSocket = null;
+        DatagramPacket datagramPacket = null;
+        try {
+            datagramSocket = new DatagramSocket();
+            byte[] data = "我是通过 UDP 协议发送的导弹！".getBytes();
+            datagramPacket = new DatagramPacket(data, 0, data.length, InetAddress.getLocalHost(), 8888);
+            datagramSocket.send(datagramPacket);
+        } catch (SocketException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (datagramSocket != null) datagramSocket.close();
+        }
+    }
+}
+```
+
+服务端：
+
+```java
+package Chapter06;
+
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.SocketException;
+
+public class UDPTestServer {
+    public static void main(String[] args) {
+        DatagramSocket datagramSocket = null;
+        DatagramPacket datagramPacket = null;
+        try {
+            datagramSocket = new DatagramSocket(8888);
+            byte[] data = new byte[1024];
+            datagramPacket = new DatagramPacket(data, 0, data.length);
+            datagramSocket.receive(datagramPacket);
+            System.out.println("服务端接收到的 UDP 数据：" + new String(datagramPacket.getData(), 0, datagramPacket.getLength()));
+        } catch (SocketException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (datagramSocket != null) datagramSocket.close();
+        }
+    }
+}
+```
+
+### `URL`编程
+
+```java
+package Chapter06;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+
+public class URLTest {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://www.baidu.com");
+            System.out.println("获取URL协议名：" + url.getProtocol());
+            System.out.println("获取URL主机名：" + url.getHost());
+            System.out.println("获取URL端口号：" + url.getPort());
+            System.out.println("获取URL文件名：" + url.getFile());
+            System.out.println("获取URL文件路径：" + url.getPath());
+            System.out.println("获取URL查询名：" + url.getQuery());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+#### 实现从`Tomcat`服务器下载数据
+
+```java
+package Chapter06;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+
+public class URLTest {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://www.baidu.com/example/test.txt");
+            System.out.println("获取URL协议名：" + url.getProtocol());
+            System.out.println("获取URL主机名：" + url.getHost());
+            System.out.println("获取URL端口号：" + url.getPort());
+            System.out.println("获取URL文件名：" + url.getFile());
+            System.out.println("获取URL文件路径：" + url.getPath());
+            System.out.println("获取URL查询名：" + url.getQuery());
+            URLConnection urlConnection = url.openConnection();//获取到 HTTP 连接
+            HttpURLConnection httpURLConnection = (HttpURLConnection) urlConnection;
+            //连接
+            httpURLConnection.connect();
+            InputStream inputStream = httpURLConnection.getInputStream();
+            //后面就是拷贝数据的操作了，不再多加阐述
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            //进行资源关闭
+        }
+    }
+}
+```
+
+# 2022年06月20日下午
+
+## 反射
+
+### `Java`反射机制概述
+
+- 反射`Reflection`是被视为动态语言的关键，反射机制允许程序在执行期间获取`Class`实例，取得任何类的内部信息，并且能够直接操作任意对象的内部属性以及方法。
+- 加载完类之后，在堆内存中就产生了`Class`类对象，一个类只有一个`class`对象，这个对象就包含了完整的类的结构信息。我们可以通过这个对象看到类的结构。这个对象就像一面镜子，透过这面镜子我们可以看到类内部结构，所以我们形象的称之为：反射。
+  - 正常方式：类 ---> 通过`new`实例化 ---> 取得实例化对象
+  - 反射方式：实例化对象 ---> `getClass()`方法 ---> 得到类对象
+- 程序可以简单的分为：编译 + 运行两个阶段，`Java`在编译阶段是不知道你要产生哪个类的对象，只有在编译阶段才知道，所以`Java`又可以看作是一门静态语言。
+- **<font color="red">通过反射机制到底可以干什么？</font>**
+  - 在运行时判断任意一个对象所属的类
+  - 在运行时构造任意一个类的对象
+  - 在运行时判断任意一个类所具有的成员变量和方法
+  - 在运行时获取泛型信息
+  - 在运行时调用任意一个对象的成员变量和方法
+  - 在运行时处理注解
+  - 生成动态代理
+
+### 理解`Class`类并获取`Class`实例
+
+- **<font color="red">不管如何，创建某个类的对象都需要用到构造器</font>**
+- 并且通常在`JavaBean`中要求有空参构造器，因为默认调用`super()`的时候，会默认调用空参构造器，保证父类有此构造器。没有空参构造器不会默认调用有参的，需要手动实现。
+
+```java
+package Chapter07;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+
+public class ReflectionTest {
+    public static void main(String[] args) throws Exception {
+        //反射之前可以对 Person 类做的事情 ---> 公共的 ---> 无法调用私有物品
+        Person person = new Person("张三", 1000);
+        person.age = 102;
+        System.out.println(person.toString());
+        person.show();
+        //反射之后可以做的事情 ---> 获取所有的类内部信息
+        //1.通过反射获取构造器 Constructor ---> 私有需使用 setAccessible(boolean flag);
+        Class personClass = person.getClass();
+        Constructor constructor = personClass.getDeclaredConstructor(String.class, int.class);
+        constructor.setAccessible(true);
+        Person personObject = (Person) constructor.newInstance("李四", 108);
+        System.out.println(personObject.toString());
+        //2.通过反射获取类的属性、方法 Field Method ---> 私有需使用 setAccessible(boolean flag); 设置为 true 才可以修改，否则报 IllegalAccessException
+        Field personField = personClass.getDeclaredField("name");
+        personField.setAccessible(true);
+        personField.set(personObject, "liSi");
+        System.out.println(personObject.toString());
+        Method personMethod = personClass.getDeclaredMethod("showNation", String.class);
+        personMethod.setAccessible(true);
+        Object methodObject = personMethod.invoke(personObject, "中国");
+        System.out.println(methodObject);
+    }
+}
+```
+
+- **<font color="red">直接使用`new`实例化对象跟反射获取对象有什么区别？</font>**
+  - **<font color="deepskyblue">如果可以直接确定要造哪个对象直接使用`new`，如果编译时无法确定则使用反射会更好即动态的【比如`Servlet`对象，前端发送一个`/login`请求此时就需要的是`Login`相关对象，如果前端发送过来的是`/register`请求那么此时就需要的是`Register`相关对象，此时你是无法将创建对象的代码写死的，除非你使用大量的`if-else`代码，但这显然不是一个很好的方法，此时使用反射就是一个很好的选择】。</font>**
+- 有了反射机制以后，是否就跟封装性矛盾了呢？如何看待？
+  - 不矛盾，封装性只是建议你不要去调用`private`属性和方法，但是如果你非要调用也可以，使用反射获取即可
+
+### 类的理解与`ClassLoader`的理解【重点】
+
+对于类加载过程的理解：
+
+- 程序经过`javac.exe`命令以后会生成一个或多个字节码文件即`.class`文件。
+- 然后通过`java.exe`命令会对某个字节码文件即`.class`文件进行解释运行，相当于将字节码文件加载到内存中，这个过程就是类加载过程。加载到内存中的类称为运行时类，此运行时类就作为`Class`的一个实例。
+
+总结下类加载过程：`javac.exe`生成一个或多个字节码文件，`java.exe`对字节码文件即`.class`文件进行解释运行，将字节码文件加载到内存中，这个过程就叫做类加载过程。加载到内存中的类就是运行时类，此运行时类就是一个`Class`实例，**<font color="red">而且在堆内存中有且只有一个`Class`实例</font>**。换句话说`Class`实例就是运行时类。运行时类会缓存一定时间，在此时间内可以通过不同方式获取运行时类。
+
+**类加载过程即`ClassLoader`涉及到`JVM`的知识，在这里先学习一些基础部分：**类加载过程其实就是将类加载到内存其中的一个过程，但并不是对类进行初始化的全部过程，想要将类完全加载到内存并初始化需要通过下面三个部分，这三个部分统称为对该类进行初始化【类加载到内存中仅仅只是一个部分】：
+
+1. **类的加载`Load`：**将类的`.class`后缀文件即字节码文件读入内存并为之创建一个`java.lang.Class`对象。此过程由类加载器完成。【**也就是说在第一步骤类的加载`Load`就出现了`java.lang.Class`对象了，并且只会产生一个，每个类有且只有一个`Class`对象**】
+
+   >`Load`具体过程：将`class`文件字节码内容加载到内存当中，并将这些静态数据[简单理解为静态代码]转换成方法区的运行时数据结构，然后就生成了一个代表这个类的`java.lang.Class`对象，作为方法区中类数据结构的访问入口【即访问地址】。所有需要访问和使用类数据只能通过这个`Class`对象。这个加载的过程需要类加载器参与。
+
+2. **类的链接`Link`：**将类的二进制数据合并到`JRE`[`Java`运行时环境]中。需经历如下三个过程：
+
+   > - 验证：确保加载的类信息符合`JVM`规范
+   > - 准备：正式为类变量即`static`关键字修饰的变量分配内存并设置类变量默认初始值的阶段，【说白了就是给静态变量赋予默认值的阶段】，这些内存都将在方法区中进行分配
+   > - 解析：虚拟机常量池内的符号引用（常量名）替换为直接引用（地址）的过程
+
+3. **类的初始化`Initialize`：**`JVM`负责对类进行初始化
+
+   > - 执行`类构造器<clint>()`方法的过程。类构造器`<clint>()`方法是由编译器自动收集类中所有类变量的赋值动作和静态代码块中的语句合并产生的。（类构造器是构造类信息的，不是构造该类对象的构造器）【说白了类的初始化就是给静态变量赋值得这么一个阶段】
+   > - 当初始化一个类的时候，如果发现其父类还没有进行初始化，则需要先触发其父类的初始化【先加载爸爸的，这在学习继承、`super`时都有学习过】
+   > - 虚拟机会保证一个类的`<clint>()`方法在多线程环境中被正确加锁和同步。
+
+**总结下就是：**类的加载【产生了`java.lang.Class`对象】---> 类的链接【包括验证、准备、解析三个阶段，其中在准备阶段就会给静态变量赋予默认值】 ---> 类的初始化【负责对类进行初始化，并会在这个过程给静态变量赋予初始化值】
+
+```java
+public class ClassLoaderTest {
+    public static void main(String[] args) {
+        System.out.println(A.m);
+    }
+}
+
+class A {
+    static {
+        m = 300;
+    }
+    static int m = 100;
+}
+```
+
+- 第一步：类的加载`Load`，生成`A ClassLoaderTest`的`Class`对象
+
+- 第二步：类的链接（验证 ---> 准备 ---> 解析）：在准备这一阶段会给`m`一个默认值 ---> `m = 0`
+
+- 第三步：类的初始化
+
+  - ```java
+    <clint>() {
+        m = 300;
+        m = 100;
+    }
+    ```
+
+**<font color="red">类的加载是通过类加载器`ClassLoader`来完成的，类加载器`ClassLoader`的作用为：</font>**
+
+> **将字节码文件内容加载到堆内存中，并将这些静态数据转换为方法区的运行时数据结构，然后在堆内存中生成一个代表这个类`java.lang.Class`对象，作为方法区中类数据的访问入口。**
+
+**<font color="red">类的缓存：</font>**
+
+> 标准的`JavaSE`类加载器可以按照要求查找类，但一旦某个类字节码文件内容被类加载器加载到了内存当中，它将维持加载（缓存）一段时间。不过`JVM`垃圾回收机制可以回收这些`Class`对象。【堆内存对象就会被回收】
+
+总的过程：**`*.java`文件 ---> `Java`编译器 ---> 字节码`.class`文件 ---> 类装载器 ---> 字节码校验器 ---> 解释器 ---> 操作系统平台**
+
+类加载器有三种自上而下分别为：
+
+> - **引导类加载器`Bootstrap ClassLoader`：**用`C++`编写，`JVM`自带的类加载器，负责处理`Java`平台核心库并且不被外界所使用，用于装载核心类库，所以引导类加载器是无法直接获取的。
+> - **扩展类加载器`Extension ClassLoader`：**负责`jre/lib/ext`目录下的`jar`包或`java.ext.dirs`指定目录下的`jar`包装入工作库。
+> - **系统类加载器`System ClassLoader`：**最常用的类加载器，负责加载一些自己编写的类。
+
+如要需要还可以**自定义类加载器**。
+
+```java
+package Chapter07;
+
+public class ClassLoaderTest {
+    public static void main(String[] args) {
+        ClassLoader systemClassLoader = ClassLoaderTest.class.getClassLoader();
+        System.out.println(systemClassLoader);
+        System.out.println(systemClassLoader.getParent());
+        System.out.println(systemClassLoader.getParent().getParent());
+    }
+}
+
+//sun.misc.Launcher$AppClassLoader@18b4aac2
+//sun.misc.Launcher$ExtClassLoader@1b6d3586
+//null Bootstrap ClassLoaader 引导类加载器无法直接获取到，该类加载器加载 Java 核心类库
+```
+
+**<font color="red">使用`ClassLoader`加载配置文件：</font>**这种方式的相对路径以`src`开头，而通常的则是以`module`当前模块开头
+
+```java
+package Chapter07;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
+public class PropertiesAndClassLoader {
+    public static void main(String[] args) throws IOException {
+        //1.传统方式获取配置文件
+        Properties properties = new Properties();
+        FileInputStream fileInputStream = new FileInputStream("userCopy.properties");//这里最好使用 try-catch 不过懒得写了，相对路径以 module 模块开头
+        properties.load(fileInputStream);
+        String name1 = properties.getProperty("name");
+        String password1 = properties.getProperty("password");
+        System.out.println("传统方式获取配置文件 ---> " + name1 + ":" + password1);
+        //2.类加载器获取配置文件
+        ClassLoader classLoader = PropertiesAndClassLoader.class.getClassLoader();
+        InputStream inputStream = classLoader.getResourceAsStream("user.properties");//相对路径以 src 目录开头
+        properties.load(inputStream);
+        String name2 = properties.getProperty("name");
+        String password2 = properties.getProperty("password");
+        System.out.println("类加载器获取配置文件 ---> " + name2 + ":" + password2);
+    }
+}
+```
+
+### 创建运行时类的对象即`Class`对象
+
+四种方式：
+
+> 1. 通过类本身
+> 2. 通过类对象
+> 3. 通过`Class`类的静态方法`forName(String className)`
+> 4. 通过类加载器`ClassLoader`对象
+
+```java
+package Chapter07;
+
+public class FourGetClassObject {
+    public static void main(String[] args) throws ClassNotFoundException {
+        //1.通过类本身的属性获取运行时类对象
+        Class personClass1 = Person.class;
+        System.out.println(personClass1);
+        //2.通过类对象的 getClass() 方法获取运行时类对象
+        Class personClass2 = new Person().getClass();
+        System.out.println(personClass2);
+        //3.通过 Class 运行时类的 forName(String className) 静态方法获取运行时类对象
+        Class personClass3 = Class.forName("Chapter07.Person");
+        System.out.println(personClass3);
+        //4.通过 ClassLoader 类加载器获取运行时类对象
+        ClassLoader classLoader = FourGetClassObject.class.getClassLoader();
+        Class personClass4 = classLoader.loadClass("Chapter07.Person");
+        System.out.println(personClass4);
+        //不管通过什么方式，运行时类在堆内存中只有一个，所以所有运行时类对象变量都指向同一个堆内存地址
+        System.out.println(personClass1 == personClass2);
+        System.out.println(personClass1 == personClass3);
+        System.out.println(personClass1 == personClass4);
+    }
+}
+```
+
+### 获取运行时类的完整结构
+
+运行时类的结构不仅仅只有类，还包含：接口、数组、枚举、注解、基本数据类型以及`void`，而且`Class`类本身也可以获取运行时类对象。
+
+### 调用运行时类的指定结构
+
+可以使用：`clazz.getGenericSuperClass`获取泛型父类`Class`对象，通过`clazz.getSuperClass()`获取父类`Class`对象
+
+# 2022年06月20日晚上
+
+# 2022年06月21日上午
+
+### 反射的应用：动态代理【重要】
+
+框架：【注解 + 反射 + 设计模式】
+
+静态代理有个不好的地方就是每一个代理类只能为一个接口服务，这样一来在开发过程中就会产生过多的代理，所以我们就希望能否只通过一个代理类就可以完成全部的代理功能。这就是我们所说的 —— **<font color="red">动态代理</font>**。
+
+ 静态代理例子：【可以看到这里写死了`nikeClothFactory`，如果我现在还有`Adidas`生产商那么这里只能新建一个代理类对象去代理`Adidas`服装工程，能否根据需要来变化服装工厂甚至直接写一个代理类工厂然后所有的需要被代理的类可以直接使用呢？这就引出了动态代理~】
+
+```java
+package Chapter07;
+
+public class StaticProxyTest {
+    public static void main(String[] args) {
+        NikeClothFactory nikeClothFactory = new NikeClothFactory();
+        ProxyClothFactory proxyClothFactory = new ProxyClothFactory(nikeClothFactory);
+        proxyClothFactory.produceCloth();
+    }
+}
+
+interface ClothFactory {
+    public abstract void produceCloth();
+}
+
+class ProxyClothFactory implements ClothFactory {
+
+    private ClothFactory clothFactory;
+
+    public ProxyClothFactory(ClothFactory clothFactory) {
+        this.clothFactory = clothFactory;
+    }
+
+    @Override
+    public void produceCloth() {
+        System.out.println("执行生产衣服的准备工作");
+        clothFactory.produceCloth();
+        System.out.println("执行生产衣服的收尾工作");
+    }
+}
+
+class NikeClothFactory implements ClothFactory {
+    @Override
+    public void produceCloth() {
+        System.out.println("Nike 生产了一批运动裤");
+    }
+}
+```
+
+其实说是自己写动态代理，背后`Java`已经实现好了`Porxy`类，只要调用`newProxyInstance()`静态方法传入必要的参数就可以获取一个代理类对象。这就是动态代理。
+
+```java
+class ProxyInstance() {
+    public Object getProxyInstance(Object object) {
+        ProxyInvocationHandler proxyInvocationHandler = new ProxyInvocationHandler(object);
+        return Porxy.newProxyInstance(object.getClass().getClassLoader(), object.getClass().getInterfaces(), proxyInvocationHandler);
+    }
+}
+```
+
+动态代理，因为我们编译的时候是不知道要代理哪个类的所以更别说要执行哪个方法了，所以为了达到动态的效果，需要通过反射来执行方法。所以需要一个实现了`InvocationHandler`接口重写`invoke()`方法的类：
+
+```java
+class ProxyInvocationHandler implements InvocationHandler {
+    private Object object;
+    
+    public ProxyInvocationHandler(Object object) {
+        this.object = object;
+    }
+    
+    @Override
+    public Object invoke(Object proxy, Method method, Object args[]) throws Throwable() {
+        System.out.println("代理类执行一些准备工作...");
+        Object returnObject = method.invoke(object, args);
+        System.out.println("代理类执行一些收尾工作...");
+        return returnObject;
+    }
+}
+```
+
+可以测试一下，现在不管你传入的是什么类，只要有接口，有实现类，就可以实现代理【注意这里因为要传递给`ProxyInvocationHandler`所以无法传递“接口对象”】：
+
+```java
+public class DynamicProxyTest {
+    public static void main(String[] args) {
+        SuperMan superMan = new SuperMan();
+        ProxyInstance proxyInstance = new ProxyInstance();
+        Human human = (Human) proxyInstance.getInstance(superMan);
+        NikeClothFactory nikeClothFactory = new NikeClothFactory();
+        ClothFactory clothFactory = (ClothFactory) proxyInstance.getInstance(nikeClothFactory);
+        human.getBelief();
+        System.out.println("-------------------------");
+        String food = human.eat();
+        System.out.println(food);
+        System.out.println("-------------------------");
+        clothFactory.produceCloth();
+    }
+}
+interface Human {
+    public abstract void getBelief();
+    public abstract String eat();
+}
+```
+
+输出结果为：
+
+```java
+代理类执行一些准备工作...
+I belief i can fly!
+代理类执行一些收尾工作...
+-------------------------
+代理类执行一些准备工作...
+代理类执行一些收尾工作...
+Apple
+-------------------------
+代理类执行一些准备工作...
+Nike 生产了一批运动裤
+代理类执行一些收尾工作...
+```
+
+动态代理的经典应用就是：`AOP`面向切面编程，它可以无须使用硬编码的方式实现日志等操作，而是需要的时候再织入。
+
+# 2022年06月21日下午
+
+# 2022年06月21日晚上
+
+## `Java8`的其它新特性
+
+速度更快、新的语法表达式[`Lambda`表达式]、强大的`Stream API`、便于并行、最大化减少空指针异常：`Optional`、`Nashorn`引擎【之前是`Rhino`引擎但是实在是太慢太慢了，所以还不如重写】可以执行`js`程序
+
+### 函数式接口`@FunctionalInterface`
+
+**<font color="red">使用`Lambda`的前提条件是接口中只有一个抽象方法，这种只有一个抽象方法的接口也称为函数式接口。通常有`@FunctionalInterface`注解进行注解</font>**
+
+**只要是函数式接口，那么它就可以使用`Lambda`表达式来写。**
+
+`Java`内置`4`大核心函数式接口：
+
+> 1. 消费型接口`Consumer`：`Consumer<T> void accept(T t)`
+> 2. 供给型接口`Supplier`：`T get()`
+> 3. 函数型接口`Function`：`R apply(T t)`
+> 4. 判断型接口`Predicate`：`boolean test(T t)`
+
+```java
+package Chapter08;
+
+import java.util.function.Consumer;
+
+public class FunctionalInterfaceTest {
+    public static void main(String[] args) {
+        happyTime(100000.8988, new Consumer<Double>() {
+            @Override
+            public void accept(Double money) {
+                System.out.println("代号白金刺客消费：" + money + "元");
+            }
+        });
+        happyTime(100000.9899, money -> System.out.println("代号黄金刺客消费：" + money + "元"));
+    }
+
+    public static void happyTime(Double price, Consumer<Double> consumer) {
+        consumer.accept(price);
+    }
+}
+```
+
+```java
+package Chapter08;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.function.Predicate;
+
+public class PredicateTest {
+    public static void main(String[] args) {
+        ArrayList<String> arrayList = new ArrayList<>();
+        arrayList.add("北京");
+        arrayList.add("天津");
+        arrayList.add("南京");
+        arrayList.add("上金");
+        arrayList.add("西京");
+        arrayList.add("夏津");
+        arrayList.add("东京");
+        //1.传统的使用匿名函数的方式完成过滤
+        ArrayList<String> newArrayList = getPredicateArrayList(arrayList, new Predicate<String>() {
+            @Override
+            public boolean test(String s) {
+                return s.contains("京");
+            }
+        });
+        System.out.println(newArrayList);
+        //2.使用 Lambda 表达式的方式完成过滤
+        ArrayList<String> newLambdaArrayList = getPredicateArrayList(arrayList, str -> str.contains("京"));
+        System.out.println(newLambdaArrayList);
+    }
+
+    public static ArrayList<String> getPredicateArrayList(ArrayList<String> arrayList, Predicate<String> predicate) {
+        ArrayList<String> newArrayList = new ArrayList<String>();
+        for (String str : arrayList) {
+            if (predicate.test(str)) newArrayList.add(str);
+        }
+        return newArrayList;
+    }
+}
+
+//[北京, 南京, 西京, 东京]
+//[北京, 南京, 西京, 东京]
+```
+
+### `Lambda`表达式
+
+`Lambda`表示可以理解为一段可传递的代码，相当于匿名函数。其本质就是作为接口的实例。
+
+举例：`(o1, o2) -> Integer.compare(o1, o2);`
+
+格式：
+
+```java
+->：表示 Lambda 的操作符/箭头操作符
+-> 左边：Lamdba 形参列表【其实就是接口中抽象方法的形参列表】
+-> 右边：Lambda 体【其实就是重写的抽象方法的方法体】
+```
+
+`Lambda`常见语法格式：
+
+```java
+1. 没有形参，没有返回值
+    Runnable runnable = () -> System.out.println("毛爷爷");
+	runnable.run();
+2. 有一个形参，没有返回值
+    Consumer<String> consumer = (String str) -> System.out.println(str);
+	consumer.accept("Apple");
+3. 数据类型可以省略，因为编译器可以推断出来，称为“类型推断”【数组那一节中有学习过】
+    Consumer<String> consumer = (str) -> System.out.println(str);
+	consumer.accept("Apple");
+4. 只有一个参数，参数小括号可省略
+    Consumer<String> consumer = str -> System.out.println(str);
+	consumer.accept("Apple");
+5. 有两个或以上的参数，多条执行语句，并且可以有返回值
+    Comparator<Integer> comparator = (Integer o1, o2) -> {
+    	System.out.println("Lambda 表达式实现函数式接口方法！");
+    	return Integer.compare(o1, o2);
+	}
+	Integer compare = comparator.compare(1, 2);
+	System.out.println(compare);
+6. 若只有一条语句，则 return 和大括号都可以省略
+    Comparator<Integer> comparator1 = (o1, o2) -> Integer.compare(o1, o2);
+	Integer compare2 = comparator1.compare(1000, 102);
+	System.out.println(compare2);
+```
+
+### 方法引用
+
+方法引用和构造器引用时基于`Lambda`表达式的。写了一两个方法引用之后就会发现无非就是写好的方法放到了方法引用而已。 
+
+比方说：`Consumer`接口你是需要重写`accept(Object objet)`方法的，假设你现在里面只有一条打印语句，那你直接就使用`printStream::out`输出这个对象即可【前提是你就是想这样做，如果不是这样做，那你可以使用匿名函数或者`Lambda`表达式】
+
+只要有现成方法可以使用的，那么你就可以使用方法引用。方法引用是`Lambda`一种特殊情况，或者说是更深层次的`Lamdba`表达式，只要你可以使用一个现有方法可以完成的，那么你就可以使用方法引用。然后只要你实现的抽象接口中只有一个抽象方法，那么你就可以使用`Lambda`表达式。
+
+```java
+package Chapter08;
+
+import Chapter07.Person;
+
+import java.io.PrintStream;
+import java.util.Comparator;
+import java.util.function.BiPredicate;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+public class MethodQuote {
+    public static void main(String[] args) {
+        test1();
+        test2();
+        test3();
+        test4();
+        test5();
+        test6();
+    }
+
+    //方法是非静态方法 可以使用对象::非静态方法调用
+    //消费型函数式接口Consumer:accept(T) 一个参数 + 无返回值
+    public static void test1() {
+        Consumer<String> consumer = new Consumer<String>() {
+            @Override
+            public void accept(String s) {
+                System.out.println(s);
+            }
+        };
+        consumer.accept("毛爷爷");
+        System.out.println("--------------------------");
+        consumer = (String str) -> System.out.println(str);
+        consumer.accept("石头");
+        System.out.println("--------------------------");
+        PrintStream printStream = System.out;
+        consumer = printStream::println;
+        consumer.accept("Chinese Father");
+        System.out.println("--------------------------");
+    }
+
+    //供给型函数式接口Supplier:get() return T; 没有参数 + 有返回值
+    public static void test2() {
+        Supplier<String> supplier = new Supplier<String>() {
+            @Override
+            public String get() {
+                return "获取了大葫芦娃";
+            }
+        };
+        String BigHuLuWa = supplier.get();
+        System.out.println(BigHuLuWa);
+        System.out.println("--------------------------");
+        supplier = () -> {
+            return "获取了中葫芦娃";
+        };
+        String MiddleHuLuWa = supplier.get();
+        System.out.println(MiddleHuLuWa);
+        System.out.println("--------------------------");
+        HuLuWa huLuWa = new HuLuWa();
+        supplier = huLuWa::toString;
+        String smallHuLuWa = supplier.get();
+        System.out.println(smallHuLuWa);
+        System.out.println("--------------------------");
+    }
+
+    //方法是静态方法可以使用 类::静态方法调用
+    public static void test3() {
+        Comparator<Integer> comparator = new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return Integer.compare(o1, o2);
+            }
+        };
+        Integer answer1 = comparator.compare(100, 200);
+        System.out.println(answer1);
+        System.out.println("--------------------------");
+        comparator = (Integer o1, Integer o2) -> {
+            return Integer.compare(o1, o2);
+        };
+        Integer answer2 = comparator.compare(200, 100);
+        System.out.println(answer2);
+        System.out.println("--------------------------");
+        comparator = Integer::compare;
+        Integer answer3 = comparator.compare(100, 100);
+        System.out.println(answer3);
+        System.out.println("--------------------------");
+    }
+
+    //函数型函数式接口Function<T, G>:apply(T t); 有参数[前者表示形式参数，后者表示返回值数据类型] + 有返回值
+    //其实就是数学中的函数：y = x^2;
+    public static void test4() {
+        Function<Integer, Integer> function = new Function<Integer, Integer>() {
+            @Override
+            public Integer apply(Integer x) {
+                return x * x;
+            }
+        };
+        Integer answer = function.apply(32);
+        System.out.println(answer);
+        System.out.println("--------------------------");
+        function = (Integer x) -> {
+            return x * x;
+        };
+        answer = function.apply(64);
+        System.out.println(answer);
+        System.out.println("--------------------------");
+        function = Math::abs;
+        answer = function.apply(-100);
+        System.out.println(answer);
+        System.out.println("--------------------------");
+    }
+
+    //方法是非静态方法，还可以使用 类::非静态方法，如果第一个参数作为调用方法的对象去使用，则可以使用该种方法
+    //比如String类中的compareTo方法：t1.compareToe(t2)，再比如：t1.equals(t1)皆是如此
+    public static void test5() {
+        Comparator<String> comparator = new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return o1.compareTo(o2);
+            }
+        };
+        Integer answer = comparator.compare("abc", "abe");
+        System.out.println(answer);
+        System.out.println("--------------------------");
+        comparator = (String s1, String s2) -> s1.compareTo(s2);
+        answer = comparator.compare("abd", "abe");
+        System.out.println(answer);
+        System.out.println("--------------------------");
+        comparator = String::compareTo;
+        answer = comparator.compare("abe", "abe");
+        System.out.println(answer);
+    }
+
+    //t1.equals(t2)
+    public static void test6() {
+        System.out.println("--------------------------");
+        BiPredicate<String, String> biPredicate = new BiPredicate<String, String>() {
+            @Override
+            public boolean test(String s1, String s2) {
+                return s1.equals(s2);
+            }
+        };
+        boolean predicate = biPredicate.test("abc", new String("abc"));
+        System.out.println(predicate);
+        System.out.println("--------------------------");
+        biPredicate = (String s1, String s2) -> s1.equals(s2);
+        predicate = biPredicate.test("abcdef", new String("abc"));
+        System.out.println(predicate);
+        System.out.println("--------------------------");
+        biPredicate = String::equalsIgnoreCase;
+        predicate = biPredicate.test("abcABC", new String("abcabc"));
+        System.out.println(predicate);
+    }
+}
+
+class HuLuWa {
+    private String name;
+
+    public HuLuWa() {
+    }
+
+    public HuLuWa(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "获取了小葫芦娃";
+    }
+}
+```
+
+### 构造器引用
+
+构造器引用其实就是方法引用的一个小型应用而已。
+
+```java
+package Chapter08;
+
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+public class ConstructorQuote {
+    public static void main(String[] args) {
+        test1();
+        test2();
+        test3();
+    }
+
+    //Supplier:get() return T t;
+    public static void test1() {
+        Supplier<HuLuWa> supplier = new Supplier<HuLuWa>() {
+            @Override
+            public HuLuWa get() {
+                return new HuLuWa("小葫芦娃");
+            }
+        };
+        HuLuWa littleHuLuWa = supplier.get();
+        System.out.println(littleHuLuWa.toString());
+        System.out.println("--------------------------");
+        supplier = () -> new HuLuWa("中葫芦娃");
+        HuLuWa middleHuLuWa = supplier.get();
+        System.out.println(middleHuLuWa.toString());
+        System.out.println("--------------------------");
+        supplier = HuLuWa::new;
+        HuLuWa bigHuLuWa = supplier.get();
+        bigHuLuWa.setName("大葫芦娃");
+        System.out.println(bigHuLuWa.toString());
+        System.out.println("--------------------------");
+    }
+
+    //Function:apply(T t) return G g;
+    public static void test2() {
+        Function<String, HuLuWa> function = new Function<String, HuLuWa>() {
+            @Override
+            public HuLuWa apply(String s) {
+                return new HuLuWa(s);
+            }
+        };
+        HuLuWa goldWa = function.apply("金娃");
+        System.out.println(goldWa);
+        System.out.println("--------------------------");
+        function = (String name) -> new HuLuWa(name);
+        HuLuWa treeWa = function.apply("木娃");
+        System.out.println(treeWa);
+        System.out.println("--------------------------");
+        function = HuLuWa::new;
+        HuLuWa waterWa = function.apply("水娃");
+        System.out.println(waterWa);
+        System.out.println("--------------------------");
+    }
+
+    //BiFunction:apply(T t, G g) return U u;
+    public static void test3() {
+        BiFunction<String, Integer, FiveField> biFunction = new BiFunction<String, Integer, FiveField>() {
+            @Override
+            public FiveField apply(String name, Integer power) {
+                return new FiveField(name, power);
+            }
+        };
+        FiveField fiveField = biFunction.apply("金", 8);
+        System.out.println(fiveField);
+        System.out.println("--------------------------");
+        biFunction = (String name, Integer power) -> new FiveField(name, power);
+        fiveField = biFunction.apply("木", 8);
+        System.out.println(fiveField);
+        System.out.println("--------------------------");
+        biFunction = FiveField::new;
+        fiveField = biFunction.apply("水", 8);
+        System.out.println(fiveField);
+        System.out.println("--------------------------");
+        biFunction = FiveField::new;
+        fiveField = biFunction.apply("火", 8);
+        System.out.println(fiveField);
+        System.out.println("--------------------------");
+        biFunction = FiveField::new;
+        fiveField = biFunction.apply("土", 8);
+        System.out.println(fiveField);
+        System.out.println("--------------------------");
+    }
+}
+
+class FiveField {
+    private String name;
+    private Integer power;
+
+    public FiveField() {
+    }
+
+    public FiveField(String name, Integer power) {
+        this.name = name;
+        this.power = power;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getPower() {
+        return power;
+    }
+
+    public void setPower(Integer power) {
+        this.power = power;
+    }
+
+    @Override
+    public String toString() {
+        return name + " : 能量值 : " + power;
+    }
+}
+```
+
+### 强大的`Stream API`
+
+`Java8`中有两个重要的改变。第一个就是`Lambda`表达式，另外一个就是`Stream API`。**<font color="deepskyblue">使用`Stream API`就像使用`SQL`查询语句。</font>**
+
+**<font color="red">为什么要使用`Stream API`？</font>**
+
+- 当前实际开发的过程中，不仅仅有关系型数据库，还有非关系型数据库`MongoDB Redis`这些，这些非关系型数据库就需要`Java`层面去处理。
+- `Stream`和`Collection`的区别在于：后者是一种静态的内存数据结构跟内存/存储器打交道，前者则用于计算的需要跟处理器打交道。所以说：`Stream`是不做存储数据的，存储数据的事情你让`Collection`集合面向内存/存储器去干。
+
+**使用`Stream`的注意点：**
+
+1. `Stream`自己是不存储元素的
+2. `Stream`不会改变源对象而是返回持有新结果的`Stream`对象
+3. `Stream`的操作是延迟执行的，意味着它们会先获取结果然后才执行【只有调用终止操作才会执行中间操作链】
+
+**操作`Stream`的三个步骤：**【在声明下：`Stream`是跟处理器打交道的，用来计算的】
+
+1. 创建`Stream`
+
+   - 一个数据源【集合、数组等】 ---> 获取一个流【顺序流（同步流） + 并行流】
+
+     ```java
+     ArrayList<Integer> arrayList = new ArrayList<>();
+     //1.通过集合创建流 Stream
+     Stream stream1 = arrayList.stream();//返回一个顺序流
+     Stream stream2 = arrayList.parallelStream();//返回一个顺序流
+     //2.通过数组创建流 Stream
+     int[] array1 = {1, 2, 3, 4, 5, 6};
+     IntStream intStream = Arrays.stream(array1);
+     String[] array2 = {"1", "2", "3"};
+     Stream<String> stream = Arrays.stream(array2);
+     //3.通过Stream.of()创建流 Stream
+     Stream<Integer> stream3 = Stream.of(1, 2, 3, 4, 5, 6);//放入的是包装类
+     //4.创建无限流 ---> 无限元素
+     Stream.iterate(0, x -> 2 + x).limit(10).forEach(System.out::println);
+     //  生成无限流 ---> 无限元素
+     Stream.generate(Math::random).limit(10).forEach(System.out::println);
+     ```
+
+2. 中间操作
+
+   - 一个中间操作链，对数据源的数据进行处理
+
+     - 中间操作之：筛选与切片
+
+       ```java
+       String[] huLuWas = new String[]{"金娃", "木娃", "水娃", "火娃", "土娃", "金娃", "金娃", "金娃", "金娃"};
+       Stream<String> huLuWaStream = Arrays.stream(huLuWas);
+       //1.筛选与切片
+       //（1）过滤 filter(Predicate predicate)：从流中排除某些符合特定条件的元素
+       huLuWaStream.filter((String str) -> str.contains("金")).forEach(System.out::print);
+       System.out.println();
+       //因为这里已经执行了终止操作，是无法回到中间操作的。所以这里会报错。
+       //（2）截断 limit(n)：使其元素不超过给定数量
+       huLuWaStream = Arrays.stream(huLuWas);
+       huLuWaStream.limit(3).forEach(System.out::print);
+       System.out.println();
+       //（3）跳过 skip(n)：返回一个扔掉了前 n 个元素的流
+       huLuWaStream = Arrays.stream(huLuWas);
+       huLuWaStream.skip(3).forEach(System.out::print);
+       System.out.println();
+       //（4）筛选 distinct()：去除重复元素
+       huLuWaStream = Arrays.stream(huLuWas);
+       huLuWaStream.distinct().forEach(System.out::print);
+       System.out.println();
+       ```
+
+     - 中间操作之：映射
+
+       ```java
+       //2.映射
+       //（1） map：接受一个函数作为参数，将元素转换成其他形式或提取信息
+       List<String> list = Arrays.asList("aa", "bb", "cc");
+       list.stream().map(str -> str.toUpperCase()).forEach(System.out::print);
+       System.out.println();
+       list = Arrays.asList("aaa", "b", "ccccc", "dddddddddd");
+       list.stream().map(str -> str.length() > 6 ? str : "").forEach(System.out::print);
+       System.out.println();
+       //（2） flatMap：接受一个函数作为参数，将流中的每个值转换成另外一个流
+       ```
+
+     - 中间操作之：排序
+
+       ```java
+       //3.排序
+       List<Integer> list1 = Arrays.asList(100, 88, 23, 989, 652, 735, 412, 399);
+       //（1） sorted()：产生一个新流，按照自然顺序排序
+       list1.stream().sorted().forEach(System.out::print);
+       System.out.println();
+       //（2） sorted(Comparator com)：产生一个新流，按照自定义顺序排序
+       list1.stream().sorted((Integer o1, Integer o2) -> -(Integer.compare(o1, o2))).forEach(System.out::print);
+       ```
+
+   - 总结：
+
+     ```java
+     package Chapter08;
+     
+     import java.util.ArrayList;
+     import java.util.Arrays;
+     import java.util.List;
+     import java.util.function.Consumer;
+     import java.util.stream.Stream;
+     
+     public class MiddleStreamTest {
+         public static void main(String[] args) {
+             String[] huLuWas = new String[]{"金娃", "木娃", "水娃", "火娃", "土娃", "金娃", "金娃", "金娃", "金娃"};
+             Stream<String> huLuWaStream = Arrays.stream(huLuWas);
+             //1.筛选与切片
+             //（1）过滤 filter(Predicate predicate)：从流中排除某些符合特定条件的元素
+             huLuWaStream.filter((String str) -> str.contains("金")).forEach(System.out::print);
+             System.out.println();
+             //因为这里已经执行了终止操作，是无法回到中间操作的。所以这里会报错。
+             //（2）截断 limit(n)：使其元素不超过给定数量
+             huLuWaStream = Arrays.stream(huLuWas);
+             huLuWaStream.limit(3).forEach(System.out::print);
+             System.out.println();
+             //（3）跳过 skip(n)：返回一个扔掉了前 n 个元素的流
+             huLuWaStream = Arrays.stream(huLuWas);
+             huLuWaStream.skip(3).forEach(System.out::print);
+             System.out.println();
+             //（4）筛选 distinct()：去除重复元素
+             huLuWaStream = Arrays.stream(huLuWas);
+             huLuWaStream.distinct().forEach(System.out::print);
+             System.out.println();
+             //--------------------------------------------------------------------
+             //2.映射
+             //（1） map：接受一个函数作为参数，将元素转换成其他形式或提取信息
+             List<String> list = Arrays.asList("aa", "bb", "cc");
+             list.stream().map(str -> str.toUpperCase()).forEach(System.out::print);
+             System.out.println();
+             list = Arrays.asList("aaa", "b", "ccccc", "dddddddddd");
+             list.stream().map(str -> str.length() > 6 ? str : "").forEach(System.out::print);
+             System.out.println();
+             //（2） flatMap：接受一个函数作为参数，将流中的每个值转换成另外一个流
+             //--------------------------------------------------------------------
+             //3.排序
+             List<Integer> list1 = Arrays.asList(100, 88, 23, 989, 652, 735, 412, 399);
+             //（1） sorted()：产生一个新流，按照自然顺序排序
+             list1.stream().sorted().forEach(System.out::print);
+             System.out.println();
+             //（2） sorted(Comparator com)：产生一个新流，按照自定义顺序排序
+             list1.stream().sorted((Integer o1, Integer o2) -> -(Integer.compare(o1, o2))).forEach(System.out::print);
+         }
+     }
+     ```
+
+3. 终止操作
+
+   - 一旦执行终止操作就会执行中间操作链，并产生结果。然后中间操作链将变得不可用。
+
+     - 终止操作之：匹配与查找
+
+       ```java
+       1. allMatch(Predicate p)：检查是否匹配所有的元素
+       2. anyMatch(Predicate p)：检查是否匹配一个的元素
+       3. noneMatch(Predicate p)：检查是否没有匹配的元素 ---> 其实就是 非all
+       4. findFirst：返回第一个元素
+       5. findAny：返回任意元素
+       6. count：返回流中元素的总个数
+       7. max(Comparator c)：返回流中最大值
+       8. min(Comparator c)：返回流中最小值
+       9. forEach(Consumer c)：内部迭代
+       ```
+
+       ```java
+       //1.匹配与查找
+       List<Integer> list = Arrays.asList(100, 88, 23, 989, 652, 735, 412, 399);
+       System.out.println(list.stream().allMatch(x -> x > 10));
+       System.out.println(list.stream().anyMatch(x -> x > 100));
+       System.out.println(list.stream().noneMatch(x -> x > 1000));
+       System.out.println(list.stream().findFirst());
+       System.out.println(list.stream().findAny());
+       System.out.println(list.stream().count());
+       System.out.println(list.stream().max(Integer::compare));
+       System.out.println(list.stream().min(Integer::compare));
+       list.stream().forEach(x -> System.out.print(x + " "));
+
+     - 终止操作之：归约
+
+       ```java
+       1.reduce(T iden, BinaryOperator b)：可以将流中元素反复结合起来，得到一个值。返回 T
+       2.reduece(BinaryOperator b)：可以将流中元素反复结合起来，得到一个值。返回 Optional<T>
+       ```
+
+       备注：`map`和`reduce`的连接通常称为：`map-reduce`模式，因`Google`用此来做网络搜索而出名。
+
+       ```java
+       //2.规约
+       //1.计算 1-10 的自然数的和
+       List<Integer> list1 = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+       System.out.println(list1.stream().reduce(0, Integer::sum));//第一个参数相当于一个初始值
+       
+       ```
+
+     - 终止操作之：收集
+
+       ```java
+       1.collect(Collector c)：将流转换为其它形式。接收一个 Collector 接口的实现，用于给 Stream 中元素做汇总的方法    
+       ```
+
+       ```java
+       //3.收集
+       List<Integer> list2 = list.stream().filter(x -> x > 600).collect(Collectors.toList());
+       System.out.println(list2);
+       ```
+
+### `Optional`类【容器】
+
+最常见的异常就是`NullPointerException`即空指针异常，有没有什么东西可以检查空指针呢？在`Java8`中引入了`Optional`类【从`Google`公司的`Guava`项目引入了`Optional`类中有感而发】。
+
+`Optional<T>`类是一个容器类，它可以保存类型`T`的值，代表这个值是存在的。或者仅仅保存`null`，表示这个值不存在。`Optional`存放的元素要求是非空的`of()`。
+
+1. `Optional.of();`
+2. `Optional.ofNullable();`
+3. `optionalHuLuWa.orElse(new HuLuWa("火娃"));`如果`optionalHuLuWa`对象为空则返回一个新的对象
+4. `boolean isPresent()`：判断容器是否包含该对象
+5. `get()`：跟`isPresent`连用先判断，如果存在可获取
+
+```java
+package Chapter08;
+
+import java.util.Optional;
+
+public class OptionalTest {
+    public static void main(String[] args) {
+        HuLuWa huLuWa = new HuLuWa("金娃");
+        Optional<HuLuWa> optionalHuLuWa1 = Optional.of(huLuWa);
+        huLuWa = null;
+        Optional<HuLuWa> optionalHuLuWa2 = Optional.ofNullable(huLuWa);
+        System.out.println(huLuWa);
+        HuLuWa huLuWa1 = optionalHuLuWa2.orElse(new HuLuWa("火娃"));//如果为空就新建一个火娃，降低了空指针异常的风险
+        System.out.println(huLuWa1);
+        if(optionalHuLuWa1.isPresent()) {
+            System.out.println(optionalHuLuWa1.get());
+        }
+    }
+}
+```
